@@ -38,7 +38,7 @@
 
                     <div class="form-group">
                         <label for="role">Role:</label>
-                        <select name="type" class="form-control" id="role" data-live-search required>
+                        <select name="type" class="form-control" id="role" data-live-search required onchange="loginChanged()">
                             <option disabled selected hidden>--Select Role--</option>
                             <option value="STUDENT">Student</option>
                              <option value="ADMIN">Admin</option>
@@ -46,7 +46,7 @@
                     </div>
                  
                     <div class="form-group">
-                        <label for="username">Email/Mobile No:</label>
+                        <label for="username" id="userId">Enrollment No:</label>
                         <input type="text" class="form-control" name="username" id="username" required>
                     </div>
                     <div class="form-group">
@@ -68,7 +68,19 @@
 	</div>  <!-- \.container -->
 
 </body>
+<script>
+function loginChanged(){
+	let t=document.getElementById("role").value ;
+	if(t==="ADMIN"){
+		let admin=document.getElementById("userId").innerHTML="Email:" ;
+		//let username=document.getElementById("username").name="Email:" ;
+	}
+	else{
+		let admin=document.getElementById("userId").innerHTML="Enrollment No:";
+		}
+}
 
+</script>
     <!-- Jquery JavaScript -->
 	<script src="../plugins/jquery/jquery.min.js"></script>
 	<script src="../plugins/jquery/jquery.validate.min.js"></script> 
@@ -81,4 +93,4 @@
     <!-- Custom CSS -->
 	<script src="../js/script.js"></script>
    
-</html>	
+</html>
