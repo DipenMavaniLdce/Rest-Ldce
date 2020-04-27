@@ -281,7 +281,7 @@ $("#regForm,#editProfileForm").validate({
 });
 
 
-// login form validation
+//login form validation
 $("#loginForm").validate({
 
     invalidHandler: function(form, validator) {
@@ -291,7 +291,7 @@ $("#loginForm").validate({
     rules: {
         username: {
             required:true,
-            regex: /^(([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4}))|([5-9][0-9]{9})$/,
+            regex: (/^[1-2][0-9]028[0-9]{7}$/)||(/^(([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4}))$/),
         }
         
     },
