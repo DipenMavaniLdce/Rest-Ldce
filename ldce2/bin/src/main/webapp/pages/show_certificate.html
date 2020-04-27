@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>L. D. College of Engineering</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- favicon -->
+	<link rel="shortcut icon" href="../images/favicon.ico">
+
+	<!-- Bootstrap Core CSS -->
+	<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+
+	<!-- font-aweome CSS -->
+	<link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+
+	<!-- Custom CSS -->
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+    <style>
+        page {
+            background: white;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 0.5cm;
+            box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+        }
+        page[size="A4"] {  
+            width: 21cm;
+            height: 29.7cm; 
+        }
+    </style>
+</head>
+
+<body>
+
+	<!-- navigation bar -->
+    <div id="navigation-bar"></div>
+	<!-- /.navigation bar -->
+
+	<!-- contant -->
+
+	<div class="container mt-5">
+        
+        
+        <h1>
+			<span id="certiName">Bonafide Certificate</span>
+			<button class="btn btn-success float-md-right mt-2" id="printBtn">Print</button>
+			<button class="btn btn-success float-md-right mt-2" onclick="printJS('printContain', 'html')">prcint</button>
+		</h1>
+		<hr class="mb-5">
+		<div class="table-responsive">
+			<table class="mx-auto">
+				<tr>
+					<td>
+						<page size="A4" id="printContain"></page>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<!-- footer -->
+	<div id="addFooter"></div>
+	<!-- /.footer -->
+
+</body>
+
+<!-- Jquery JavaScript -->
+<script src="../plugins/jquery/jquery.min.js"></script>
+<script src="../plugins/jquery/jquery.validate.min.js"></script>
+<script src="../plugins/jquery/additional-methods.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="../plugins/bootstrap/js/popper.min.js"></script>
+
+<script src="../plugins/printJs/js/print.min.js"></script>
+<!-- Custom CSS -->
+<script src="../js/script.js"></script>
+<script src="js/print_certificate.js"></script>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+	<title>L. D. College of Engineering</title> 
+	
+	<meta charset="utf-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- favicon -->
+	<link rel="shortcut icon" href="../images/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+	<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+	
+	<!-- font-awesome CSS -->
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../plugins/font-awesome/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+     <style>
+        page {
+            background: white;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 0.5cm;
+            box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+        }
+        page[size="A4"] {  
+            width: 21cm;
+            height: 29.7cm; 
+        }
+    </style>
+    <script type="text/javascript">
+  
+    </script>
+
+</head> 
+
+<body>
+
+	<!-- navigation bar -->
+    <div id="admin-navigation-bar"></div>
+	<!-- /.navigation bar -->
+
+	<!-- contant -->
+	<div class="container-fluid">
+	</br>
+					<div class='row'>
+							<div class='col-md-2'></div>
+							
+                             <input type="text" class="form-control col-md-6" id="searchText" placeholder="Enter Enrollment Number for serach" > 
+<!--                             <button id="bth-search"class="btn btn-primary" >Search </button>  -->
+                    </div>
+                           </br> 
+                        
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover" id='DataTable'>
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAllBoxes"></th>
+                        <th>Sr No.</th>
+                        <th>Enroll No.</th>
+                        <th>Name</th>
+                        <th>Semester</th>
+                        <th>Request</th>
+                        <th>View Document</th>
+                        <th>Fee Receipt</th>
+                        <th>Approve</th>
+                        <th>Unapprove</th>
+                    </tr>
+                </thead>
+                <tbody id="request_table">
+                </tbody>
+            </table>
+        </div>
+    </div>  <!-- /.container -->
+   <div class="modal fade" id="View_Document" tabindex="-1" role="dialog" >
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="change_photo_title">Change Photo</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>  <!--/.modal-header-->
+            
+                        <div class="modal-body">
+                         						<div class="container">
+										        <h1>
+													<span id="certiName">Bonafide Certificate</span>
+													<button class="btn btn-success" id="printBtn"> print bonafide</button>
+														<button class="btn btn-success" id="pdf" onclick="printContain"> print bonafide</button>
+													<button class="btn btn-success float-md-right mt-2" onclick="printJS('printContain', 'html')">prcint</button>
+												</h1>
+												<hr class="mb-5">
+												<div class="table-responsive">
+													<table class="mx-auto">
+														<tr>
+															<td>
+																<page size="A4" id="printContain"> LDCE Bonafide</page>
+															</td>
+														</tr>
+													</table>
+												</div>
+											</div>
+                               
+                               
+                               
+                               
+                               
+                                <div class="modal-footer">
+                                    <button type="submit" name="submit" class="btn btn-success">Save Changes</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                </div>
+                           
+                        </div>  <!--/.modal-body-->
+                    </div>  <!--/.modal-content-->
+                </div>
+            </div>
+            
+	<div class="modal fade" id="Fee_Receipt" tabindex="-1" role="dialog" >
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>  <!--/.modal-header-->
+            
+                        <div class="modal-body">
+                         						<div class="container">
+										        <h1>
+													<span id="certiName">Fee Receipt</span>
+												</h1>
+												<hr class="mb-5">
+												   <img class="img-fluid img-thumbnail" src="../images/photo.jpg"  id="fee_Receipt" alt="Your Photo">
+											</div>
+                               
+                               
+                               
+                               
+                               
+                        </div>  <!--/.modal-body-->
+                    </div>  <!--/.modal-content-->
+                </div>
+            </div>
+	            
+           
+    <!-- footer -->
+    <div id="addFooter"></div>
+    <!-- /.footer -->
+
+</body>
+
+    <!-- Jquery JavaScript -->
+	<script src="../plugins/jquery/jquery.min.js"></script>
+	<script src="../plugins/jquery/jquery.validate.min.js"></script> 
+	<script src="../plugins/jquery/additional-methods.min.js"></script>
+	
+	<!-- Bootstrap Core JavaScript -->
+	<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../plugins/bootstrap/js/popper.min.js"></script>
+    
+    <!-- Custom CSS -->
+<!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script> -->
+    <script src="../js/script.js"></script>
+    <script src="../js/DocumentApprove.js"></script>
+    <script src="../plugins/printJs/print.min.js"></script>
+    
+     <!-- Custom CSS -->
+	<script src="../js/script.js"></script>
+	<script src="../js/print_certificate.js"></script>
+	
+</html>	

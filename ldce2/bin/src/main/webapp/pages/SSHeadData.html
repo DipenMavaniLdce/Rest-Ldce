@@ -1,0 +1,412 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+	<title>L. D. College of Engineering</title> 
+	
+	<meta charset="utf-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- favicon -->
+	<link rel="shortcut icon" href="../images/favicon.ico">
+
+	<!-- Bootstrap Core CSS -->
+	<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+
+	<!-- font-awesome CSS -->
+	<link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+
+	<!-- Custom CSS -->
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+
+</head> 
+
+<body>
+
+	<!-- navigation bar -->
+    <div id="admin-navigation-bar"></div>
+	<!-- /.navigation bar -->
+
+	<!-- contant -->
+	<div class="container-fluid">
+        
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="caste">Caste:</label>
+                            <select name="caste" id="caste" class="form-control" data-live-search="on" >
+                                <option disabled selected hidden>--Select Caste--</option>
+                                <option value="ALL" selected >All Caste</option>
+                                <option value="st">ST</option>
+                                <option value="sc">SC</option>
+                                <option value="obc">OBC</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="gender">Gender:</label>
+                            <select name="gender" id="gender" class="form-control" data-live-search="on" >
+                                <option disabled selected hidden>--Select Gender--</option>
+                                <option value="ALL" selected >All Gender</option>
+                                <option value="male">MALE</option>
+                                <option value="female">FEMALE</option>
+                                <option value="other">OTHER</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="addmission_year">Addmission Year: </label>
+                            <select name="addmission_year" id="addmission_year" class="form-control" data-live-search="on" required>
+                                <option disabled selected hidden>--Select Addmission year--</option>
+                                <option value="0" selected >All Year</option>
+                                <option value="2020">2020</option>
+                                <option value="2019">2019</option>
+                                <option value="2018">2018</option>
+                                <option value="2017">2017</option>
+                                <option value="2016">2016</option>
+                                <option value="2015">2015</option>
+                            </select>
+                        </div>
+                    </div>
+                
+                    <div class="col-lg-6">
+                                        <div class="form-group"> 
+                                            <label for="semester">Semester: <font color="red">*</font></label> 
+                                            <select class="form-control" name="semester" id="semester" data-live-search="on" required>
+                                                <option disabled selected hidden>--Select Semester--</option>
+                                                <option value="0" selected >All Sem</option>
+                                                <option value="1">1st SEM</option>
+                                                <option value="2">2nd SEM</option>
+                                                <option value="3">3rd SEM</option>
+                                                <option value="4">4th SEM</option>
+                                                <option value="5">5th SEM</option>
+                                                <option value="6">6th SEM</option>
+                                                <option value="7">7th SEM</option>
+                                                <option value="8">8th SEM</option>
+                                            </select>
+                                        </div>
+                    </div> 
+                </div>     
+                    
+                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="branch">Branch:</label>
+                                            <select name="branch" id="branch" class="form-control" data-live-search="on" >
+                                                <option disabled selected hidden>--Select Branch--</option>
+                                                <option value="0" selected >All Branch</option>
+                                                <option value="2">Automobile Engineering</option>
+                                                <option value="3">Biomedical Engineering</option>
+                                                <option value="5">Chemical Engineering</option>
+                                                <option value="6">Civil Engineering</option>
+                                                <option value="7">Computer Engineering</option>
+                                                <option value="9">Electrical Engineering</option>
+                                                <option value="11">Electronics & Communication Engineering</option>
+                                                <option value="13">Environment Engineering</option>
+                                                <option value="16">Information Technology</option>
+                                                <option value="17">Instrumentation & Control Engineering</option>
+                                                <option value="19">Mechanical Engineering</option>
+                                                <option value="23">Plastic Technology</option>
+                                                <option value="26">Rubber Technology</option>
+                                                <option value="29">Textile Technology</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">	
+                                            <label for="course">Course:</label>
+                                            <select name="course" id="course" class="form-control" data-live-search="on" >
+                                                <option disabled selected hidden>--Select Course--</option>
+                                                <option value="ALL" selected >All Course</option>
+                                                <option value="BE">BE</option>
+                                                <option value="PDDC">PDDC</option>
+                                                <option value="PG">PG</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                </div>
+           
+                 <button id="bth-search"
+                            class="btn btn-primary btn-lg">Search
+                    </button>
+                
+           
+           
+    </div>  <!-- /.container -->
+    
+    <!-- contant -->
+	<div class="container-fluid">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAllBoxes"></th>
+                        <th>Sr No.</th>
+                        <th>Enroll No.</th>
+                        <th>Name</th>
+                        <th>Semester</th>
+                        <th>gmail</th>
+                        <th>View Profile</th>
+                  
+                    </tr>
+                </thead>
+                <tbody id="request_table">
+                </tbody>
+            </table>
+        </div>
+    </div>  <!-- /.container -->
+
+    <!-- view profile modal -->
+    <div class="modal fade" id="view_profile" tabindex="-1" role="dialog" aria-labelledby="view_profile_title" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="view_profile_title"></h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>  <!-- \. modal header -->
+
+            <div class="modal-body">
+                
+                <div class="container">
+                    <div class="row mt-5">
+                        <div class="col-sm-3 text-center">
+            
+                            <!-- view photo -->
+                            <img class="img-fluid img-thumbnail" src="../images/photo.jpg"  id="student_photo" alt="Your Photo">
+            
+                            <!-- view sign -->
+                            <img class="img-fluid img-thumbnail mt-3" src="../images/sign.jpg"  id="student_sign" alt="Your sign">
+                        </div>
+            
+                        <!-- view profile tab -->
+                        <div class="col-lg-9 col-md-9 mt-5 mt-sm-0">
+                            <ul class="nav nav-tabs viewProfileTab">
+                                <li class="nav-item col-md-3">
+                                    <a class="nav-link active" data-toggle="tab" href="#student"><i class="fas fa-user-graduate"></i> Student Details</a>
+                                </li>
+                                <li class="nav-item col-md-3">
+                                    <a class="nav-link" data-toggle="tab" href="#personal"><i class="fa fa-bookmark"></i> Personal Details</a>
+                                </li>
+                                <li class="nav-item col-md-3">
+                                    <a class="nav-link" data-toggle="tab" href="#family"><i class="fa fa-info"></i> Family Details</a>
+                                </li>
+                                 <li class="nav-item col-md-3">
+                                    <a class="nav-link" data-toggle="tab" href="#request"><i class="fa fa-file-text-o"></i> Request Details</a>
+                                </li>
+                                
+                            </ul>
+            
+                            <div class="tab-content">
+                                <div id="student" class="tab-pane fade active show">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td><i class="fa fa-user"></i> Full Name</td>
+                                                    <td id="fullname"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-envelope"></i> Email ID</td>
+                                                    <td id="vemail"></td id="">
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-phone"></i> Mobile Number</td>
+                                                    <td id="vcontact"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-user"></i> Gender</td>
+                                                    <td id="vgender"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-list-ol"></i> Caste</td>
+                                                    <td id="vcaste"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fas fa-praying-hands"></i> Religion</td>
+                                                    <td id="vreligion"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-calendar"></i> Addmission Year</td>
+                                                    <td id="vaddmission_year"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fas fa-graduation-cap"></i> Semester</td>
+                                                    <td id="vsemester"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fas fa-code-branch"></i> Branch</td>
+                                                    <td id="vbranch"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fas fa-graduation-cap"></i> Course</td>
+                                                    <td id="vcourse"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+            
+                                <div id="personal" class="tab-pane fade">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td><i class="fa fa-user"></i> Father's Name</td>
+                                                    <td id="vfather_name"></td>
+                                                </tr>
+                                                
+                                                <tr>
+                                                    <td><i class="fa fa-user"></i> Mother's Name</td>
+                                                    <td id="vmother_name"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-id-card"></i> Aadhar Card</td>
+                                                    <td id="vaadhar"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-calendar"></i> Birthday</td>
+                                                    <td id="vdate_of_birth"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fas fa-burn"></i> Blood Group</td>
+                                                    <td id="vblood_group"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-home"></i> Resident Address</td>
+                                                    <td>
+                                                        <address id="vre_add"></address>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-home"></i> Permanent Address</td>
+                                                    <td>
+                                                        <address id="vpr_add"></address>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-calendar"></i> SSC Year</td>
+                                                    <td id="vssc_year"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fas fa-registered"></i> SSC PR</td>
+                                                    <td id="vssc_pr"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-calendar"></i> HSC Year</td>
+                                                    <td id="vhsc_year"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fas fa-registered"></i> HSC PR</td>
+                                                    <td id="vhsc_pr"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+            
+                                <div id="family" class="tab-pane fade">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td><i class="fas fa-business-time"></i> Father Occupation</td>
+                                                    <td  id="vfather_occupation"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fa fa-home"></i> Office Address</td>
+                                                    <td>
+                                                        <address  id="voff_add"></address>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fas fa-business-time"></i> Mother Occupation</td>
+                                                    <td  id="vmother_occupation"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><i class="fas fa-rupee-sign"></i> Family Income</td>
+                                                    <td  id="vfamily_income"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                 <div id="request" class="tab-pane fade">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                            <tr>
+                                            <td><b>Request Status at</b></td> <td><b>Department</b></td> <td><b>SS-Mentor</b></td> <td><b>SS-Head</b></td></tr>
+                                                <tr>
+                                                    <td><i class="fa fa-file-text-o"></i> Bonafide</td>
+                                                   <td id="vb1"></td>
+                                                    <td id="vb2">2</td>
+                                                     <td id="vb3">3</td>
+                                                    
+                                                </tr>
+                                              
+                                                
+                                                <tr>
+                                                    <td><i class="fa fa-file-text-o"></i>Character</td>
+                                                    <td id="vc1"></td>
+                                                    <td id="vc2"></td>
+                                                     <td id="vc3"></td>
+                                                </tr>
+                                          
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+            
+                        </div>
+                    </div>
+                </div>
+
+            </div>  <!--/.modal-body-->
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+          </div>  <!--/.modal-content-->
+        </div>  <!--/.modal-dialog-->
+    </div>
+    <!-- /.view profile modal -->
+    
+
+
+    <!-- footer -->
+    <div id="addFooter"></div>
+    <!-- /.footer -->
+
+</body>
+
+    <!-- Jquery JavaScript -->
+	<script src="../plugins/jquery/jquery.min.js"></script>
+	<script src="../plugins/jquery/jquery.validate.min.js"></script> 
+	<script src="../plugins/jquery/additional-methods.min.js"></script>
+	
+	<!-- Bootstrap Core JavaScript -->
+	<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../plugins/bootstrap/js/popper.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <script src="../js/script.js"></script>
+  
+    <script src="../js/SSHeadData.js"></script> 
+   
+
+
+</html>	
+    
+   

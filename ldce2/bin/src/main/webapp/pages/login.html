@@ -1,0 +1,84 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+	<title>L. D. College of Engineering</title> 
+	
+	<meta charset="utf-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- favicon -->
+	<link rel="shortcut icon" href="../images/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+	<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+	
+	<!-- font-awesome CSS -->
+	<link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+
+</head> 
+
+<body>
+
+	<!-- navigation bar -->
+    <div id="navigation-bar"></div>
+	<!-- \.navigation bar -->
+
+	<!-- contant -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-lg-4 mx-auto mx-auto">
+
+				<!-- form -->
+				<form id="loginForm" action="login" method="POST" enctype="multipart/form-data">
+
+                    <h2 class="form-title text-center">Login</h2>
+
+                    <div class="form-group">
+                        <label for="role">Role:</label>
+                        <select name="type" class="form-control" id="role" data-live-search required>
+                            <option disabled selected hidden>--Select Role--</option>
+                            <option value="STUDENT">Student</option>
+                             <option value="ADMIN">Admin</option>
+                        </select>
+                    </div>
+                 
+                    <div class="form-group">
+                        <label for="username">Email/Mobile No:</label>
+                        <input type="text" class="form-control" name="username" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" name="password" id="password" required>
+					</div>
+					
+					<div class="form-group">
+						<a href="forgot">Forgot Password?</a>
+					</div>
+
+                    <div class="form-group text-center">
+                        <input id="login" type="submit" name="login" value="Login" class="btn btn-success">
+                    </div>
+
+				</form>   <!-- \.form -->
+			</div>  <!-- \.col -->
+		</div>  <!-- \.row -->
+	</div>  <!-- \.container -->
+
+</body>
+
+    <!-- Jquery JavaScript -->
+	<script src="../plugins/jquery/jquery.min.js"></script>
+	<script src="../plugins/jquery/jquery.validate.min.js"></script> 
+	<script src="../plugins/jquery/additional-methods.min.js"></script>
+	
+	<!-- Bootstrap Core JavaScript -->
+	<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../plugins/bootstrap/js/popper.min.js"></script>
+    
+    <!-- Custom CSS -->
+	<script src="../js/script.js"></script>
+   
+</html>	
