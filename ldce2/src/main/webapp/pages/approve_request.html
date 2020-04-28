@@ -7,17 +7,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<!-- favicon -->
-	<link rel="shortcut icon" href="../images/favicon.ico">
+	<link rel="shortcut icon" href="/images/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
-	<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css">
 	
 	<!-- font-awesome CSS -->
-    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../plugins/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="/plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/plugins/font-awesome/css/all.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 
 </head> 
 
@@ -30,35 +30,30 @@
 	<!-- contant -->
 	<div class="container-fluid">
 
-        <div class="table-responsive">
-
-			</br>
-					<div class='row'>
-							<div class='col-md-2'></div>
-							
-                             <input type="text" class="form-control col-md-6" id="searchText" placeholder="Enter Enrollment Number for serach" > 
-<!--                             <button id="bth-search"class="btn btn-primary" >Search </button>  -->
-                    </div>
-                           </br> 
-
-
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" id="selectAllBoxes"></th>
-                        <th>Sr No.</th>
-                        <th>Enroll No.</th>
-                        <th>Name</th>
-                        <th>Semester</th>
-                        <th>Request</th>
-                        <th>View Profile</th>
-                        <th>Approve</th>
-                        <th>Unapprove</th>
-                    </tr>
-                </thead>
-                <tbody id="request_table">
-                </tbody>
-            </table>
+        <div class="row my-4">
+            <input type="text" class="form-control col-md-6 mx-3 mx-md-auto" id="searchText" placeholder="Serach By Enter Enrollment No, Name..." autofocus>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>Enroll No.</th>
+                                <th>Name</th>
+                                <th>Semester</th>
+                                <th>Request</th>
+                                <th>View Profile</th>
+                                <th>Approve</th>
+                                <th>Unapprove</th>
+                            </tr>
+                        </thead>
+                        <tbody id="request_table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>  <!-- /.container -->
 
@@ -258,16 +253,16 @@
 </body>
 
     <!-- Jquery JavaScript -->
-	<script src="../plugins/jquery/jquery.min.js"></script>
-	<script src="../plugins/jquery/jquery.validate.min.js"></script> 
-	<script src="../plugins/jquery/additional-methods.min.js"></script>
+	<script src="/plugins/jquery/jquery.min.js"></script>
+	<script src="/plugins/jquery/jquery.validate.min.js"></script> 
+	<script src="/plugins/jquery/additional-methods.min.js"></script>
 	
 	<!-- Bootstrap Core JavaScript -->
-	<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../plugins/bootstrap/js/popper.min.js"></script>
+	<script src="/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/plugins/bootstrap/js/popper.min.js"></script>
     
     <!-- Custom CSS -->
-    <script src="../js/script.js"></script>
-    <script src="../js/approve_request.js"></script>
+    <script src="/js/script.js"></script>
+    <script src="/js/approve_request.js"></script>
 
 </html>	
