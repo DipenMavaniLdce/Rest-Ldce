@@ -7,16 +7,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<!-- favicon -->
-	<link rel="shortcut icon" href="../images/favicon.ico">
+	<link rel="shortcut icon" href="/images/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
-	<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css">
 	
 	<!-- font-awesome CSS -->
-	<link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/plugins/font-awesome/css/font-awesome.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 
 </head> 
 
@@ -32,7 +32,7 @@
 			<div class="col-sm-7 mx-auto">
 
 				<!-- form -->
-				<form id="regForm" onsubmit="" action="" method="POST" enctype="multipart/form-data">
+				<form id="regForm" class="regForm" onsubmit="" action="" method="POST" enctype="multipart/form-data">
 
                     <h2 class="form-title text-center">Registration form</h2>
 
@@ -90,21 +90,20 @@
 							<label for="confirm_password">Confirm Password: <font color="red">*</font></label> 
 							<input type="password" class="form-control" id="confirm_password" placeholder="Confirm Password" name="confirm_password" maxlength="32" required>
 						</div>
-	
-						<div class="form-group">
-							<label>Gender:  <font color="red">*</font></label>
-							<label class="form-check-label radio-inline">
-								<input type="radio" value="male" name="gender" required> Male 
-							</label>
-							<label class="form-check-label radio-inline"> 
-								<input type="radio" value="female" name="gender" required> Female 
-							</label>
-							<label class="form-check-label radio-inline"> 
-								<input type="radio" value="other" name="gender" required> Other 
-							</label>
-							
-						</div>
-							<div>
+
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="form-group">
+									<label>Gender:  <font color="red">*</font></label>
+									<select name="gender" id="gender" class="form-control" data-live-search="on" required>
+										<option disabled selected hidden>--Select Gender--</option>
+										<option value="male">Male</option>
+										<option value="female">Female</option>
+										<option value="other">Other</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-6">
 								<div class="form-group">
 									<label for="caste">Caste: <font color="red">*</font></label>
 									<select name="caste" id="caste" class="form-control" data-live-search="on" required>
@@ -117,8 +116,9 @@
 									</select>
 								</div>
 							</div>
+						</div>
+
 						<div class="row">
-						 
 							<div class="col-lg-6">
 								<div class="form-group">
 									<label for="admission_category">Admission category: <font color="red">*</font></label>
@@ -211,7 +211,7 @@
 							<div class="col-lg-6 text-center">
 								<div class="form-group">
 									<label>
-										<img src="images/photo.jpg" id="upload-photo" class="uploadPhoto" alt="Your Photo">
+										<img src="/images/photo.jpg" id="upload-photo" class="uploadPhoto" alt="Your Photo">
 										<span class="btn btn-primary btn-lg btn-block mx-auto">Add Photo</span>
 										<input type="file"  accept="image/*" name="photo" id="photo" class="form-control invisible position-absolute" style="left: 0;" required>
 									</label>
@@ -221,7 +221,7 @@
 							<div class="col-lg-6 mt-lg-5 text-center">
 								<div class="form-group">
 									<label>
-										<img src="images/sign.jpg" id="upload-sign" class="uploadSign" alt="Your Sign">
+										<img src="/images/sign.jpg" id="upload-sign" class="uploadSign" alt="Your Sign">
 										<span class="btn btn-primary btn-lg btn-block mx-auto">Add Sign</span>
 										<input type="file"  accept="image/*" name="sign" id="sign" class="form-control invisible position-absolute" style="left: 0;" required>
 									</label>
@@ -384,7 +384,7 @@
 										<option value="HK">Hong Kong</option>
 										<option value="HU">Hungary</option>
 										<option value="IS">Iceland</option>
-										<option value="IN">India</option>
+										<option value="IN" selected>India</option>
 										<option value="ID">Indonesia</option>
 										<option value="IR">Iran (Islamic Republic of)</option>
 										<option value="IQ">Iraq</option>
@@ -639,7 +639,7 @@
 										<option value="HK">Hong Kong</option>
 										<option value="HU">Hungary</option>
 										<option value="IS">Iceland</option>
-										<option value="IN">India</option>
+										<option value="IN" selected>India</option>
 										<option value="ID">Indonesia</option>
 										<option value="IR">Iran (Islamic Republic of)</option>
 										<option value="IQ">Iraq</option>
@@ -799,7 +799,7 @@
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label for="ssc_pr">SSC PR: <font color="red">*</font></label>
-									<input type="number" class="form-control" name="ssc_pr" id="ssc_pr" maxlength="5" required>
+									<input type="number" class="form-control" name="ssc_pr" id="ssc_pr" placeholder="99.00" maxlength="5" required>
 								</div>
 							</div>
 						</div>
@@ -820,7 +820,7 @@
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label for="hsc_pr">HSC PR: <font color="red">*</font></label>
-									<input type="number" class="form-control" name="hsc_pr" id="hsc_pr" maxlength="5" required>
+									<input type="number" class="form-control" name="hsc_pr" id="hsc_pr" placeholder="99.00" maxlength="5" required>
 								</div>
 							</div>
 						</div>
@@ -943,7 +943,7 @@
 								<option value="HK">Hong Kong</option>
 								<option value="HU">Hungary</option>
 								<option value="IS">Iceland</option>
-								<option value="IN">India</option>
+								<option value="IN" selected>India</option>
 								<option value="ID">Indonesia</option>
 								<option value="IR">Iran (Islamic Republic of)</option>
 								<option value="IQ">Iraq</option>
@@ -1101,7 +1101,7 @@
                     <div style="overflow:auto;">
                         <div style="float:right;">
                           <button type="button" class="btn btn-secondary " id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                          <button type="button"  class="btn btn-success regForm" id="nextBtn" onclick="nextPrev(1)" >Next</button>
+                          <button type="button"  class="btn btn-success" id="nextBtn" onclick="nextPrev(1)" >Next</button>
                         </div>
                     </div>
 
@@ -1113,16 +1113,16 @@
 </body>
 
     <!-- Jquery JavaScript -->
-	<script src="../plugins/jquery/jquery.min.js"></script>
-	<script src="../plugins/jquery/jquery.validate.min.js"></script> 
-	<script src="../plugins/jquery/additional-methods.min.js"></script>
+	<script src="/plugins/jquery/jquery.min.js"></script>
+	<script src="/plugins/jquery/jquery.validate.min.js"></script> 
+	<script src="/plugins/jquery/additional-methods.min.js"></script>
 	
 	<!-- Bootstrap Core JavaScript -->
-	<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../plugins/bootstrap/js/popper.min.js"></script>
+	<script src="/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/plugins/bootstrap/js/popper.min.js"></script>
     
     <!-- Custom CSS -->
-	<script src="../js/script.js"></script>
-	<script src="../js/Registration.js"></script>
+	<script src="/js/script.js"></script>
+	<script src="/js/Registration.js"></script>
 
 </html>	
