@@ -1,10 +1,12 @@
 // load Navigation bar, footer
-$("#addNavigation").load("../pages/navigation.html");
-$("#navigation-bar").load("../pages/navigation.html");
-$("#addFooter").load("../pages/footer.html");
+$("#addNavigation").load("/pages/navigation.html");
+$("#navigation-bar").load("/pages/navigation.html");
+$("#addFooter").load("/pages/footer.html");
 
-$("#admin-navigation-bar").load("../pages/AdminNavigation.html");
-$("#student-navigation-bar").load("../pages/StudentNavigation.html");
+$("#admin-navigation-bar").load("/pages/AdminNavigation.html");
+$("#student-navigation-bar").load("/pages/StudentNavigation.html");
+
+// Form Control
 // set page no
 var currentformPage = 1;
     lastpage = 3;
@@ -22,7 +24,6 @@ function showformPage(n) {
     }
     if (n == lastpage) {
         $("#nextBtn").html("Submit");
-       
         $("#step-"+n).addClass("finish");
     } else {
         $("#nextBtn").html("Next");
@@ -44,25 +45,22 @@ function fixStepIndicator(n) {
 
 // previous next button
 function nextPrev(n) {
-    
-    if (n == 1 && !$("#regForm,#editProfileForm").valid()) return false;
-    
-    $("#page-"+currentformPage).css("display","none");
-    
-    currentformPage = currentformPage + n;
-    if (currentformPage > lastpage) {
+
+	if (n == 1 && !$("#regForm,#editProfileForm").valid()) return false;
+	
+	if ((currentformPage+n) > lastpage) {
     	console.log("iin submit")
     	AjexSubmit();
-    	
-      // $("#regForm,#editProfileForm").submit();
+//        $("#regForm").submit();
         return false;
     }
-    $("html, body").animate({scrollTop: 0}, 1000);
+	
+    $("#page-"+currentformPage).css("display","none"); 
+    currentformPage = currentformPage + n;
+    
+    $("#regForm").animate({scrollTop: 0}, 1000);
     showformPage(currentformPage);
 }
-
-
-
 
 
 // preview photo sign
@@ -99,13 +97,13 @@ $("#copy_re").click(function(){
 });
 
 
-// login form course view
-$("#loginForm #role").change(function() {
-    if($("#role").val() == "01")
-        $("#course-tab").removeClass("d-none");
-    else
-    $("#course-tab").addClass("d-none");
-});
+// // login form course view
+// $("#loginForm #role").change(function() {
+//     if($("#role").val() == "01")
+//         $("#course-tab").removeClass("d-none");
+//     else
+//     $("#course-tab").addClass("d-none");
+// });
 
 
 // validator add method
@@ -121,7 +119,7 @@ var nameRule = {
     },
     addLineRule = {
         required:true,
-        regex: /^[a-zA-Z0-9-\/] ?([a-zA-Z0-9-\/]|[a-zA-Z0-9-\/] )*[a-zA-Z0-9-\/]$/,
+        regex: /^[a-zA-Z0-9-.,\/] ?([a-zA-Z0-9-.,\/]|[a-zA-Z0-9-.,\/] )*[a-zA-Z0-9-.,\/]$/,
     },
     addCityRule = {
         required: true,
@@ -132,7 +130,7 @@ var nameRule = {
         regex: /^[1-9][0-9]{5}$/,
     };
 
-// registration form validation
+// student registration form validation
 $("#regForm,#editProfileForm").validate({
 
     invalidHandler: function(form, validator) {
@@ -280,70 +278,6 @@ $("#regForm,#editProfileForm").validate({
     },
 });
 
-
-//login form validation
-$("#loginForm").validate({
-
-    invalidHandler: function(form, validator) {
-        $(validator.errorList[0].element).focus();
-    },
-    
-    rules: {
-        username: {
-            required:true,
-            regex: (/^[1-2][0-9]028[0-9]{7}$/)||(/^(([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4}))$/),
-        }
-        
-    },
-    messages: {
-        role: "Please select role.",
-        course: "Please select Course.",
-        username: "Please enter valid email/mobile no.",
-        password: "Please enter password.",
-    }
-});
-
-
-// forget password form validation
-$("#forgetPassForm").validate({
-    errorLabelContainer: '.errorTxt',
-    rules: {
-        email: {
-            required: true,
-            regex: /^(([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4}))$/,
-        },
-    },
-    messages: {
-        email: "Please enter valid email address.",
-    },
-});
-
-$("#changePasswordForm").validate({
-    rules: {
-        new_password: {
-            regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
-            minlength:8,
-            maxlength:32,
-        },
-        confirm_password : {
-            equalTo: '#password',
-        },
-    },
-    messages: {
-        current_password: "Please enter current password",
-        new_password : `<div id="repassword">
-                        <span>Password must contain the following:</span>
-                        <p>A <b>lowercase</b> letter.</p>
-                        <p>A <b>UPPERCASE</b> letter.</p>
-                        <p>A <b>number (0-9)</b>.</p>
-                        <p>A <b>special (!@#$%^&*) characters</b>.</p>
-                        <p>Password length between <b>8-32 characters</b>.</p>
-                    </div>`,
-        confirm_password: "Password don't match.",
-    },
-});
-
-
 // faculty reg Form validation
 $("#facultyRegForm").validate({
     invalidHandler: function(form, validator) {
@@ -401,7 +335,9 @@ $("#facultyRegForm").validate({
         confirm_password: "Password don't match.",
         branch: "Please select your Branch.",
         branch_year: "Please select your Beanch year.",
+        faculty_id: "Please enter your faculty id.",
         designation: "Please enter your designation",
+        gender: "Please select your gender.",
         photo: {
             required: "Please Upload your photo.",
             accept: "Only jpg,jpeg,png file type allow.",
@@ -424,17 +360,98 @@ $("#facultyRegForm").validate({
 });
 
 
+// login form validation
+$("#loginForm").validate({
 
-// Select all 
-
-$('#selectAllBoxes').click(function(e){
-    if(this.checked) {
-        $('.checkBoxes').each(function(){
-            this.checked = true;
-        })
-    } else {
-        $('.checkBoxes').each(function(){
-            this.checked = false;
-        })
+    invalidHandler: function(form, validator) {
+        $(validator.errorList[0].element).focus();
+    },
+    
+    rules: {
+        username: {
+            required:true,
+            regex: (/^[1-2][0-9]028[0-9]{7}$/)||(/^(([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4}))$/),
+        }
+        
+    },
+    messages: {
+        type: "Please select role.",
+        username: "Please enter valid email address.",
+        password: "Please enter password.",
     }
+});
+
+// forget password form validation
+$("#forgetPassForm").validate({
+    errorLabelContainer: '.errorTxt',
+    rules: {
+        email: {
+            required: true,
+            regex: /^(([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4}))$/,
+        },
+    },
+    messages: {
+        email: "Please enter valid email address.",
+    },
+});
+
+
+// change password form validation
+$("#changePasswordForm").validate({
+    rules: {
+        new_password: {
+            regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+            minlength:8,
+            maxlength:32,
+        },
+        confirm_password : {
+            equalTo: '#password',
+        },
+    },
+    messages: {
+        current_password: "Please enter current password",
+        new_password : `<div id="repassword">
+                        <span>Password must contain the following:</span>
+                        <p>A <b>lowercase</b> letter.</p>
+                        <p>A <b>UPPERCASE</b> letter.</p>
+                        <p>A <b>number (0-9)</b>.</p>
+                        <p>A <b>special (!@#$%^&*) characters</b>.</p>
+                        <p>Password length between <b>8-32 characters</b>.</p>
+                    </div>`,
+        confirm_password: "Password don't match.",
+    },
+});
+
+// change Photo form validation
+$("#changePhotoForm").validate({
+    rules: {
+        photo: {
+            accept: "jpg,png,jpeg",
+            maxsize : 512000,
+        }
+    },
+    messages: {
+        photo: {
+            required: "Please Upload your photo.",
+            accept: "Only jpg,jpeg,png file type allow.",
+            maxsize: "File size must not exceed 500 KB.",
+        }
+    },
+});
+
+// change Sign form validation
+$("#changeSignForm").validate({
+    rules: {
+        sign: {
+            accept: "jpg,png,jpeg",
+            maxsize : 512000,
+        }
+    },
+    messages: {
+        sign: {
+            required: "Please Upload your sign.",
+            accept: "Only jpg,jpeg,png file type allow.",
+            maxsize: "File size must not exceed 500 KB.",
+        }
+    },
 });

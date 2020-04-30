@@ -7,16 +7,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<!-- favicon -->
-	<link rel="shortcut icon" href="../images/favicon.ico">
+	<link rel="shortcut icon" href="/images/favicon.ico">
 
     <!-- Bootstrap Core CSS -->
-	<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css">
 	
 	<!-- font-awesome CSS -->
-	<link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/plugins/font-awesome/css/font-awesome.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 
 </head> 
 
@@ -32,7 +32,7 @@
 			<div class="col-md-6 col-lg-4 mx-auto mx-auto">
 
 				<!-- form -->
-				<form id="loginForm" action="login" method="POST" enctype="multipart/form-data">
+				<form id="loginForm" class="regForm" action="login" method="POST" enctype="multipart/form-data">
 
                     <h2 class="form-title text-center">Login</h2>
 
@@ -67,30 +67,30 @@
 		</div>  <!-- \.row -->
 	</div>  <!-- \.container -->
 
-</body>
-<script>
-function loginChanged(){
-	let t=document.getElementById("role").value ;
-	if(t==="ADMIN"){
-		let admin=document.getElementById("userId").innerHTML="Email:" ;
-		//let username=document.getElementById("username").name="Email:" ;
-	}
-	else{
-		let admin=document.getElementById("userId").innerHTML="Enrollment No:";
-		}
-}
 
-</script>
     <!-- Jquery JavaScript -->
-	<script src="../plugins/jquery/jquery.min.js"></script>
-	<script src="../plugins/jquery/jquery.validate.min.js"></script> 
-	<script src="../plugins/jquery/additional-methods.min.js"></script>
+	<script src="/plugins/jquery/jquery.min.js"></script>
+	<script src="/plugins/jquery/jquery.validate.min.js"></script> 
+	<script src="/plugins/jquery/additional-methods.min.js"></script>
 	
 	<!-- Bootstrap Core JavaScript -->
-	<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../plugins/bootstrap/js/popper.min.js"></script>
+	<script src="/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/plugins/bootstrap/js/popper.min.js"></script>
     
     <!-- Custom CSS -->
-	<script src="../js/script.js"></script>
-   
+	<script src="/js/script.js"></script>
+	
+	<script>
+		function loginChanged() {
+			if($("#role").val()==="ADMIN") {
+				$("#userId").html("Email:");
+			}
+			else {
+				$("#userId").html("Enrollment No:");
+			}
+		}	
+	</script>
+
+</body>
+  
 </html>
