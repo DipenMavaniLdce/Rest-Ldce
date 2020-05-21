@@ -37,7 +37,7 @@ public class Request {
 	Student student;
  
 	public Request() {
-System.out.println("crezzdvated");
+
 		 status1=0;
 		 status2=0;
 		 status3=0;

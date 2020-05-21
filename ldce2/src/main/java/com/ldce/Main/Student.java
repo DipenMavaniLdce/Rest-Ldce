@@ -79,6 +79,8 @@ public  class Student implements Serializable {
 	
     private List<Request> request;
 
+	@OneToMany(mappedBy = "student")
+	private List<FeeRefundDetails> feerefunddetails;
 
 
 
@@ -262,6 +264,14 @@ public  class Student implements Serializable {
 	
 
 
+
+	public List<FeeRefundDetails> getFeerefunddetails() {
+		return feerefunddetails;
+	}
+
+	public void setFeerefunddetails(List<FeeRefundDetails> feerefunddetails) {
+		this.feerefunddetails = feerefunddetails;
+	}
 
 	public List<Request> getRequest() {
 		return request;

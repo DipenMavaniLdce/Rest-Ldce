@@ -21,6 +21,8 @@ import com.ldce.Data.DocumentData;
 import com.ldce.Data.RequestDto;
 import com.ldce.Data.StudentDto;
 import com.ldce.Email.EmailSender;
+import com.ldce.Main.FeeRefundDetails;
+import com.ldce.Main.FeeRefundDetailsRepository;
 import com.ldce.Main.Request;
 import com.ldce.Main.RequestRepository;
 import com.ldce.Main.Student;
@@ -50,6 +52,11 @@ public class Dao {
 	
 	@Autowired
 	RequestRepository requestRepository;
+	
+	@Autowired
+	FeeRefundDetailsRepository feerefunddetailsRepository;
+	
+	
 	
 	Request request ;
 	//saveStudent
@@ -210,9 +217,23 @@ public boolean save(String enrollment,int status,String comment) {
 
 }
 
+public boolean saveFeeRefundDetails(FeeRefundDetails fee,String enrollment,MultipartFile fee_Receipt) {
+	Student student=studentRepo.findByEnrollment(enrollment);
+	fee.setStudent(student);
+	try {
+		fee.setFee_Receipt(fee_Receipt.getBytes());
+		feerefunddetailsRepository.save(fee);
+		
+	} catch (IOException e) {
+		e.printStackTrace();
+		return false;
+	}
+	return true;
+	
+}
 
 public boolean saveRequest(String enrollment,String type,MultipartFile fee_Receipt) throws IOException {
-	if(type=="character"||type=="rank"|| type=="conduct" ||type=="bonafide") {
+	if(type.equals("character")||type.equals("rank")|| type.equals("conduct") ||type.equals("bonafide")) {
 	Student student=studentRepo.findByEnrollment(enrollment);
 	Request Document=requestRepository.findByReq(type, enrollment);
 	if(Document==null) {

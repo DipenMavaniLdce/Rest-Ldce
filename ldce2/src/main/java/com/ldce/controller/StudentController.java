@@ -22,9 +22,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ldce.Dao.Dao;
 import com.ldce.Data.RequestDto;
 import com.ldce.Data.StudentDto;
+import com.ldce.Main.FeeRefundDetails;
 import com.ldce.Main.Student;
 import com.ldce.Main.Student_guardian;
 import com.ldce.Main.Student_info;
+import com.ldce.admin.Admin;
 import com.ldce.security.userdetails;
 
 @RestController()
@@ -44,7 +46,10 @@ public class StudentController {
 	 public ModelAndView getBonafide() {
 		 return new ModelAndView("bonafide.html");
 	 }
-	 
+	 @GetMapping("/feeRefundDetails")
+	 public ModelAndView getfeeRefundDetails() {
+		 return new ModelAndView("feeRefundDetails.html");
+	 }
 	 
 	 @GetMapping("/character")
 	 public ModelAndView getCharacter() {
@@ -122,9 +127,15 @@ public class StudentController {
 		
 
 	@PostMapping("/feeRefund")
-	public ModelAndView feeRefund() {
+	public ModelAndView feeRefund(@Valid FeeRefundDetails feerfund,@RequestParam("Fee_Receipt")MultipartFile Fee_Receipt) {
+		userdetails userDetails =(userdetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
-		return null;
+		if(dao.saveFeeRefundDetails(feerfund,userDetails.getEnrollment(),Fee_Receipt)) {
+			return new ModelAndView("redirect:/student/");
+		}
+		else {
+			return new ModelAndView("redirect:/student/");
+		}
 		
 	}
 		 
