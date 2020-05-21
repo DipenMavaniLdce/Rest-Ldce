@@ -220,9 +220,19 @@ $("#printContain").html($printContain);
 
 $("#printBtn").click(function() {
 	
+	printWindow=window.open("","PrintWindow","top=50,left=250,width=850,height=600");
+
+	printWindow.document.write($printContain);
+    printWindow.document.close();
+	printWindow.focus();
+	printWindow.print();
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) )
+		setTimeout(function () { printWindow.close(); }, 3000);
+	else
+		printWindow.close();
 	
-    var $body= $("body").html();
-    $("body").html($("#printContain").html());
-    window.print();
-    $("body").html($body);
+//    var $body= $("body").html();
+//    $("body").html($("#printContain").html());
+//    window.print();
+//    $("body").html($body);
 });

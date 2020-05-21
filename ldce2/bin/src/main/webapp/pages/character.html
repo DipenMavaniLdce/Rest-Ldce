@@ -4,16 +4,16 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 	<!-- favicon -->
-	<link rel="shortcut icon" href="../images/favicon.ico">
+	<link rel="shortcut icon" href="/images/favicon.ico">
 
    <!-- Bootstrap Core CSS -->
-	<link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css">
 	
 	<!-- font-awesome CSS -->
-    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../plugins/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="/plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/plugins/font-awesome/css/all.min.css">
        <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
     <style>
         page {
             background: white;
@@ -35,7 +35,24 @@
        
         <h1>
 			<span id="certiName">Character Certificate</span>
-			 <a name="" id="bonafide" class="btn btn-primary" href="../student/DocumentSubmit/character" role="button"> apply for character</a>
+			 
+			 <form action="/student/DocumentSubmit/character" method="POST" enctype="multipart/form-data">
+            <div class="col-lg-6 text-center">
+                <div class="form-group">
+                    <label>
+                        <img src="/images/photo.jpg" id="upload-photo" class="uploadPhoto" alt="Your Photo">
+                        <span class="btn btn-primary btn-lg btn-block mx-auto">Add Photo</span>
+                        <input type="file" accept="image/*" name="feeReceipt" id="feeReceipt"
+                            class="form-control invisible position-absolute" style="left: 0;" required>
+                    </label>
+
+                </div>
+            </div>
+            <div class="form-group text-center mt-3">
+                <input type="submit" value="Apply for bonafide" class="btn btn-success">
+            </div>
+
+        </form>
 			
 		</h1>
 		<hr class="mb-5">
@@ -65,4 +82,7 @@
     <script src="../plugins/bootstrap/js/popper.min.js"></script>
      <!-- Custom CSS -->
 	<script src="../js/script.js"></script>
+	<script src="/plugins/printJs/print.min.js"></script>
+	<script src="/js/print_certificate.js"></script>
+	
 </html>

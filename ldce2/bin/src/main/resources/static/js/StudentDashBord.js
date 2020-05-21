@@ -1,5 +1,5 @@
   $(document).ready(function(){
-    var JsonPath = "http://localhost:8080/student/studentDashboard";
+    var JsonPath = "/student/studentDashboard";
   
     var xhttp = new XMLHttpRequest();
     
@@ -25,42 +25,43 @@
             var x=data["request"][i];
         
             
-        if(x["status1"]=="1"){
-            if(x["status2"]=="1"){
-                if(x["status3"]=="1"){ 
-                    $("#cardstatus_"+x["type"]).html("<strong>Approved</strong>");
-                }
-                else if(x["status3"]=="2"){
+            if(x["status1"]=="1"){
+                if(x["status2"]=="1"){
+                    if(x["status3"]=="1"){ 
+                        $("#cardstatus_"+x["type"]).html("<strong>Approved</strong>");
+                    }
+                    else if(x["status3"]=="2"){
+                        
+                        $("#cardstatus_"+x["type"]).html("<strong>Rejected</strong>");
+                        $("#comment_"+x["type"]).css("display" , "block").append("<strong>"+x["faculty_comment"]+"</strong>");
                     
+                    }
+                    else{
+                        $("#cardstatus_"+x["type"]).html("<strong>Pending At : Student Section</strong>");  
+                        
+                    }
+                }
+                else if(x["status2"]=="2"){
                     $("#cardstatus_"+x["type"]).html("<strong>Rejected</strong>");
-                    $("#comment_"+x["type"]).css("display" , "block").append("<strong>"+x["faculty_comment"]+"</strong>");
-                   
+                    $("#comment_"+x["type"]).css("display" , "block").append("<strong>"+x["comment"]+"</strong>");
                 }
                 else{
-                    $("#cardstatus_"+x["type"]).html("<strong>Pending At : Student Section</strong>");  
-                    
+                
+                    $("#cardstatus_"+x["type"]).html("<strong>Pending At : Cleark </strong>");  
                 }
+                }
+                else if(x["status1"]=="2"){
+                    $("#cardstatus_"+x["type"]).html("<strong>Rejected</strong>");
+                    $("#comment_"+x["type"]).css("display" , "block").append("<strong>"+x["comment"]+"</strong>");
+                }
+                else{
+                    $("#cardstatus_"+x["type"]).html("<strong>Pending At : Department</strong>");  
+                }
+            
             }
-            else if(x["status2"]=="2"){
-                $("#cardstatus_"+x["type"]).html("<strong>Rejected</strong>");
-                $("#comment_"+x["type"]).css("display" , "block").append("<strong>"+x["comment"]+"</strong>");
-            }
-            else{
-              
-                $("#cardstatus_"+x["type"]).html("<strong>Pending At : Cleark </strong>");  
-            }
-        }
-        else if(x["status1"]=="2"){
-            $("#cardstatus_"+x["type"]).html("<strong>Rejected</strong>");
-            $("#comment_"+x["type"]).css("display" , "block").append("<strong>"+x["comment"]+"</strong>");
-        }
-        else{
-            $("#cardstatus_"+x["type"]).html("<strong>Pending At : Department</strong>");  
-        }
-        
         }
     }
-}
-xhttp.open("GET", JsonPath, true);
-xhttp.send();
-    });
+    xhttp.open("GET", JsonPath, true);
+    xhttp.send();
+
+});

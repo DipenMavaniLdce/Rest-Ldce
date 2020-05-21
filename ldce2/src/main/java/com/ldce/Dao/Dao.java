@@ -212,6 +212,7 @@ public boolean save(String enrollment,int status,String comment) {
 
 
 public boolean saveRequest(String enrollment,String type,MultipartFile fee_Receipt) throws IOException {
+	if(type=="character"||type=="rank"|| type=="conduct" ||type=="bonafide") {
 	Student student=studentRepo.findByEnrollment(enrollment);
 	Request Document=requestRepository.findByReq(type, enrollment);
 	if(Document==null) {
@@ -234,6 +235,8 @@ public boolean saveRequest(String enrollment,String type,MultipartFile fee_Recei
 			return true;
 		}
 	}	
+	}
+	else return false;
 }
 
 
