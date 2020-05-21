@@ -121,10 +121,16 @@ public class StudentController {
 	}
 		
 
+	@PostMapping("/feeRefund")
+	public ModelAndView feeRefund() {
 		
+		return null;
+		
+	}
 		 
 	 @PostMapping("/DocumentSubmit/{type}")
-		public ModelAndView postBonafide(@PathVariable("type")String type,@RequestParam("feeReceipt")MultipartFile feeReceipt) throws IOException {			userdetails userDetails =(userdetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		public ModelAndView postBonafide(@PathVariable("type")String type,@RequestParam("feeReceipt")MultipartFile feeReceipt) throws IOException {		
+		 userdetails userDetails =(userdetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			if(dao.saveRequest(userDetails.getEnrollment(),type,feeReceipt)) {
 				return new ModelAndView("redirect:/student/");
 			}

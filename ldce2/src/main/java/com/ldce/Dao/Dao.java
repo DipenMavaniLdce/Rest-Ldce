@@ -260,7 +260,7 @@ public List<Student> pendingRegistration(int branch) {
 	public List<DocumentData> penndingDocument(userdetails userDetails) {
 		String role=userDetails.getRole();
 		int branch = userDetails.getBranch();
-			 if(role.equals("ROLE_DEPARTMENT")) {return studentRepo.findByStatus1(branch);}
+		if(role.equals("ROLE_DEPARTMENT")) {return studentRepo.findByStatus1(branch);}
 		else if(role.equals("ROLE_SSMENTOR")) {return studentRepo.findByStatus2();}
 		else if(role.equals("ROLE_SSHEAD")) {return studentRepo.findByStatus3();}
 		else
@@ -326,7 +326,7 @@ public List<Student> pendingRegistration(int branch) {
 	public List<Student> findAllStudent(String caste, int addmission_year, String gender, int semester, int branch,String course) {
 		List<Student> students = studentRepo.findAll(Specification.where(StudentSpecification.getStudentByBranch(branch)
 				.and(StudentSpecification.getStudentByCaste(caste)
-				 .and(StudentSpecification.getStudentByCourse(course)
+				.and(StudentSpecification.getStudentByCourse(course)
 				.and(StudentSpecification.getStudentByGender(gender))))));
 		
 		//List<StudentDto> studentdto = ObjectMapperUtils.mapAll(students, StudentDto.class);
