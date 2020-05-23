@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="ISO-8859-1">
-    <title>Insert title here</title>
+    <title>L. D. College of Engineering</title>
     <!-- favicon -->
     <link rel="shortcut icon" href="/images/favicon.ico">
 
@@ -34,34 +34,26 @@
     <div id="student-navigation-bar"></div>
     <div class="container mt-5">
 
-        <form action="/student/DocumentSubmit/bonafide" method="POST" enctype="multipart/form-data">
-            <div class="col-lg-6 text-center">
+        <h1>Bonafide Certificate</h1>
+        <hr class="mb-5">
+
+        <form action="/student/DocumentSubmit/bonafide" id="applyCertiForm" method="POST" enctype="multipart/form-data">
+            <div class="col text-center">
                 <div class="form-group">
                     <label>
-                        <img src="/images/photo.jpg" id="upload-photo" class="uploadPhoto" alt="Your Photo">
-                        <span class="btn btn-primary btn-lg btn-block mx-auto">Add Photo</span>
+                        <img src="/images/document.png" id="upload-feeReceipt" class="uploadDocument" alt="Fee Receipt">
+                        <span class="btn btn-primary btn-lg btn-block mx-auto">Upload Fee Receipt</span>
                         <input type="file" accept="image/*" name="feeReceipt" id="feeReceipt"
                             class="form-control invisible position-absolute" style="left: 0;" required>
                     </label>
-
                 </div>
             </div>
-            <div class="form-group text-center mt-3">
-                <input type="submit" value="Apply for bonafide" class="btn btn-success">
+            <div class="form-group text-center my-4">
+                <input type="submit" value="Apply for Bonafide Certificate" class="btn btn-success btn-lg">
             </div>
 
         </form>
 
-        <hr class="mb-5">
-        <div class="table-responsive">
-            <table class="mx-auto">
-                <tr>
-                    <td>
-                        <page size="A4" id="printContain"> LDCE Bonafide</page>
-                    </td>
-                </tr>
-            </table>
-        </div>
     </div>
 
     <!-- footer -->
@@ -79,7 +71,6 @@
 <script src="/plugins/bootstrap/js/popper.min.js"></script>
 <!-- Custom CSS -->
 <script src="/js/script.js"></script>
-<script src="/plugins/printJs/print.min.js"></script>
 <script src="/js/print_certificate.js"></script>
 
 </html>
