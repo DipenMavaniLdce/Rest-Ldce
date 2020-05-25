@@ -1,6 +1,6 @@
 $( document ).ready(function() {	
 
-    var JsonPath = "/admin/Document";
+    var JsonPath = "/admin/pendingDocument";
     var xhttp = new XMLHttpRequest();
 
     xhttp.onreadystatechange = function () {
@@ -39,17 +39,20 @@ $( document ).ready(function() {
                     <td>`+sem+`</td>
                     <td id="`+type+``+enroll+`" name=`+type+`>`+type+`</td>
                     <td>
-                        <button class="btn btn-info openStudentModal" data-toggle="modal" data-target="#View_Document"  data-id="`+enroll+`">View Document</button>
+                        <button class="btn btn-info openDocumentModal" data-toggle="modal" data-target="#View_Document"  data-id="`+type+"-"+enroll+`">View Document</button>
                     </td>
                     <td>
-                        <button class="btn btn-info openFeeReceipt" data-toggle="modal" data-target="#Fee_Receipt"  data-id="`+enroll+`">Fee Receipt</button>
+                        <button class="btn btn-info openFeeReceipt" data-toggle="modal" data-target="#Fee_Receipt"  data-id="`+type+"-"+enroll+`">Fee Receipt</button>
                     </td>
-                    <td><button class="btn btn-success btnClick" name="approve"  id=`+type+`_`+enroll+`>Approve</button></td>
                     <td>
-        
+                        <button class="btn btn-success btnClick" name="approve"  id=`+type+`_`+enroll+`>Approve</button>
+                    <td>
+                        <div class="input-group mb-3">
                             <input type="text" class="form-control comment`+enroll+`"  id="comment`+type+``+enroll+`" name=`+type+`  placeholder="Unapprove Comment" required>
-                            <button  value="Unapprove" class="btn btn-danger btnClick" name="disapprove"id=`+type+`_`+enroll+`>disapprove</button>
-                        
+                            <div class="input-group-append">
+                                <button  value="Unapprove" class="btn btn-danger btnClick" name="disapprove" id=`+type+`_`+enroll+`>disapprove</button>
+                            </div>
+                        </div>
                     </td>
                     </tr>`
 
@@ -58,12 +61,63 @@ $( document ).ready(function() {
                 }
             }
 
+            $(".openDocumentModal").click(function() {
+                var id = $(this).data("id").split("-");
+                for(var i=0;i<x.length;i++){
+                    if(x[i].enrollment==id[1])
+                        if(x[i].type==id[0])
+                            break;
+                }
+
+                $student = {
+                    name:x[i].first_name + " " + x[i].middle_name + " " + x[i].last_name,
+                    enrollment: x[i].enrollment,
+                    gender:"Mr",
+                    branch:"Information Technology",
+                    sem:x[i].semester,
+                    course:x[i].course,
+                    addmissionYear:x[i].addmissionYear,
+                    graduationYear:x[i].addmissionYear + 4,
+                    cgpa:x[i].cgpa,
+                    rank: x[i].ranks,
+                }
+
+                if(x[i].gender == "male")
+                    $student.gender = "Mr";
+                else if(x[i].gender == "female")
+                    $student.gender = "Miss";
+                else
+                    $student.gender = "";
+
+                var bval="";
+                switch(x[i].branch) {  
+                    case 2: bval = "Automobile Engineering"; break;
+                    case 3: bval = "Biomedical Engineering"; break;
+                    case 5: bval = "Chemical Engineering"; break;
+                    case 6: bval = "Civil Engineering"; break;
+                    case 7: bval = "Computer Engineering"; break;
+                    case 9: bval = "Electrical Engineering"; break;
+                    case 11: bval = "Electronics & Communication Engineering"; break;
+                    case 13: bval = "Environment Engineering"; break;
+                    case 16: bval = "Information Technology"; break;
+                    case 17: bval = "Instrumentation & Control Engineering"; break;
+                    case 19: bval = "Mechanical Engineering"; break;
+                    case 23: bval = "Plastic Technology"; break;
+                    case 26: bval = "Rubber Technology"; break;
+                    case 29: bval = "Textile Technology"; break;
+                }
+                $student.branch = bval;
+                
+                $("#viewCertificate").html(generateCertificate(x[i].type, $student));
+            });
+
             $(".openFeeReceipt").click(function() {
-                var enroll = $(this).data("id");
+                var id = $(this).data("id").split("-");
                 console.log(x[0].enrollment);
                 for(var i=0;i<x.length;i++){
-                    if(x[i].enrollment==enroll)
-                        break;
+                    if(x[i].enrollment==id[1])
+                        if(x[i].type==id[0])
+                            break;
                 }
                     
                 $('#fee_Receipt').attr("src","data:image/jpg;base64,"+x[i].fee_Receipt);

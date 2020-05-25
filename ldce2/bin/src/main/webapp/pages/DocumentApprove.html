@@ -84,14 +84,14 @@
                     <div class="container">
                         <h1>
                             <span id="certiName">Bonafide Certificate</span>
-                            <button class="btn btn-success float-md-right mt-2" onclick="printJS('printContain', 'html')">Print</button>
+                            <button class="btn btn-success float-md-right mt-2" id="printBtn">Print</button>
                         </h1>
                         <hr class="mb-5">
                         <div class="table-responsive">
                             <table class="mx-auto">
                                 <tr>
                                     <td>
-                                        <page size="A4" id="printContain"> LDCE Bonafide</page>
+                                        <page size="A4" id="viewCertificate">Somthing Went Wrong!!</page>
                                     </td>
                                 </tr>
                             </table>
@@ -99,7 +99,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button class="btn btn-success btn-lg" onclick="printJS('printContain', 'html')">Print</button>
+                        <button class="btn btn-success btn-lg" id="printBtn">Print</button>
                         <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
                     </div>
 
@@ -146,7 +146,6 @@
     <!-- Custom CSS -->
     <script src="/js/script.js"></script>
     <script src="/js/DocumentApprove.js"></script>
-    <script src="/plugins/printJs/print.min.js"></script>
     <script src="/js/print_certificate.js"></script>
 
 </body>
