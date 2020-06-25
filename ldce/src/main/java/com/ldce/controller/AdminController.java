@@ -64,12 +64,30 @@ public class AdminController {
 		return new ModelAndView("DocumentApprove.html");
 	}
 	
+
+	@GetMapping("/approveBonafide")
+	public ModelAndView getapproveBonafide() {
+		return new ModelAndView("approveBonafide.html");
+	}
+	@GetMapping("/approveCharacter")
+	public ModelAndView getapproveCharacter() {
+		return new ModelAndView("approveCharacter.html");
+	}
+	@GetMapping("/approveConduct")
+	public ModelAndView getapproveConduct() {
+		return new ModelAndView("approveConduct.html");
+	}
+	@GetMapping("/approveRank")
+	public ModelAndView getapproveRank() {
+		return new ModelAndView("approveRank.html");
+	}
+	
 	
 	@GetMapping("/sshead")
 	public ModelAndView anyanyanya() { 
 		return new ModelAndView("SSHeadData.html");
 	}
-	
+
 	@CrossOrigin
 	@GetMapping("/adminDashbord")
 	public Map getdashBoard() {
@@ -97,6 +115,18 @@ public class AdminController {
 	 @CrossOrigin
 	 @PostMapping("/DocumentApprove")
 		public ResponseEntity documentApprove(String enrollment,String type,String status,String comment) {
+		userdetails userDetails =(userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(!dao.UpdateStatus(userDetails,enrollment,type,status,comment)) {
+				throw new RecordNotFoundException("student data is not found");
+		}
+		else {
+			return new  ResponseEntity(HttpStatus.OK);
+		}
+		
+	}
+	 @CrossOrigin
+	 @PostMapping("/RankApprove")
+		public ResponseEntity documentApprove(String enrollment,String type,String status,String rank,String comment) {
 		userdetails userDetails =(userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(!dao.UpdateStatus(userDetails,enrollment,type,status,comment)) {
 				throw new RecordNotFoundException("student data is not found");
@@ -145,6 +175,18 @@ public class AdminController {
 		List<DocumentData> students=dao.penndingDocument(userDetails);
 		return students;
 		
-	}			  
+	}		
+	@CrossOrigin
+	@GetMapping("/Auth")
+	public HashMap<String,String> getAdminAuth() {
+		userdetails userDetails =(userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		HashMap<String,String> auth = new HashMap<>();
+		auth.put("Email", userDetails.getEmail());
+		
+		auth.put("Role", userDetails.getRole());
+		auth.put("Branch", userDetails.getBranch()+"");
+		return auth;
+		
+	}
 			 
 }

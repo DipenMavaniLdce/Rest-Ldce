@@ -174,10 +174,9 @@ public class StudentController {
 
 	@PostMapping("/DocumentSubmit/rank")
 	public ModelAndView postRank(@RequestParam("feeReceipt") MultipartFile feeReceipt,
-			@RequestParam("marksheet") MultipartFile marksheet, @RequestParam("cgpa") double cgpa,
-			@RequestParam("rank") String rank) throws IOException {
+			@RequestParam("marksheet") MultipartFile marksheet, @RequestParam("cgpa") double cgpa) throws IOException {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (dao.saveRequest("rank", userDetails.getEnrollment(), feeReceipt, marksheet, cgpa, rank)) {
+		if (dao.saveRequest("rank", userDetails.getEnrollment(), feeReceipt, marksheet, cgpa, null)) {
 			return new ModelAndView("redirect:/student/");
 		} else {
 			return new ModelAndView("redirect:/student/");

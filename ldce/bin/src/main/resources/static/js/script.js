@@ -64,7 +64,7 @@ function nextPrev(n) {
 
 
 // preview photo sign
-$("#photo,#sign").change(function() {
+$("#photo,#sign,#feeReceipt,#marksheet").change(function() {
     var target=$(this).attr('id');
     if (!this.files.length || !window.FileReader) return;
     $(this).blur().focus();
@@ -95,15 +95,6 @@ $("#copy_re").click(function(){
             $("#pr_add_country").val($("#re_add_country").val());
     }
 });
-
-
-// // login form course view
-// $("#loginForm #role").change(function() {
-//     if($("#role").val() == "01")
-//         $("#course-tab").removeClass("d-none");
-//     else
-//     $("#course-tab").addClass("d-none");
-// });
 
 
 // validator add method
@@ -370,7 +361,7 @@ $("#loginForm").validate({
     rules: {
         username: {
             required:true,
-            regex: (/^[1-2][0-9]028[0-9]{7}$/)||(/^(([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4}))$/),
+            regex: /(^[1-2][0-9]028[0-9]{7}$)||(^(([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4}))$)/,
         }
         
     },
@@ -453,5 +444,38 @@ $("#changeSignForm").validate({
             accept: "Only jpg,jpeg,png file type allow.",
             maxsize: "File size must not exceed 500 KB.",
         }
+    },
+});
+
+
+// Apply Certificate Form Validation
+$("#applyCertiForm").validate({
+    rules: {
+        feeReceipt: {
+            accept: "jpg,png,jpeg",
+            maxsize : 512000,
+        },
+        marksheet: {
+            accept: "jpg,png,jpeg",
+            maxsize : 512000,
+        },
+        cgpa: {
+            required:true,
+            regex: /^[0-9]{1,2}\.[0-9]{1,2}$/,
+        },
+    },
+    messages: {
+        feeReceipt: {
+            required: "Please Upload Fee receipt.",
+            accept: "Only jpg,jpeg,png file type allow.",
+            maxsize: "File size must not exceed 500 KB.",
+        },
+        marksheet: {
+            required: "Please Upload your final year marksheet.",
+            accept: "Only jpg,jpeg,png file type allow.",
+            maxsize: "File size must not exceed 500 KB.",
+        },
+        cgpa: "Please enter valid CGPA.",
+        graduationYear: "Please select graduation year.",
     },
 });
