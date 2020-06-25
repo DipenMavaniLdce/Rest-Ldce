@@ -72,8 +72,16 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group"> 
-                        <label for="rank">Rank: <font color="red">*</font></label> 
-                        <input type="text" class="form-control" id="rank" placeholder="First, Second,.." name="rank" required> 
+                        <label for="graduationYear">Graduation Year: <font color="red">*</font></label> 
+                        <select name="graduationYear" id="graduationYear" class="form-control" data-live-search="on" required>
+                            <option disabled selected hidden>--Select Graduation Year--</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                        </select>
                     </div>
                 </div>
             </div>
