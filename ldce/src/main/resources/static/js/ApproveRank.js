@@ -6,29 +6,21 @@ $( document ).ready(function() {
     xhttp.onreadystatechange = function () {
         
         if (this.readyState == 4 && this.status == 200) {
-        	   const x = JSON.parse(this.responseText);
-        	  var xhttp1 = new XMLHttpRequest();
-        	
-        	  xhttp1.onreadystatechange = function() {
-        	    if (this.readyState == 4 && this.status == 200) {
-        	    	 var auth = JSON.parse(this.responseText);
-        	    	    showTableData(x,auth);
+        	const x = JSON.parse(this.responseText);
+        	var xhttp1 = new XMLHttpRequest();
+
+        	xhttp1.onreadystatechange = function() {
+        		if (this.readyState == 4 && this.status == 200) {
+        			var auth = JSON.parse(this.responseText);
+        			showTableData(x,auth);
         	    }
-        	  };
-        	  xhttp1.open("GET", "/admin/Auth", true);
-        	  xhttp1.send();
-        	  
-        	  
-         
-            
         
-        
-            $("#searchText").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $(".TableRow").filter(function() {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
+			$("#searchText").on("keyup", function() {
+			    var value = $(this).val().toLowerCase();
+			    $(".TableRow").filter(function() {
+			    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+			    });
+			});
         
             function showTableData(x,auth) {
             	var ROLE_DEPARTMENT= auth.Role=="ROLE_DEPARTMENT"?true:false;
@@ -46,12 +38,14 @@ $( document ).ready(function() {
                     <th>Approve</th>
                     <th>Unapprove</th>
                 </tr>`;
- $("#Heading_data").html(headData);	
+            	
+            	$("#Heading_data").html(headData);	
                 var certiType = $("#certiType").text();
+                
                 for(var i=0;i<x.length;i++) {
-
-                    if(x[i].type == "rank") {
-
+                    if(x[i].type !== "rank") {
+                    	continue;
+                    }
                     var enroll= x[i].enrollment,
                         requestid=x[i].request_id,
                         name = x[i].first_name + " " + x[i].middle_name + " " + x[i].last_name,
@@ -94,9 +88,6 @@ $( document ).ready(function() {
                     </tr>`
 
                     $("#request_table").append(n);
-
-                    }
-
                 }
             }
 
@@ -189,7 +180,7 @@ $( document ).ready(function() {
                 console.log(rank);
                 var dataString1={enrollment:enrollment,type:typ,status:this.name,comment:com} ;
             
-                    dataString = JSON.stringify(dataString1);
+                dataString = JSON.stringify(dataString1);
 
                     url= "/admin/RankApprove";
 //                    $.ajax({
@@ -223,7 +214,10 @@ $( document ).ready(function() {
 //                    })
                     return false;
                 });
-        
+            
+        	  };
+        	  xhttp1.open("GET", "/admin/Auth", true);
+        	  xhttp1.send();
         }
     };
     xhttp.open("GET", JsonPath, true);
