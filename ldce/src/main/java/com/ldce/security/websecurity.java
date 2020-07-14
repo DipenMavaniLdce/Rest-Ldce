@@ -13,15 +13,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import com.ldce.filter.JwtAuthenticationEntryPoint;
 @Configuration
 @EnableWebSecurity
 public class websecurity extends WebSecurityConfigurerAdapter {
+	@Autowired
+	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 	@Autowired
 	UserDetailsService userDetailsService;
@@ -40,6 +43,7 @@ public class websecurity extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
+
 		http.cors().and().csrf().disable().authorizeRequests()
 				.antMatchers("/admin/*").hasAnyRole("DEPARTMENT","SSHEAD","SSMENTOR")
 				.antMatchers("/student/*").hasAnyRole("STUDENT")
@@ -48,6 +52,7 @@ public class websecurity extends WebSecurityConfigurerAdapter {
 				.anyRequest()
 				.authenticated()
 				.and()
+				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
@@ -64,8 +69,9 @@ public class websecurity extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-
-	 
-	 
+	@Bean
+	public JwtAuthenticationEntryPoint getJwtAuthenticationEntryPoint() {
+		return new JwtAuthenticationEntryPoint();
+	}
 }
 

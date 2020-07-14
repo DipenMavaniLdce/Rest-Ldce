@@ -1,4 +1,5 @@
-package com.javainuse.config;
+package com.ldce.filter;
+
 import java.io.IOException;
 import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;
