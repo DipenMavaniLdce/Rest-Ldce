@@ -42,11 +42,12 @@ public class JwtUtil {
 
     private String createToken(Map<String, Object> claims, String username) {
         return Jwts.builder().setClaims(claims).setSubject(username).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+ 1000*60*60*10))
+                .setExpiration(new Date(System.currentTimeMillis()+ 1000*60*60))
                 .signWith(SignatureAlgorithm.HS256,SECRET_KEY).compact();
 
     }
     public Boolean validateToken(String token,UserDetails userDetails){
+        System.out.println(userDetails.getUsername());
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

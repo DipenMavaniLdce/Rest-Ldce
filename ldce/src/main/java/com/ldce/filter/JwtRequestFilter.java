@@ -1,6 +1,7 @@
 package com.ldce.filter;
 
 import com.ldce.security.userdetailservice;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,15 +28,24 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         final String authorizitionHeader = httpServletRequest.getHeader("Authorization");
         final String domain = httpServletRequest.getHeader("Domain");
-
+        System.out.println(authorizitionHeader);
         String username = null;
         String jwt = null;
         if(authorizitionHeader != null && authorizitionHeader.startsWith("Bearer ")){
             jwt = authorizitionHeader.substring(7);
-            username = jwtUtil.extractUsername(jwt);
+            try {
+                username = jwtUtil.extractUsername(jwt);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Unable to get JWT Token");
+            } catch (ExpiredJwtException e) {
+                System.out.println("JWT Token has expired");
+            }
+
         }
+
         if(domain!= null  && username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             String usernameDomain = username +","+ domain;
+            System.out.println(usernameDomain);
             UserDetails userDetails = this.userDetailService.loadUserByUsername(usernameDomain);
             if (jwtUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(

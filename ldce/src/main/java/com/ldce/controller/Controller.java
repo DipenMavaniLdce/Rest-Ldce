@@ -46,7 +46,7 @@ public class Controller {
 	private JwtUtil jwtUtil;
 
 	Request request;
-
+	@CrossOrigin
 	@PostMapping("/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
 		try{
@@ -58,10 +58,14 @@ public class Controller {
 			throw new Exception("InCorrent userName or Password",e);
 		}
 		final UserDetails userDetails =  myUserDetailsService.loadUserByUsername(authenticationRequest.getUsername()+","+authenticationRequest.getType());
+
 		final String jwt = jwtUtil.generateToken(userDetails);
+
 		return ResponseEntity.ok(new AuthenticationResponce(jwt,authenticationRequest.getType()));
 	}
-	
+
+
+
 	//return main page
 	@GetMapping("/")
 	public  ModelAndView home(){	

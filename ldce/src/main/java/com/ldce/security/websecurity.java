@@ -40,7 +40,7 @@ public class websecurity extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.csrf().disable().authorizeRequests()
+		http.cors().and().csrf().disable().authorizeRequests()
 				.antMatchers("/admin/*").hasAnyRole("DEPARTMENT","SSHEAD","SSMENTOR")
 				.antMatchers("/student/*").hasAnyRole("STUDENT")
 				.antMatchers("/authenticate","/signup","/","/registerFaculty")

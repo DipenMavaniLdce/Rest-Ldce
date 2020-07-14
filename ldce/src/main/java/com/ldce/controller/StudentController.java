@@ -132,7 +132,7 @@ public class StudentController {
 	}
 
 	// json data to logged in user
-	@CrossOrigin
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/data")
 	public Student getData() {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

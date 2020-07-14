@@ -63,7 +63,12 @@ this.enrollment=null;
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return email;
+			if(role.equals("ROLE_STUDENT")){
+				return enrollment;
+			}
+			return email;
+
+
 	}
 
 	@Override
