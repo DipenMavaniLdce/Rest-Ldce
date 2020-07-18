@@ -26,6 +26,7 @@ import com.ldce.exception.ValidationFailException;
 import com.ldce.security.userdetailservice;
 
 @RestController
+
 public class Controller {
 
 	@Autowired
@@ -143,10 +144,11 @@ public class Controller {
 	      }
 	      else return new ModelAndView("error.html");
 	}
-				
-	
+
+	@CrossOrigin
 	@PostMapping("/registerStudent")
-	public ModelAndView beAdd( @Valid Student student,BindingResult E,@Valid Student_info info,@Valid Student_guardian guardian,@RequestParam("photo")MultipartFile ph,@RequestParam("sign")MultipartFile si) {
+	public ResponseEntity<?> beAdd( @Valid Student student,BindingResult E,@Valid Student_info info,@Valid Student_guardian guardian,@RequestParam("photo")MultipartFile ph,@RequestParam("sign")MultipartFile si) {
+		System.out.println("hear");
 		if (E.hasErrors()) {
 			throw new ValidationException();
 		}
@@ -156,7 +158,7 @@ public class Controller {
 	 		} catch (IOException e) {
 	 			throw new ValidationFailException("data is not valid");
 	 		}
-	 		return new ModelAndView("redirect:/login");
+			return ResponseEntity.ok(new String("Success"));
 	 	}	
 	}
 			
