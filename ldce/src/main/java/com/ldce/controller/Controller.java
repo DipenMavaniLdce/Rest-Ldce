@@ -1,6 +1,5 @@
 package com.ldce.controller;
 
-
 import java.io.IOException;
 
 import javax.validation.Valid;
@@ -26,12 +25,11 @@ import com.ldce.exception.ValidationFailException;
 import com.ldce.security.userdetailservice;
 
 @RestController
-
 public class Controller {
 
 	@Autowired
 	Dao dao;
-	
+
 	@Autowired
 	ApplicationContext applicationContext;
 	@Autowired
@@ -47,125 +45,113 @@ public class Controller {
 	private JwtUtil jwtUtil;
 
 	Request request;
+
 	@CrossOrigin
 	@PostMapping("/authenticate")
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
-		try{
-			authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername()+","+authenticationRequest.getType(),authenticationRequest.getPassword())
-			);
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
+			throws Exception {
+		try {
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+					authenticationRequest.getUsername() + "," + authenticationRequest.getType(),
+					authenticationRequest.getPassword()));
+		} catch (BadCredentialsException e) {
+			throw new Exception("InCorrent userName or Password", e);
 		}
-		catch (BadCredentialsException e){
-			throw new Exception("InCorrent userName or Password",e);
-		}
-		final UserDetails userDetails =  myUserDetailsService.loadUserByUsername(authenticationRequest.getUsername()+","+authenticationRequest.getType());
+		final UserDetails userDetails = myUserDetailsService
+				.loadUserByUsername(authenticationRequest.getUsername() + "," + authenticationRequest.getType());
 
 		final String jwt = jwtUtil.generateToken(userDetails);
 
-		return ResponseEntity.ok(new AuthenticationResponce(jwt,authenticationRequest.getType()));
+		return ResponseEntity.ok(new AuthenticationResponce(jwt, authenticationRequest.getType()));
 	}
 
-
-
-	//return main page
+	// return main page
 	@GetMapping("/")
-	public  ModelAndView home(){	
+	public ModelAndView home() {
 		return new ModelAndView("index.html");
 	}
-	
-	
+
 	@GetMapping("/forgot")
 	public ModelAndView getforgot() {
-	return  new ModelAndView("forgot.html");
-	} 
-	
-	
-	//faculty registration
+		return new ModelAndView("forgot.html");
+	}
+
+	// faculty registration
 	@GetMapping("/registerFaculty")
 	public ModelAndView registerGetfaculty() {
-	return new ModelAndView("facultyRegForm.html");
+		return new ModelAndView("facultyRegForm.html");
 	}
-	
-	
-	//return login page
+
+	// return login page
 	@GetMapping("/login")
 	public ModelAndView loginGet() {
-	return new ModelAndView("login.html");
+		return new ModelAndView("login.html");
 	}
-		
-	
-	//return registration form
+
+	// return registration form
 	@GetMapping("/registerStudent")
 	public ModelAndView registerGetstudent() {
-	return new ModelAndView("regForm.html");
+		return new ModelAndView("regForm.html");
 	}
 
-
-
-
-	//faculty post data mapping
+	// faculty post data mapping
 	@PostMapping("/registerFaculty")
-	public @ResponseBody String facultyAdd( @Valid Admin admin,@RequestParam("photo")MultipartFile ph,@RequestParam("sign")MultipartFile si) 
-	{ 
+	public @ResponseBody String facultyAdd(@Valid Admin admin, @RequestParam("photo") MultipartFile ph,
+			@RequestParam("sign") MultipartFile si) {
 		try {
-			dao.save(admin,ph,si);
+			dao.save(admin, ph, si);
 		} catch (IOException e) {
-		
+
 		}
 		return "done";
-		
+
 	}
-	
-	//forgot password page
-	
-	
-	//forgot password post mapping
+
+	// forgot password page
+
+	// forgot password post mapping
 	@PostMapping("/forgot")
-	public @ResponseBody String  postforgot(@RequestParam("email")String email) {
-		if(dao.resetPassword(email)) { 
+	public @ResponseBody String postforgot(@RequestParam("email") String email) {
+		if (dao.resetPassword(email)) {
 			return "sucess...!";
 		}
-		
+
 		else {
 			return "no user found";
 		}
 	}
-	
-	//new password saving to database
+
+	// new password saving to database
 	@GetMapping("/reset-password")
-	public ModelAndView resetPassword(@RequestParam("token")String tokenValue) {
-	     return  new ModelAndView("resetPassword.jsp").addObject("token",tokenValue);
-	  }
+	public ModelAndView resetPassword(@RequestParam("token") String tokenValue) {
+		return new ModelAndView("resetPassword.jsp").addObject("token", tokenValue);
+	}
 
 	@PostMapping("/newpassword")
-	public ModelAndView savepassword(@RequestParam("new_password")String password ,@RequestParam("token") String token) {
-		if(dao.updatePassword(token, password)) {
+	public ModelAndView savepassword(@RequestParam("new_password") String password,
+			@RequestParam("token") String token) {
+		if (dao.updatePassword(token, password)) {
 			return new ModelAndView("redirect:/login");
-	      }
-	      else return new ModelAndView("error.html");
+		} else
+			return new ModelAndView("error.html");
 	}
 
 	@CrossOrigin
 	@PostMapping("/registerStudent")
-	public ResponseEntity<?> beAdd( @Valid Student student,BindingResult E,@Valid Student_info info,@Valid Student_guardian guardian,@RequestParam("photo")MultipartFile ph,@RequestParam("sign")MultipartFile si) {
+	public ResponseEntity<?> beAdd(@Valid Student student, BindingResult E, @Valid Student_info info,
+			@Valid Student_guardian guardian, @RequestParam("photo") MultipartFile ph,
+			@RequestParam("sign") MultipartFile si) {
 		System.out.println("hear");
 		if (E.hasErrors()) {
 			throw new ValidationException();
-		}
-		else {
-	 		try {
-	 			dao.save(student,info,guardian,ph,si);
-	 		} catch (IOException e) {
-	 			throw new ValidationFailException("data is not valid");
-	 		}
+		} else {
+			try {
+				dao.save(student, info, guardian, ph, si);
+			} catch (IOException e) {
+				throw new ValidationFailException("data is not valid");
+			}
 			return ResponseEntity.ok(new String("Success"));
-	 	}	
+		}
 	}
-			
-			
-			
-	
-	
+
 }
-		
-		

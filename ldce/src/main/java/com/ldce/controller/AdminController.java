@@ -33,160 +33,154 @@ import com.ldce.SearchSpecification.ObjectMapperUtils;
 import com.ldce.SearchSpecification.ReqCountSpecification;
 import com.ldce.exception.RecordNotFoundException;
 import com.ldce.security.userdetails;
-@Secured(value = {"ROLE_DEPARTMENT","ROLE_SSMENTOR","ROLE_SSHEAD"})
+
+@Secured(value = { "ROLE_DEPARTMENT", "ROLE_SSMENTOR", "ROLE_SSHEAD" })
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
 
 	@Autowired
 	StudentRepository strp;
-	
+
 	@Autowired
 	RequestRepository reqrepo;
-	
+
 	@Autowired
 	Dao dao;
-	
+
 	@GetMapping("/")
 	public ModelAndView admin() {
 		return new ModelAndView("AdminDashBoard.html");
 	}
-	 
-	
+
 	@GetMapping("/verifyStudent")
 	public ModelAndView getapprove() {
 		return new ModelAndView("approve_request.html");
 	}
-	
-	
+
 	@GetMapping("/DocumentApprove")
 	public ModelAndView getapproveRequest() {
 		return new ModelAndView("DocumentApprove.html");
 	}
-	
 
 	@GetMapping("/approveBonafide")
 	public ModelAndView getapproveBonafide() {
 		return new ModelAndView("approveBonafide.html");
 	}
+
 	@GetMapping("/approveCharacter")
 	public ModelAndView getapproveCharacter() {
 		return new ModelAndView("approveCharacter.html");
 	}
+
 	@GetMapping("/approveConduct")
 	public ModelAndView getapproveConduct() {
 		return new ModelAndView("approveConduct.html");
 	}
+
 	@GetMapping("/approveRank")
 	public ModelAndView getapproveRank() {
 		return new ModelAndView("approveRank.html");
 	}
-	
-	
+
 	@GetMapping("/sshead")
-	public ModelAndView anyanyanya() { 
+	public ModelAndView anyanyanya() {
 		return new ModelAndView("SSHeadData.html");
 	}
 
 	@CrossOrigin
 	@GetMapping("/adminDashbord")
 	public Map getdashBoard() {
-	 Map<String,Long> map=new HashMap<String,Long>();  
-		userdetails userDetails =(userdetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if(userDetails.getRole().equals("ROLE_DEPARTMENT")) {
-			map.put("register",strp.count(Specification.where(CountSpecification.CountByBranch(userDetails.getBranch()).and(CountSpecification.CountByFaculty_approve(0)))));
+		Map<String, Long> map = new HashMap<String, Long>();
+		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (userDetails.getRole().equals("ROLE_DEPARTMENT")) {
+			map.put("register", strp.count(Specification.where(CountSpecification.CountByBranch(userDetails.getBranch())
+					.and(CountSpecification.CountByFaculty_approve(0)))));
 			map.put("document", strp.countByStatus1(userDetails.getBranch()));
 			return map;
-		}
-		else if(userDetails.getRole().equals("ROLE_SSMENTOR")) {
-			map.put("document", reqrepo.count(Specification.where(ReqCountSpecification.CountBystatus1(1).and(ReqCountSpecification.CountBystatus2(0)))));
-			return map; 
-		}
-		else if(userDetails.getRole().equals("ROLE_SSHEAD")) {
-			map.put("document", reqrepo.count(Specification.where(ReqCountSpecification.CountBystatus1(1).and(ReqCountSpecification.CountBystatus2(1)).and(ReqCountSpecification.CountBystatus3(0)))));
-			return map; 
-		}
-		else {
+		} else if (userDetails.getRole().equals("ROLE_SSMENTOR")) {
+			map.put("document", reqrepo.count(Specification
+					.where(ReqCountSpecification.CountBystatus1(1).and(ReqCountSpecification.CountBystatus2(0)))));
+			return map;
+		} else if (userDetails.getRole().equals("ROLE_SSHEAD")) {
+			map.put("document", reqrepo.count(Specification.where(ReqCountSpecification.CountBystatus1(1)
+					.and(ReqCountSpecification.CountBystatus2(1)).and(ReqCountSpecification.CountBystatus3(0)))));
+			return map;
+		} else {
 			return null;
 		}
 	}
 
-	
-	 @CrossOrigin
-	 @PostMapping("/DocumentApprove")
-		public ResponseEntity documentApprove(String enrollment,String type,String status,String comment) {
-		userdetails userDetails =(userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if(!dao.UpdateStatus(userDetails,enrollment,type,status,comment)) {
-				throw new RecordNotFoundException("student data is not found");
-		}
-		else {
-			return new  ResponseEntity(HttpStatus.OK);
-		}
-		
-	}
-	 @CrossOrigin
-	 @PostMapping("/RankApprove")
-		public ResponseEntity documentApprove(String enrollment,String type,String status,String rank,String comment) {
-		userdetails userDetails =(userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if(!dao.UpdateStatus(userDetails,enrollment,type,status,comment)) {
-				throw new RecordNotFoundException("student data is not found");
-		}
-		else {
-			return new  ResponseEntity(HttpStatus.OK);
-		}
-		
-	}
-	 
-		
-	 @PostMapping("/facultyApprove")
-	public ResponseEntity data1(String enrollment,int status,String comment ) {
-		if(!dao.save(enrollment,status,comment)) {
+	@CrossOrigin
+	@PostMapping("/DocumentApprove")
+	public ResponseEntity documentApprove(String enrollment, String type, String status, String comment) {
+		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (!dao.UpdateStatus(userDetails, enrollment, type, status, comment)) {
 			throw new RecordNotFoundException("student data is not found");
+		} else {
+			return new ResponseEntity(HttpStatus.OK);
 		}
-		else {
-			return new  ResponseEntity(HttpStatus.OK);
-		}	
-	} 
-	
-	
-	
+
+	}
+
+	@CrossOrigin
+	@PostMapping("/RankApprove")
+	public ResponseEntity documentApprove(String enrollment, String type, String status, String rank, String comment) {
+		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (!dao.UpdateStatus(userDetails, enrollment, type, status, comment)) {
+			throw new RecordNotFoundException("student data is not found");
+		} else {
+			return new ResponseEntity(HttpStatus.OK);
+		}
+
+	}
+
+	@PostMapping("/facultyApprove")
+	public ResponseEntity data1(String enrollment, int status, String comment) {
+		if (!dao.save(enrollment, status, comment)) {
+			throw new RecordNotFoundException("student data is not found");
+		} else {
+			return new ResponseEntity(HttpStatus.OK);
+		}
+	}
+
 	@CrossOrigin
 	@GetMapping("/ssheaddata")
-	public List<Student> anyany(String caste,int addmission_year,String gender,int semester,int branch ,String course) {
+	public List<Student> anyany(String caste, int addmission_year, String gender, int semester, int branch,
+			String course) {
 		return dao.findAllStudent(caste, addmission_year, gender, semester, branch, course);
 	}
-	
-	
-	//list json data to admin
+
+	// list json data to admin
 	@CrossOrigin
 	@GetMapping("/pendingRegList")
-	public List <Student> getStudentData(){
+	public List<Student> getStudentData() {
 		System.out.println("heeeeee");
-		userdetails userDetails =(userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		List<Student> student=dao.pendingRegistration(userDetails.getBranch());
+		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<Student> student = dao.pendingRegistration(userDetails.getBranch());
 		return student;
-	} 
-			
-			
+	}
+
 	@CrossOrigin
 	@GetMapping("/pendingDocument")
-	public List <DocumentData> getDocApprove(){
-		userdetails userDetails =(userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		List<DocumentData> students=dao.penndingDocument(userDetails);
+	public List<DocumentData> getDocApprove() {
+		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<DocumentData> students = dao.penndingDocument(userDetails);
 		return students;
-		
-	}		
+
+	}
+
 	@CrossOrigin
 	@GetMapping("/Auth")
-	public HashMap<String,String> getAdminAuth() {
-		userdetails userDetails =(userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		HashMap<String,String> auth = new HashMap<>();
+	public HashMap<String, String> getAdminAuth() {
+		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		HashMap<String, String> auth = new HashMap<>();
 		auth.put("Email", userDetails.getEmail());
-		
+
 		auth.put("Role", userDetails.getRole());
-		auth.put("Branch", userDetails.getBranch()+"");
+		auth.put("Branch", userDetails.getBranch() + "");
 		return auth;
-		
+
 	}
-			 
+
 }

@@ -59,7 +59,7 @@ public class Request {
 	public void setFee_Receipt(byte[] fee_Receipt) {
 		Fee_Receipt = fee_Receipt;
 	}
-	
+
 	public byte[] getMarksheet() {
 		return marksheet;
 	}
