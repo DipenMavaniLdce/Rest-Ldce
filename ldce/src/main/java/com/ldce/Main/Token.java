@@ -1,5 +1,4 @@
- package com.ldce.Main;
-
+package com.ldce.Main;
 
 import java.util.Date;
 import java.util.UUID;
@@ -17,50 +16,49 @@ import javax.persistence.TemporalType;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 public class Token {
-		@Id
-	    @GeneratedValue(strategy = GenerationType.AUTO)
-	   
-	    private long tokenid;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long tokenid;
 
-	 
-	    private String tokenValue;
+	private String tokenValue;
 
-	    @Temporal(TemporalType.TIMESTAMP)
-	    private Date createdDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdDate;
 
-		public Token() {
-		
-			this.tokenValue = UUID.randomUUID().toString();
-			this.createdDate = new Date();
-		}
+	public Token() {
 
-		public long getTokenid() {
-			return tokenid;
-		}
+		this.tokenValue = UUID.randomUUID().toString();
+		this.createdDate = new Date();
+	}
 
-		public void setTokenid(long tokenid) {
-			this.tokenid = tokenid;
-		}
+	public long getTokenid() {
+		return tokenid;
+	}
 
-		public String getTokenValue() {
-			return tokenValue;
-		}
+	public void setTokenid(long tokenid) {
+		this.tokenid = tokenid;
+	}
 
-		public void setTokenValue(String tokenValue) {
-			this.tokenValue = tokenValue;
-		}
+	public String getTokenValue() {
+		return tokenValue;
+	}
 
-		public Date getCreatedDate() {
-			return createdDate;
-		}
+	public void setTokenValue(String tokenValue) {
+		this.tokenValue = tokenValue;
+	}
 
-		public void setCreatedDate(Date createdDate) {
-			this.createdDate = createdDate;
-		}
-	    
-	    
-	    public void newTokenValue() {
-			this.tokenValue = UUID.randomUUID().toString();}
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public void newTokenValue() {
+		this.tokenValue = UUID.randomUUID().toString();
+	}
 }

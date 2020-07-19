@@ -30,7 +30,7 @@ import com.ldce.security.userdetails;
 public class StudentController {
 	@Autowired
 	Dao dao;
-	
+
 	@Autowired
 	FeeRefundDetailsRepository frdr;
 
@@ -86,7 +86,7 @@ public class StudentController {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return dao.ttmp(userDetails.getEnrollment());
 	}
-	
+
 	@CrossOrigin
 	@GetMapping("feeRefund")
 	public FeeRefundDetails getfeerefund() {
@@ -94,9 +94,6 @@ public class StudentController {
 		System.out.println(userDetails);
 		return dao.feerefund(userDetails.getEnrollment());
 	}
-
-
-
 
 	// change photo
 	@PostMapping("/changePhoto")
@@ -182,12 +179,12 @@ public class StudentController {
 			return new ModelAndView("redirect:/student/");
 		}
 	}
-	
+
 	@PostMapping("/feeRefund")
 	public ModelAndView feeRefund(@Valid FeeRefundDetails feerefund,
 			@RequestParam("fee_recipt") MultipartFile fee_recipt) {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-System.out.println(feerefund);
+		System.out.println(feerefund);
 		if (dao.saveFeeRefundDetails(feerefund, userDetails.getEnrollment(), fee_recipt)) {
 			return new ModelAndView("redirect:/student/");
 		} else {
@@ -195,6 +192,5 @@ System.out.println(feerefund);
 		}
 
 	}
-	
-	
+
 }
