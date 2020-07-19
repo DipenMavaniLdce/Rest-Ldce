@@ -176,7 +176,11 @@ public class Dao {
 		student = studentRepo.findByEmail(email);
 		return student;
 	}
-
+	public  Admin adminCrenditials(String email){
+		Admin admin = null;
+		admin = adminrepo.findByEmail(email);
+		return  admin;
+	}
 	public boolean save(String enrollment, int status, String comment) {
 		// TODO Auto-generated method stub
 		System.out.println(enrollment);

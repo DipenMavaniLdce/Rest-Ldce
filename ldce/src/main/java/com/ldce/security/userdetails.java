@@ -67,8 +67,6 @@ this.enrollment=null;
 				return enrollment;
 			}
 			return email;
-
-
 	}
 
 	@Override

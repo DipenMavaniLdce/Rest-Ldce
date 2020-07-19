@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ldce.Main.AuthenticationResponce;
+import com.ldce.admin.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -33,9 +35,10 @@ import com.ldce.SearchSpecification.ObjectMapperUtils;
 import com.ldce.SearchSpecification.ReqCountSpecification;
 import com.ldce.exception.RecordNotFoundException;
 import com.ldce.security.userdetails;
+@CrossOrigin
 @Secured(value = {"ROLE_DEPARTMENT","ROLE_SSMENTOR","ROLE_SSHEAD"})
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class AdminController {
 
 	@Autowired
@@ -187,6 +190,19 @@ public class AdminController {
 		auth.put("Branch", userDetails.getBranch()+"");
 		return auth;
 		
+	}
+
+	@GetMapping("/data")
+	public ResponseEntity<?> getAdminCrenditials(){
+		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Admin admin = dao.adminCrenditials(userDetails.getEmail());
+		if(admin != null){
+			return  new ResponseEntity(admin,HttpStatus.OK);
+		}else{
+			HashMap<String,String> responce = new HashMap<String,String>();
+			responce.put("Error","Credentials Not Found");
+			return new ResponseEntity(responce,HttpStatus.NOT_FOUND);
+		}
 	}
 			 
 }

@@ -24,9 +24,9 @@ import com.ldce.Main.Student;
 import com.ldce.Main.Student_guardian;
 import com.ldce.Main.Student_info;
 import com.ldce.security.userdetails;
-
+@CrossOrigin
 @RestController()
-@RequestMapping("/student")
+@RequestMapping("/api/student")
 public class StudentController {
 	@Autowired
 	Dao dao;

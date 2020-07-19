@@ -2,6 +2,7 @@ package com.ldce.controller;
 
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -10,6 +11,7 @@ import com.ldce.Main.*;
 import com.ldce.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,7 +28,7 @@ import com.ldce.exception.ValidationFailException;
 import com.ldce.security.userdetailservice;
 
 @RestController
-
+@RequestMapping("/api")
 public class Controller {
 
 	@Autowired
@@ -56,7 +58,9 @@ public class Controller {
 			);
 		}
 		catch (BadCredentialsException e){
-			throw new Exception("InCorrent userName or Password",e);
+			HashMap<String,String> error = new HashMap<>();
+			error.put("error","InCorrent userName or Password");
+			return new  ResponseEntity(error,HttpStatus.UNAUTHORIZED);
 		}
 		final UserDetails userDetails =  myUserDetailsService.loadUserByUsername(authenticationRequest.getUsername()+","+authenticationRequest.getType());
 
