@@ -28,6 +28,7 @@ import com.ldce.exception.ValidationFailException;
 import com.ldce.security.userdetailservice;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api")
 public class Controller {
 
