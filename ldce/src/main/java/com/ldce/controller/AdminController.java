@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ldce.admin.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -110,6 +111,19 @@ public class AdminController {
 			return null;
 		}
 	}
+
+
+
+	// json data to logged in user
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping("/data")
+	public Admin getData() {
+		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Admin admin = dao.adminCrenditials(userDetails.getEmail());
+		//System.out.println(a);
+		return admin;
+	}
+
 
 	@CrossOrigin
 	@PostMapping("/DocumentApprove")

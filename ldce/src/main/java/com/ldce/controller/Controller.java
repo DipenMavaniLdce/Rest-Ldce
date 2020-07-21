@@ -27,9 +27,10 @@ import com.ldce.admin.Admin;
 import com.ldce.exception.ValidationFailException;
 import com.ldce.security.userdetailservice;
 
-@RestController
 @CrossOrigin
 @RequestMapping("/api")
+@RestController
+
 public class Controller {
 
 	@Autowired
@@ -50,7 +51,12 @@ public class Controller {
 	private JwtUtil jwtUtil;
 
 	Request request;
-	@CrossOrigin
+
+	@GetMapping("/try")
+	public String trying(){
+		return "Hello";
+	}
+
 	@PostMapping("/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
 		try{
@@ -74,8 +80,8 @@ public class Controller {
 
 	//return main page
 	@GetMapping("/")
-	public  ModelAndView home(){	
-		return new ModelAndView("index.html");
+	public  String home(){
+		return "Dhaval";
 	}
 	
 	
