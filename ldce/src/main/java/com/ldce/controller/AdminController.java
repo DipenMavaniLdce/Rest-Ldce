@@ -95,16 +95,16 @@ public class AdminController {
 		Map<String, Long> map = new HashMap<String, Long>();
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (userDetails.getRole().equals("ROLE_DEPARTMENT")) {
-			map.put("register", strp.count(Specification.where(CountSpecification.CountByBranch(userDetails.getBranch())
+			map.put("Registered Student", strp.count(Specification.where(CountSpecification.CountByBranch(userDetails.getBranch())
 					.and(CountSpecification.CountByFaculty_approve(0)))));
-			map.put("document", strp.countByStatus1(userDetails.getBranch()));
+			map.put("Applied Document", strp.countByStatus1(userDetails.getBranch()));
 			return map;
 		} else if (userDetails.getRole().equals("ROLE_SSMENTOR")) {
-			map.put("document", reqrepo.count(Specification
+			map.put("Applied Document", reqrepo.count(Specification
 					.where(ReqCountSpecification.CountBystatus1(1).and(ReqCountSpecification.CountBystatus2(0)))));
 			return map;
 		} else if (userDetails.getRole().equals("ROLE_SSHEAD")) {
-			map.put("document", reqrepo.count(Specification.where(ReqCountSpecification.CountBystatus1(1)
+			map.put("Applied Document", reqrepo.count(Specification.where(ReqCountSpecification.CountBystatus1(1)
 					.and(ReqCountSpecification.CountBystatus2(1)).and(ReqCountSpecification.CountBystatus3(0)))));
 			return map;
 		} else {
