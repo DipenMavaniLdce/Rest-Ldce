@@ -52,10 +52,6 @@ public class Controller {
 
 	Request request;
 
-	@GetMapping("/try")
-	public String trying(){
-		return "Hello";
-	}
 
 	@PostMapping("/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
@@ -77,39 +73,6 @@ public class Controller {
 	}
 
 
-
-	//return main page
-	@GetMapping("/")
-	public  String home(){
-		return "Dhaval";
-	}
-	
-	
-	@GetMapping("/forgot")
-	public ModelAndView getforgot() {
-	return  new ModelAndView("forgot.html");
-	} 
-	
-	
-	//faculty registration
-	@GetMapping("/registerFaculty")
-	public ModelAndView registerGetfaculty() {
-	return new ModelAndView("facultyRegForm.html");
-	}
-	
-	
-	//return login page
-	@GetMapping("/login")
-	public ModelAndView loginGet() {
-	return new ModelAndView("login.html");
-	}
-		
-	
-	//return registration form
-	@GetMapping("/registerStudent")
-	public ModelAndView registerGetstudent() {
-	return new ModelAndView("regForm.html");
-	}
 
 
 

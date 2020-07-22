@@ -57,6 +57,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 			}
 		}
+		httpServletRequest.setAttribute("username",username);
+		httpServletRequest.setAttribute("Domain",domain);
 		filterChain.doFilter(httpServletRequest, httpServletResponse);
 	}
 }

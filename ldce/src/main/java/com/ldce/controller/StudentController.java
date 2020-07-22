@@ -1,11 +1,14 @@
 package com.ldce.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +27,7 @@ import com.ldce.Main.Student;
 import com.ldce.Main.Student_guardian;
 import com.ldce.Main.Student_info;
 import com.ldce.security.userdetails;
-@CrossOrigin
+
 @RestController()
 @RequestMapping("/api/student")
 public class StudentController {
@@ -39,36 +42,7 @@ public class StudentController {
 		return new ModelAndView("StudentDashBoard.html");
 	}
 
-	// looged user-detail
-	@GetMapping("/view_profile")
-	public ModelAndView currentUserNameSimple(HttpServletRequest request) {
-		return new ModelAndView("view_profile.html");
-	}
 
-	@GetMapping("/bonafide")
-	public ModelAndView getBonafide() {
-		return new ModelAndView("bonafide.html");
-	}
-
-	@GetMapping("/character")
-	public ModelAndView getCharacter() {
-		return new ModelAndView("character.html");
-	}
-
-	@GetMapping("/conduct")
-	public ModelAndView getConduct() {
-		return new ModelAndView("conduct.html");
-	}
-
-	@GetMapping("/rank")
-	public ModelAndView getRank() {
-		return new ModelAndView("rank.html");
-	}
-
-	@GetMapping("/feeRefundDetails")
-	public ModelAndView getfeeRefundDetails() {
-		return new ModelAndView("feeRefundDetails.html");
-	}
 
 	// account confirmation using email
 	@GetMapping("/confirm-account")
@@ -80,14 +54,14 @@ public class StudentController {
 		}
 	}
 
-	@CrossOrigin
+
 	@GetMapping("studentDashboard")
 	public RequestDto getdashBoard() {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return dao.ttmp(userDetails.getEnrollment());
 	}
 
-	@CrossOrigin
+
 	@GetMapping("feeRefund")
 	public FeeRefundDetails getfeerefund() {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -97,23 +71,51 @@ public class StudentController {
 
 	// change photo
 	@PostMapping("/changePhoto")
-	public ModelAndView chnagePhoto(HttpServletRequest request, @RequestParam("photo") MultipartFile studentPhoto)
+	public ResponseEntity<?> chnagePhoto(HttpServletRequest request, @RequestParam("photo") MultipartFile studentPhoto)
 			throws IOException {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (dao.updatephoto(userDetails.getEmail(), studentPhoto)) {
+		String username= (String)request.getAttribute("username");
+		System.out.println(username);
+        HashMap<String,String> res = new HashMap<String,String>();
+		if (dao.updatephoto(username, studentPhoto)) {
+
+            res.put("success","User Photo Changed Successfully");
+            return new ResponseEntity<>(
+                    res,
+                    HttpStatus.OK
+            );
 		}
-		return new ModelAndView("redirect:/student/view_profile");
+		else{
+		    res.put("error","Server Eorror");
+            return new ResponseEntity<>(
+                    res,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
 
 	}
 
 	// update sign
 	@PostMapping("/changeSign")
-	public ModelAndView chnagesign(HttpServletRequest request, @RequestParam("sign") MultipartFile studentSign)
+	public ResponseEntity<?> chnagesign(HttpServletRequest request, @RequestParam("sign") MultipartFile studentSign)
 			throws IOException {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (dao.updatesign(userDetails.getEmail(), studentSign)) {
+	    String username = (String)request.getAttribute("username");
+		System.out.println(username);
+        HashMap<String,String> res = new HashMap<String,String>();
+		if (dao.updatesign(username, studentSign)) {
+            res.put("success","User Sign Updated Successfully");
+            return new ResponseEntity<>(
+                    res,
+                    HttpStatus.OK
+            );
 		}
-		return new ModelAndView("redirect:/student/view_profile");
+		else{
+            res.put("error","Server Eorror");
+            return new ResponseEntity<>(
+                    res,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+
 
 	}
 

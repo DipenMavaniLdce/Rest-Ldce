@@ -124,9 +124,9 @@ public class Dao {
 		return student;
 	}
 
-	public boolean updatesign(String email, MultipartFile sign) throws IOException {
+	public boolean updatesign(String enrollment, MultipartFile sign) throws IOException {
 
-		Student student = studentRepo.findByEmail(email);
+		Student student = studentRepo.findByEnrollment(enrollment);
 		if (student != null) {
 			student.setStudent_sign(sign.getBytes());
 			studentRepo.save(student);
@@ -135,9 +135,9 @@ public class Dao {
 			return false;
 	}
 
-	public boolean updatephoto(String email, MultipartFile photo) throws IOException {
+	public boolean updatephoto(String username, MultipartFile photo) throws IOException {
 
-		Student student = studentRepo.findByEmail(email);
+		Student student = studentRepo.findByEnrollment(username);
 		if (student != null) {
 			student.setStudent_photo(photo.getBytes());
 			studentRepo.save(student);
