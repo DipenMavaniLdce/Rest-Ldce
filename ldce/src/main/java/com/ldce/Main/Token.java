@@ -29,7 +29,6 @@ public class Token {
 	private Date createdDate;
 
 	public Token() {
-
 		this.tokenValue = UUID.randomUUID().toString();
 		this.createdDate = new Date();
 	}

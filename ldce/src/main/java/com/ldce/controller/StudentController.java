@@ -10,12 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -120,23 +115,25 @@ public class StudentController {
 	}
 
 	@PostMapping("/updateStudent")
-	public ModelAndView updateProfile(HttpServletRequest request, @Valid Student Student, @Valid Student_info info,
+	public ResponseEntity<?> updateProfile(HttpServletRequest request, @Valid Student Student, @Valid Student_info info,
 			@Valid Student_guardian guardian) throws IOException {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		if (dao.updateprofile(userDetails.getEmail(), Student, info, guardian)) {
+	    String username = (String)request.getAttribute("username");
+		HashMap<String,String> res = new HashMap<>();
+		if (dao.updateprofile(username, Student, info, guardian)) {
+			res.put("success","Data Updated SuccessFully");
+			return new ResponseEntity<>(res,HttpStatus.OK);
+		}else {
+			res.put("error", "server Error");
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ModelAndView("redirect:/student/view_profile");
-
 	}
 
 	// json data to logged in user
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/data")
-	public Student getData() {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Student student = dao.search(userDetails.getEmail());
-		System.out.println(student);
+	public Student getData(HttpServletRequest request) {
+		String username = (String) request.getAttribute("username");
+		Student student = dao.search(username);
 		return student;
 	}
 
@@ -195,4 +192,25 @@ public class StudentController {
 
 	}
 
+	@PostMapping("/changePassword")
+	public ResponseEntity<?> changePassword(HttpServletRequest request){
+		String username = (String)request.getAttribute("username");
+		String password = request.getParameter("password");
+		String current_password = request.getParameter("current_password");
+		HashMap<String,String> res = new HashMap<String, String>();
+		String s = dao.changePasswordDao(username, password, current_password);
+		if (s == null){
+			res.put("error","Server error");
+			return new ResponseEntity<>(res,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		else if(s.equals("true")){
+			res.put("success","true");
+			return new ResponseEntity<>(res, HttpStatus.OK);
+		}
+		else{
+			res.put("error","false");
+			return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+		}
+
+	}
 }

@@ -146,9 +146,9 @@ public class Dao {
 			return false;
 	}
 
-	public boolean updateprofile(String email, Student student, Student_info info, Student_guardian guardian) {
+	public boolean updateprofile(String enrollment, Student student, Student_info info, Student_guardian guardian) {
 
-		Student existstudent = studentRepo.findByEmail(email);
+		Student existstudent = studentRepo.findByEnrollment(enrollment);
 		student.setStudent_id(existstudent.getStudent_id());
 		info.setId(existstudent.getInfo().getId());
 		student.setPassword(existstudent.getPassword());
@@ -157,7 +157,7 @@ public class Dao {
 		student.setStudent_sign(existstudent.getStudent_sign());
 		guardian.setId(existstudent.getGuardian().getId());
 		student.setGuardian(guardian);
-		if (!(student.getEmail().equals(existstudent.getEmail()))) {
+		if (!(student.getEnrollment().equals(existstudent.getEnrollment()))) {
 			existstudent.getToken().newTokenValue();
 			existstudent.setIsactive(false);
 		}
@@ -173,7 +173,7 @@ public class Dao {
 
 	public Student search(String email) {
 		Student student = null;
-		student = studentRepo.findByEmail(email);
+		student = studentRepo.findByEnrollment(email);
 		return student;
 	}
 	public  Admin adminCrenditials(String email){
@@ -371,5 +371,23 @@ public class Dao {
 
 		}
 		return false;
+	}
+
+	public String changePasswordDao(String username,String password, String current_password){
+		Student student = studentRepo.findByEnrollment(username);
+		if(!student.getPassword().equals(current_password)){
+			return "false";
+		}else {
+			try{
+				student.setPassword(password);
+				studentRepo.save(student);
+				return "true";
+			}
+			catch (Exception e){
+				System.out.println(e.toString());
+				return null;
+			}
+		}
+
 	}
 }
