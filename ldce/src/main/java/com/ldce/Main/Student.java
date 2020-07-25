@@ -49,6 +49,7 @@ public class Student implements Serializable {
 	String caste;
 	String religion;
 	int addmission_year;
+	int graduation_year;
 	int semester;
 	int branch;
 	String course;
@@ -295,6 +296,14 @@ public class Student implements Serializable {
 
 	public void setAdmission_category(String admission_category) {
 		this.admission_category = admission_category;
+	}
+
+	public int getGraduation_year() {
+		return graduation_year;
+	}
+
+	public void setGraduation_year(int graduation_year) {
+		this.graduation_year = graduation_year;
 	}
 
 	@Override

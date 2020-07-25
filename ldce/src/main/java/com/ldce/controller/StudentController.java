@@ -37,8 +37,6 @@ public class StudentController {
 		return new ModelAndView("StudentDashBoard.html");
 	}
 
-
-
 	// account confirmation using email
 	@GetMapping("/confirm-account")
 	public ModelAndView confirmStudentAccount(@RequestParam("token") String tokenValue) {
@@ -49,13 +47,11 @@ public class StudentController {
 		}
 	}
 
-
 	@GetMapping("studentDashboard")
 	public RequestDto getdashBoard() {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return dao.ttmp(userDetails.getEnrollment());
 	}
-
 
 	@GetMapping("feeRefund")
 	public FeeRefundDetails getfeerefund() {
@@ -68,24 +64,17 @@ public class StudentController {
 	@PostMapping("/changePhoto")
 	public ResponseEntity<?> chnagePhoto(HttpServletRequest request, @RequestParam("photo") MultipartFile studentPhoto)
 			throws IOException {
-		String username= (String)request.getAttribute("username");
+		String username = (String) request.getAttribute("username");
 		System.out.println(username);
-        HashMap<String,String> res = new HashMap<String,String>();
+		HashMap<String, String> res = new HashMap<String, String>();
 		if (dao.updatephoto(username, studentPhoto)) {
 
-            res.put("success","User Photo Changed Successfully");
-            return new ResponseEntity<>(
-                    res,
-                    HttpStatus.OK
-            );
+			res.put("success", "User Photo Changed Successfully");
+			return new ResponseEntity<>(res, HttpStatus.OK);
+		} else {
+			res.put("error", "Server Eorror");
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		else{
-		    res.put("error","Server Eorror");
-            return new ResponseEntity<>(
-                    res,
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        }
 
 	}
 
@@ -93,36 +82,28 @@ public class StudentController {
 	@PostMapping("/changeSign")
 	public ResponseEntity<?> chnagesign(HttpServletRequest request, @RequestParam("sign") MultipartFile studentSign)
 			throws IOException {
-	    String username = (String)request.getAttribute("username");
+		String username = (String) request.getAttribute("username");
 		System.out.println(username);
-        HashMap<String,String> res = new HashMap<String,String>();
+		HashMap<String, String> res = new HashMap<String, String>();
 		if (dao.updatesign(username, studentSign)) {
-            res.put("success","User Sign Updated Successfully");
-            return new ResponseEntity<>(
-                    res,
-                    HttpStatus.OK
-            );
+			res.put("success", "User Sign Updated Successfully");
+			return new ResponseEntity<>(res, HttpStatus.OK);
+		} else {
+			res.put("error", "Server Eorror");
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		else{
-            res.put("error","Server Eorror");
-            return new ResponseEntity<>(
-                    res,
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        }
-
 
 	}
 
 	@PostMapping("/updateStudent")
 	public ResponseEntity<?> updateProfile(HttpServletRequest request, @Valid Student Student, @Valid Student_info info,
 			@Valid Student_guardian guardian) throws IOException {
-	    String username = (String)request.getAttribute("username");
-		HashMap<String,String> res = new HashMap<>();
+		String username = (String) request.getAttribute("username");
+		HashMap<String, String> res = new HashMap<>();
 		if (dao.updateprofile(username, Student, info, guardian)) {
-			res.put("success","Data Updated SuccessFully");
-			return new ResponseEntity<>(res,HttpStatus.OK);
-		}else {
+			res.put("success", "Data Updated SuccessFully");
+			return new ResponseEntity<>(res, HttpStatus.OK);
+		} else {
 			res.put("error", "server Error");
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -137,46 +118,88 @@ public class StudentController {
 		return student;
 	}
 
-	@PostMapping("/DocumentSubmit/bonafide")
-	public ModelAndView postBonafide(@RequestParam("feeReceipt") MultipartFile feeReceipt) throws IOException {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (dao.saveRequest("bonafide", userDetails.getEnrollment(), feeReceipt, null, 0, null)) {
-			return new ModelAndView("redirect:/student/");
-		} else {
-			return new ModelAndView("redirect:/student/");
-		}
-	}
+//	@PostMapping("/DocumentSubmit/bonafide")
+//	public ModelAndView postBonafide(@RequestParam("feeReceipt") MultipartFile feeReceipt) throws IOException {
+//		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		if (dao.saveRequest("bonafide", userDetails.getEnrollment(), feeReceipt, null, 0, null)) {
+//			return new ModelAndView("redirect:/student/");
+//		} else {
+//			return new ModelAndView("redirect:/student/");
+//		}
+//	}
+//
+//	@PostMapping("/DocumentSubmit/character")
+//	public ModelAndView postCharacter(@RequestParam("feeReceipt") MultipartFile feeReceipt) throws IOException {
+//		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		if (dao.saveRequest("character", userDetails.getEnrollment(), feeReceipt, null, 0, null)) {
+//			return new ModelAndView("redirect:/student/");
+//		} else {
+//			return new ModelAndView("redirect:/student/");
+//		}
+//	}
+//
+//	@PostMapping("/DocumentSubmit/conduct")
+//	public ModelAndView postConduct(@RequestParam("feeReceipt") MultipartFile feeReceipt,
+//			@RequestParam("marksheet") MultipartFile marksheet, @RequestParam("cgpa") double cgpa) throws IOException {
+//		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		if (dao.saveRequest("conduct", userDetails.getEnrollment(), feeReceipt, marksheet, cgpa, null)) {
+//			return new ModelAndView("redirect:/student/");
+//		} else {
+//			return new ModelAndView("redirect:/student/");
+//		}
+//	}
 
-	@PostMapping("/DocumentSubmit/character")
-	public ModelAndView postCharacter(@RequestParam("feeReceipt") MultipartFile feeReceipt) throws IOException {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (dao.saveRequest("character", userDetails.getEnrollment(), feeReceipt, null, 0, null)) {
-			return new ModelAndView("redirect:/student/");
-		} else {
-			return new ModelAndView("redirect:/student/");
-		}
-	}
+	@PostMapping("/DocumentSubmit/{type}")
+	public ResponseEntity<?> requestCertificate(@PathVariable("type") String type,
+			@RequestParam("feeReceipt") MultipartFile feeReceipt,
+			@RequestParam(name = "marksheet", required = false) MultipartFile marksheet,
+			@RequestParam(name = "cgpa", required = false, defaultValue = "0") Double cgpa,
+			@RequestParam(name = "graduation_year", required = false, defaultValue = "0") Integer graduation_year, HttpServletRequest request) throws IOException {
 
-	@PostMapping("/DocumentSubmit/conduct")
-	public ModelAndView postConduct(@RequestParam("feeReceipt") MultipartFile feeReceipt,
-			@RequestParam("marksheet") MultipartFile marksheet, @RequestParam("cgpa") double cgpa) throws IOException {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (dao.saveRequest("conduct", userDetails.getEnrollment(), feeReceipt, marksheet, cgpa, null)) {
-			return new ModelAndView("redirect:/student/");
-		} else {
-			return new ModelAndView("redirect:/student/");
+		String username = (String) request.getAttribute("username");
+		HashMap<String, String> res = new HashMap<String, String>();
+		System.out.println(type);
+		System.out.println(feeReceipt);
+		System.out.println(marksheet);
+		System.out.println(cgpa);
+		System.out.println(graduation_year);
+		
+		switch (type) {
+		case "bonafide":
+			if (feeReceipt == null) {
+				res.put("error", "Fee Receipt Required!");
+				return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+			}
+			break;
+		case "character":
+			if (feeReceipt == null || graduation_year == null) {
+				res.put("error", "Please give all required details!");
+				return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+			}
+			break;
+		case "conduct":
+		case "rank":
+			if (feeReceipt == null || marksheet == null || cgpa == null || graduation_year == null) {
+				res.put("error", "Please give all required details!");
+				return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+			}
+			break;
+		default:
+			res.put("error", "Wrong Document Request!");
+			return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
 		}
-	}
 
-	@PostMapping("/DocumentSubmit/rank")
-	public ModelAndView postRank(@RequestParam("feeReceipt") MultipartFile feeReceipt,
-			@RequestParam("marksheet") MultipartFile marksheet, @RequestParam("cgpa") double cgpa) throws IOException {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (dao.saveRequest("rank", userDetails.getEnrollment(), feeReceipt, marksheet, cgpa, null)) {
-			return new ModelAndView("redirect:/student/");
+		int code = dao.saveRequest(type, username, feeReceipt, marksheet, cgpa, graduation_year);
+		if (code == 409) {
+			res.put("error", "Document Request Already Exist!");
+			return new ResponseEntity<>(res, HttpStatus.CONFLICT);
+		} else if (code == 200) {
+			return new ResponseEntity<>(res, HttpStatus.OK);
 		} else {
-			return new ModelAndView("redirect:/student/");
+			res.put("error", "Server Error");
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+
 	}
 
 	@PostMapping("/feeRefund")
@@ -193,22 +216,20 @@ public class StudentController {
 	}
 
 	@PostMapping("/changePassword")
-	public ResponseEntity<?> changePassword(HttpServletRequest request){
-		String username = (String)request.getAttribute("username");
+	public ResponseEntity<?> changePassword(HttpServletRequest request) {
+		String username = (String) request.getAttribute("username");
 		String password = request.getParameter("password");
 		String current_password = request.getParameter("current_password");
-		HashMap<String,String> res = new HashMap<String, String>();
+		HashMap<String, String> res = new HashMap<String, String>();
 		String s = dao.changePasswordDao(username, password, current_password);
-		if (s == null){
-			res.put("error","Server error");
-			return new ResponseEntity<>(res,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		else if(s.equals("true")){
-			res.put("success","true");
+		if (s == null) {
+			res.put("error", "Server error");
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+		} else if (s.equals("true")) {
+			res.put("success", "true");
 			return new ResponseEntity<>(res, HttpStatus.OK);
-		}
-		else{
-			res.put("error","false");
+		} else {
+			res.put("error", "false");
 			return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
 		}
 

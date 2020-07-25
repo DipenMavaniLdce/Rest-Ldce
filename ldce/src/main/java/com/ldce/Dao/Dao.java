@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import javax.print.Doc;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -217,34 +218,39 @@ public class Dao {
 
 	}
 
-	public boolean saveRequest(String type, String enrollment, MultipartFile fee_Receipt, MultipartFile marksheet,
-			double cgpa, String rank) throws IOException {
-		if (type.equals("character") || type.equals("rank") || type.equals("conduct") || type.equals("bonafide")) {
-			Student student = studentRepo.findByEnrollment(enrollment);
-			Request Document = requestRepository.findByReq(type, enrollment);
-			if (Document == null) {
-				Document = getReq();
-				Document.setLive(true);
-				Document.setType(type);
-				Document.setStudent(student);
-				Document.setFee_Receipt(fee_Receipt.getBytes());
+	public int saveRequest(String type, String enrollment, MultipartFile fee_Receipt, MultipartFile marksheet, double cgpa, int graduation_year) throws IOException {
+		Student student = studentRepo.findByEnrollment(enrollment);
+		Request Document = requestRepository.findByReq(type, enrollment);
+		if (Document == null) {
+			Document = getReq();
+			Document.setLive(true);
+			Document.setType(type);
+			Document.setStudent(student);
+			Document.setFee_Receipt(fee_Receipt.getBytes());
+			if(marksheet != null)
 				Document.setMarksheet(marksheet.getBytes());
-				Document.setCgpa(cgpa);
-				Document.setRanks(rank);
-				requestRepository.save(Document);
-				return true;
-			} else {
-				if (Document.isLive()) {
-					return false;
-				} else {
-					resetRequest(Document, fee_Receipt, marksheet, cgpa, rank);
-					Document.setStudent(student);
-					requestRepository.save(Document);
-					return true;
-				}
+			Document.setCgpa(cgpa);
+			if(student.getGraduation_year() != graduation_year) {
+				System.out.println("in in");
+				student.setGraduation_year(graduation_year);
+				studentRepo.save(student);
 			}
-		} else
-			return false;
+			requestRepository.save(Document);
+			return 200;
+		} else {
+			if (Document.isLive()) {
+				return 409;
+			} else {
+				resetRequest(Document, fee_Receipt, marksheet, cgpa);
+				if(student.getGraduation_year() != graduation_year) {
+					student.setGraduation_year(graduation_year);
+					studentRepo.save(student);
+				}
+				Document.setStudent(student);
+				requestRepository.save(Document);
+				return 200;
+			}
+		}
 	}
 
 	private Request getReq() {
@@ -350,8 +356,7 @@ public class Dao {
 		return temp;
 	}
 
-	public void resetRequest(Request request, MultipartFile fee_Receipt, MultipartFile marksheet, double cgpa,
-			String rank) throws IOException {
+	public void resetRequest(Request request, MultipartFile fee_Receipt, MultipartFile marksheet, double cgpa) throws IOException {
 		request.setApplied_date(new Date());
 		request.setComment(null);
 		request.setStatus1(0);
@@ -361,7 +366,6 @@ public class Dao {
 		if (marksheet != null)
 			request.setMarksheet(marksheet.getBytes());
 		request.setCgpa(cgpa);
-		request.setRanks(rank);
 		request.setLive(true);
 	}
 
