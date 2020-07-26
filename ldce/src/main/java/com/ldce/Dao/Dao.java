@@ -338,14 +338,17 @@ public class Dao {
 		}
 	}
 
-	public List<Student> findAllStudent(String caste, int addmission_year, String gender, int semester, int branch,
+	public List<Student> findAllStudent(String caste, Integer addmission_year, String gender, Integer semester, Integer branch,
 			String course) {
-		List<Student> students = studentRepo.findAll(Specification.where(StudentSpecification.getStudentByBranch(branch)
-				.and(StudentSpecification.getStudentByCaste(caste).and(StudentSpecification.getStudentByCourse(course)
-						.and(StudentSpecification.getStudentByGender(gender))))));
-
-		// List<StudentDto> studentdto = ObjectMapperUtils.mapAll(students,
-		// StudentDto.class);
+		
+		List<Student> students = studentRepo.findAll(Specification.where(
+				StudentSpecification.getStudentByBranch(branch)
+				.and(StudentSpecification.getStudentByCaste(caste))
+				.and(StudentSpecification.getStudentByCourse(course))
+				.and(StudentSpecification.getStudentByGender(gender))
+				.and(StudentSpecification.getStudentByAddmissionYear(addmission_year))
+				.and(StudentSpecification.getStudentBySem(semester))));
+		
 		return students;
 	}
 

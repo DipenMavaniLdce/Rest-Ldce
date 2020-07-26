@@ -112,51 +112,19 @@ public class StudentController {
 	// json data to logged in user
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/data")
-	public Student getData(HttpServletRequest request) {
-		String username = (String) request.getAttribute("username");
+	public Student getData(@RequestAttribute("username") String username) {
 		Student student = dao.search(username);
 		return student;
 	}
 
-//	@PostMapping("/DocumentSubmit/bonafide")
-//	public ModelAndView postBonafide(@RequestParam("feeReceipt") MultipartFile feeReceipt) throws IOException {
-//		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//		if (dao.saveRequest("bonafide", userDetails.getEnrollment(), feeReceipt, null, 0, null)) {
-//			return new ModelAndView("redirect:/student/");
-//		} else {
-//			return new ModelAndView("redirect:/student/");
-//		}
-//	}
-//
-//	@PostMapping("/DocumentSubmit/character")
-//	public ModelAndView postCharacter(@RequestParam("feeReceipt") MultipartFile feeReceipt) throws IOException {
-//		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//		if (dao.saveRequest("character", userDetails.getEnrollment(), feeReceipt, null, 0, null)) {
-//			return new ModelAndView("redirect:/student/");
-//		} else {
-//			return new ModelAndView("redirect:/student/");
-//		}
-//	}
-//
-//	@PostMapping("/DocumentSubmit/conduct")
-//	public ModelAndView postConduct(@RequestParam("feeReceipt") MultipartFile feeReceipt,
-//			@RequestParam("marksheet") MultipartFile marksheet, @RequestParam("cgpa") double cgpa) throws IOException {
-//		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//		if (dao.saveRequest("conduct", userDetails.getEnrollment(), feeReceipt, marksheet, cgpa, null)) {
-//			return new ModelAndView("redirect:/student/");
-//		} else {
-//			return new ModelAndView("redirect:/student/");
-//		}
-//	}
-
 	@PostMapping("/DocumentSubmit/{type}")
 	public ResponseEntity<?> requestCertificate(@PathVariable("type") String type,
+			@RequestAttribute("username") String username,
 			@RequestParam("feeReceipt") MultipartFile feeReceipt,
 			@RequestParam(name = "marksheet", required = false) MultipartFile marksheet,
 			@RequestParam(name = "cgpa", required = false, defaultValue = "0") Double cgpa,
 			@RequestParam(name = "graduation_year", required = false, defaultValue = "0") Integer graduation_year, HttpServletRequest request) throws IOException {
 
-		String username = (String) request.getAttribute("username");
 		HashMap<String, String> res = new HashMap<String, String>();
 		System.out.println(type);
 		System.out.println(feeReceipt);

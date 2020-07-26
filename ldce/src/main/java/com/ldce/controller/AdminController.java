@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.criteria.CriteriaBuilder.In;
+
 import com.ldce.admin.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,6 +36,7 @@ import com.ldce.SearchSpecification.ObjectMapperUtils;
 import com.ldce.SearchSpecification.ReqCountSpecification;
 import com.ldce.exception.RecordNotFoundException;
 import com.ldce.security.userdetails;
+
 @CrossOrigin
 @Secured(value = { "ROLE_DEPARTMENT", "ROLE_SSMENTOR", "ROLE_SSHEAD" })
 @RestController
@@ -49,54 +52,14 @@ public class AdminController {
 	@Autowired
 	Dao dao;
 
-	@GetMapping("/")
-	public ModelAndView admin() {
-		return new ModelAndView("AdminDashBoard.html");
-	}
-
-	@GetMapping("/verifyStudent")
-	public ModelAndView getapprove() {
-		return new ModelAndView("approve_request.html");
-	}
-
-	@GetMapping("/DocumentApprove")
-	public ModelAndView getapproveRequest() {
-		return new ModelAndView("DocumentApprove.html");
-	}
-
-	@GetMapping("/approveBonafide")
-	public ModelAndView getapproveBonafide() {
-		return new ModelAndView("approveBonafide.html");
-	}
-
-	@GetMapping("/approveCharacter")
-	public ModelAndView getapproveCharacter() {
-		return new ModelAndView("approveCharacter.html");
-	}
-
-	@GetMapping("/approveConduct")
-	public ModelAndView getapproveConduct() {
-		return new ModelAndView("approveConduct.html");
-	}
-
-	@GetMapping("/approveRank")
-	public ModelAndView getapproveRank() {
-		return new ModelAndView("approveRank.html");
-	}
-
-	@GetMapping("/sshead")
-	public ModelAndView anyanyanya() {
-		return new ModelAndView("SSHeadData.html");
-	}
-
 	@CrossOrigin
 	@GetMapping("/adminDashbord")
 	public Map getdashBoard() {
 		Map<String, Long> map = new HashMap<String, Long>();
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (userDetails.getRole().equals("ROLE_DEPARTMENT")) {
-			map.put("Registered Student", strp.count(Specification.where(CountSpecification.CountByBranch(userDetails.getBranch())
-					.and(CountSpecification.CountByFaculty_approve(0)))));
+			map.put("Registered Student", strp.count(Specification.where(CountSpecification
+					.CountByBranch(userDetails.getBranch()).and(CountSpecification.CountByFaculty_approve(0)))));
 			map.put("Applied Document", strp.countByStatus1(userDetails.getBranch()));
 			return map;
 		} else if (userDetails.getRole().equals("ROLE_SSMENTOR")) {
@@ -112,18 +75,15 @@ public class AdminController {
 		}
 	}
 
-
-
 	// json data to logged in user
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/data")
 	public Admin getData() {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Admin admin = dao.adminCrenditials(userDetails.getEmail());
-		//System.out.println(a);
+		// System.out.println(a);
 		return admin;
 	}
-
 
 	@CrossOrigin
 	@PostMapping("/DocumentApprove")
@@ -134,7 +94,6 @@ public class AdminController {
 		} else {
 			return new ResponseEntity(HttpStatus.OK);
 		}
-
 	}
 
 	@CrossOrigin
@@ -159,9 +118,14 @@ public class AdminController {
 	}
 
 	@CrossOrigin
-	@GetMapping("/ssheaddata")
-	public List<Student> anyany(String caste, int addmission_year, String gender, int semester, int branch,
-			String course) {
+	@GetMapping("/searchStudent")
+	public List<Student> searchStudent(@RequestParam(defaultValue = "ALL") String caste,
+			@RequestParam(defaultValue = "0")  Integer addmission_year,
+			@RequestParam(defaultValue = "ALL") String gender,
+			@RequestParam(defaultValue = "0") Integer semester,
+			@RequestParam(defaultValue = "0") Integer branch,
+			@RequestParam(defaultValue = "ALL") String course) {
+
 		return dao.findAllStudent(caste, addmission_year, gender, semester, branch, course);
 	}
 
