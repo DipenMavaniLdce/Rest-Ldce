@@ -1,12 +1,15 @@
 package com.ldce.Dao;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.print.Doc;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -92,31 +95,42 @@ public class Dao {
 	}
 
 //reset password email sender
-	public boolean resetPassword(String email) {
-		Student student = studentRepo.findByEmail(email);
-		if (student == null) {
-			return false;
-		} else {
-			emailSender.createResetPasswordMail(email, student.getToken().getTokenValue());
-			return true;
-		}
+	public String resetPassword(String username,String type) {
+		String email;
+		String password;
+		if(type.equals("STUDENT")){
+            Student student = studentRepo.findByEnrollment(username);
+            if(student == null){
+                return null;
+            }else{
+				password= generateCommonLangPassword();
+				student.setPassword(password);
+				studentRepo.save(student);
+				System.out.println("save");
+            	email = student.getEmail();
+			}
+
+        }else{
+	        Admin admin = adminrepo.findByEmail(username);
+	        if(admin == null){
+	            return null;
+            }
+	        else{
+				password= generateCommonLangPassword();
+				admin.setPassword(password);
+				adminrepo.save(admin);
+	        	email = username;
+			}
+        }
+
+		emailSender.createResetPasswordMail(email,username,password);
+		return email;
 	}
 
 //reset password update
-	public boolean updatePassword(String tokenValue, String password) {
-		Student existstudent = studentRepo.findBytokenValue(tokenValue);
 
-		if (existstudent != null) {
-			existstudent.setIsactive(true);
-			existstudent.setPassword(password);
-			existstudent.getToken().newTokenValue();
-			studentRepo.save(existstudent);
-			return true;
-		} else {
-			return false;
-		}
 
-	}
+
 
 	public List<Student> searchList(int branch) {
 		System.out.println("start");
@@ -394,4 +408,24 @@ public class Dao {
 		}
 
 	}
+
+    public String generateCommonLangPassword() {
+        String upperCaseLetters = RandomStringUtils.random(2, 65, 90, true, true);
+        String lowerCaseLetters = RandomStringUtils.random(2, 97, 122, true, true);
+        String numbers = RandomStringUtils.randomNumeric(2);
+        String specialChar = RandomStringUtils.random(2, 33, 39, false, false);
+        String totalChars = RandomStringUtils.randomAlphanumeric(2);
+        String combinedChars = upperCaseLetters.concat(lowerCaseLetters)
+                .concat(numbers)
+                .concat(specialChar)
+                .concat(totalChars);
+        List<Character> pwdChars = combinedChars.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.toList());
+        Collections.shuffle(pwdChars);
+        String password = pwdChars.stream()
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString();
+        return password;
+    }
 }

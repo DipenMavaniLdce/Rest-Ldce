@@ -94,30 +94,21 @@ public class Controller {
 	
 	
 	//forgot password post mapping
-	@PostMapping("/forgot")
-	public @ResponseBody String  postforgot(@RequestParam("email")String email) {
-		if(dao.resetPassword(email)) { 
-			return "sucess...!";
+	@PostMapping("/forgotPassword")
+	public ResponseEntity<?>  forgotPassword(@RequestParam("username") String username,@RequestParam("type") String type) throws Exception{
+		System.out.println(username+"in forgot password");
+		String email = dao.resetPassword(username,type);
+		HashMap<String,String> res = new HashMap<>();
+		if(email == null) {
+			res.put("error","Username Not Found");
+			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
 		}
-		
 		else {
-			return "no user found";
+			res.put("email",email);
+			return new ResponseEntity<>(res,HttpStatus.OK);
 		}
 	}
 	
-	//new password saving to database
-	@GetMapping("/reset-password")
-	public ModelAndView resetPassword(@RequestParam("token")String tokenValue) {
-	     return  new ModelAndView("resetPassword.jsp").addObject("token",tokenValue);
-	  }
-
-	@PostMapping("/newpassword")
-	public ModelAndView savepassword(@RequestParam("new_password")String password ,@RequestParam("token") String token) {
-		if(dao.updatePassword(token, password)) {
-			return new ModelAndView("redirect:/login");
-	      }
-	      else return new ModelAndView("error.html");
-	}
 
 	@CrossOrigin
 	@PostMapping("/registerStudent")

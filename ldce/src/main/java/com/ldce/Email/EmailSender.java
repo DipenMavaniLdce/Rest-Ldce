@@ -34,15 +34,13 @@ public class EmailSender {
 
 		sendEmail(mailMessage);
 	}
-
-	public void createResetPasswordMail(String email, String tokenValue) {
+	@Async
+	public void createResetPasswordMail(String email,String username,String password) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(email);
 		mailMessage.setSubject("Reset Ldce Password!");
 		mailMessage.setFrom("iammavani25@gmail.com");
-		mailMessage.setText("to reset your account password, please click here : "
-				+ "http://192.168.0.109:8080/reset-password?token=" + tokenValue);
-
+		mailMessage.setText("Please Login With this Username And Password And Change Your"+"\nusername : "+username+"\npassword : "+password);
 		sendEmail(mailMessage);
 	}
 
