@@ -127,8 +127,7 @@ public class Dao {
 		return email;
 	}
 
-//reset password update
-
+	//reset password update
 
 
 
@@ -139,26 +138,48 @@ public class Dao {
 		return student;
 	}
 
-	public boolean updatesign(String enrollment, MultipartFile sign) throws IOException {
+	public boolean updatesign(String username, MultipartFile sign,String type) throws IOException {
+		if(type.equals("ADMIN")){
+			Admin admin = adminrepo.findByEmail(username);
+			if (admin != null) {
+				admin.setFaculty_sign(sign.getBytes());
+				adminrepo.save(admin);
+				return true;
+			} else
+				return false;
+		}
+		else{
+			Student student = studentRepo.findByEnrollment(username);
+			if (student != null) {
+				student.setStudent_sign(sign.getBytes());
+				studentRepo.save(student);
+				return true;
+			} else
+				return false;
+		}
 
-		Student student = studentRepo.findByEnrollment(enrollment);
-		if (student != null) {
-			student.setStudent_sign(sign.getBytes());
-			studentRepo.save(student);
-			return true;
-		} else
-			return false;
 	}
 
-	public boolean updatephoto(String username, MultipartFile photo) throws IOException {
+	public boolean updatephoto(String username, MultipartFile photo,String type) throws IOException {
+		if(type.equals("ADMIN")){
+			Admin admin = adminrepo.findByEmail(username);
+			if (admin != null) {
+				admin.setFaculty_photo(photo.getBytes());
+				adminrepo.save(admin);
+				return true;
+			} else
+				return false;
+		}
+		else{
+			Student student = studentRepo.findByEnrollment(username);
+			if (student != null) {
+				student.setStudent_photo(photo.getBytes());
+				studentRepo.save(student);
+				return true;
+			} else
+				return false;
+		}
 
-		Student student = studentRepo.findByEnrollment(username);
-		if (student != null) {
-			student.setStudent_photo(photo.getBytes());
-			studentRepo.save(student);
-			return true;
-		} else
-			return false;
 	}
 
 	public boolean updateprofile(String enrollment, Student student, Student_info info, Student_guardian guardian) {
@@ -394,19 +415,37 @@ public class Dao {
 		return false;
 	}
 
-	public String changePasswordDao(String username,String password, String current_password){
-		Student student = studentRepo.findByEnrollment(username);
-		if(!student.getPassword().equals(current_password)){
-			return "false";
-		}else {
-			try{
-				student.setPassword(password);
-				studentRepo.save(student);
-				return "true";
+	public String changePasswordDao(String username,String password, String current_password,String type){
+		if(type.equals("ADMIN")) {
+			Admin admin = adminrepo.findByEmail(username);
+			if(!admin.getPassword().equals(current_password)){
+				return "false";
+			}else {
+				try{
+					admin.setPassword(password);
+					adminrepo.save(admin);
+					return "true";
+				}
+				catch (Exception e){
+					System.out.println(e.toString());
+					return null;
+				}
 			}
-			catch (Exception e){
-				System.out.println(e.toString());
-				return null;
+		}
+		else {
+			Student student = studentRepo.findByEnrollment(username);
+			if(!student.getPassword().equals(current_password)){
+				return "false";
+			}else {
+				try{
+					student.setPassword(password);
+					studentRepo.save(student);
+					return "true";
+				}
+				catch (Exception e){
+					System.out.println(e.toString());
+					return null;
+				}
 			}
 		}
 

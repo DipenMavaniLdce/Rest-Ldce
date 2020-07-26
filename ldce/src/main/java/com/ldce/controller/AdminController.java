@@ -1,11 +1,13 @@
 package com.ldce.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder.In;
+import javax.servlet.http.HttpServletRequest;
 
 import com.ldce.admin.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ldce.Dao.Dao;
@@ -161,4 +164,57 @@ public class AdminController {
 
 	}
 
+    @PostMapping("/changePhoto")
+    public ResponseEntity<?> chnagePhoto(HttpServletRequest request, @RequestParam("photo") MultipartFile adminPhoto)
+            throws IOException {
+        String username = (String) request.getAttribute("username");
+        System.out.println(username);
+        HashMap<String, String> res = new HashMap<String, String>();
+        if (dao.updatephoto(username, adminPhoto,"ADMIN")) {
+
+            res.put("success", "User Photo Changed Successfully");
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        } else {
+            res.put("error", "Server Eorror");
+            return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    // update sign
+    @PostMapping("/changeSign")
+    public ResponseEntity<?> chnagesign(HttpServletRequest request, @RequestParam("sign") MultipartFile adminSign)
+            throws IOException {
+        String username = (String) request.getAttribute("username");
+        System.out.println(username);
+        HashMap<String, String> res = new HashMap<String, String>();
+        if (dao.updatesign(username, adminSign,"ADMIN")) {
+            res.put("success", "User Sign Updated Successfully");
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        } else {
+            res.put("error", "Server Eorror");
+            return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+	@PostMapping("/changePassword")
+	public ResponseEntity<?> changePassword(HttpServletRequest request) {
+		String username = (String) request.getAttribute("username");
+		String password = request.getParameter("password");
+		String current_password = request.getParameter("current_password");
+		HashMap<String, String> res = new HashMap<String, String>();
+		String s = dao.changePasswordDao(username, password, current_password,"ADMIN");
+		if (s == null) {
+			res.put("error", "Server error");
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+		} else if (s.equals("true")) {
+			res.put("success", "true");
+			return new ResponseEntity<>(res, HttpStatus.OK);
+		} else {
+			res.put("error", "false");
+			return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+		}
+
+	}
 }

@@ -67,7 +67,7 @@ public class StudentController {
 		String username = (String) request.getAttribute("username");
 		System.out.println(username);
 		HashMap<String, String> res = new HashMap<String, String>();
-		if (dao.updatephoto(username, studentPhoto)) {
+		if (dao.updatephoto(username, studentPhoto,"STUDENT")) {
 
 			res.put("success", "User Photo Changed Successfully");
 			return new ResponseEntity<>(res, HttpStatus.OK);
@@ -85,7 +85,7 @@ public class StudentController {
 		String username = (String) request.getAttribute("username");
 		System.out.println(username);
 		HashMap<String, String> res = new HashMap<String, String>();
-		if (dao.updatesign(username, studentSign)) {
+		if (dao.updatesign(username, studentSign,"STUDENT")) {
 			res.put("success", "User Sign Updated Successfully");
 			return new ResponseEntity<>(res, HttpStatus.OK);
 		} else {
@@ -189,7 +189,7 @@ public class StudentController {
 		String password = request.getParameter("password");
 		String current_password = request.getParameter("current_password");
 		HashMap<String, String> res = new HashMap<String, String>();
-		String s = dao.changePasswordDao(username, password, current_password);
+		String s = dao.changePasswordDao(username, password, current_password,"STUDENT");
 		if (s == null) {
 			res.put("error", "Server error");
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
