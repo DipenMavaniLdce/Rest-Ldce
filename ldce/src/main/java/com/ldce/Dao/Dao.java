@@ -302,7 +302,7 @@ public class Dao {
 			if(marksheet != null)
 				Document.setMarksheet(marksheet.getBytes());
 			Document.setCgpa(cgpa);
-			if(student.getGraduation_year() != graduation_year) {
+			if(graduation_year != 0 && student.getGraduation_year() != graduation_year) {
 				System.out.println("in in");
 				student.setGraduation_year(graduation_year);
 				studentRepo.save(student);
@@ -314,7 +314,7 @@ public class Dao {
 				return 409;
 			} else {
 				resetRequest(Document, fee_Receipt, marksheet, cgpa);
-				if(student.getGraduation_year() != graduation_year) {
+				if(graduation_year != 0 && student.getGraduation_year() != graduation_year) {
 					student.setGraduation_year(graduation_year);
 					studentRepo.save(student);
 				}
@@ -348,14 +348,14 @@ public class Dao {
 			return null;
 	}
 
-	public boolean UpdateStatus(userdetails userDetails, String enrollment, String type, String status,
-			String comment) {
+	public boolean UpdateStatus(userdetails userDetails, String enrollment, String type, Integer status, String comment,String rank) {
 		String role = userDetails.getRole();
 
 		Request request = requestRepository.findByReq(type, enrollment);
-		if (status.equals("approve")) {
+		if (status==1) {
 			if (role.equals("ROLE_DEPARTMENT")) {
 				request.setStatus1(1);
+				if (rank!=null) request.setRanks(rank);
 				requestRepository.save(request);
 				return true;
 			} else if (role.equals("ROLE_SSMENTOR")) {

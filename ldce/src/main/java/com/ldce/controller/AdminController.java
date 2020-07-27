@@ -87,31 +87,31 @@ public class AdminController {
 		return admin;
 	}
 
-	@CrossOrigin
 	@PostMapping("/DocumentApprove")
-	public ResponseEntity documentApprove(String enrollment, String type, String status, String comment) {
+	public ResponseEntity<?> documentApprove(String enrollment, String type, Integer status, String comment, String rank) {
+		HashMap<String, String> res = new HashMap<String, String>();
+		if(enrollment==null || type == null || status == null) {
+			res.put("error","Type, Enrollment and Status is Required");
+			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
+		}
+		if(type.equals("rank") && rank ==null) {
+			res.put("error","Rank is Required");
+			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
+		}
+		if(status==2 && comment==null) {
+			res.put("error","Comment is Required");
+			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
+		}
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (!dao.UpdateStatus(userDetails, enrollment, type, status, comment)) {
+		if (!dao.UpdateStatus(userDetails, enrollment, type, status, comment,rank)) {
 			throw new RecordNotFoundException("student data is not found");
 		} else {
-			return new ResponseEntity(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
-	}
-
-	@CrossOrigin
-	@PostMapping("/RankApprove")
-	public ResponseEntity documentApprove(String enrollment, String type, String status, String rank, String comment) {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (!dao.UpdateStatus(userDetails, enrollment, type, status, comment)) {
-			throw new RecordNotFoundException("student data is not found");
-		} else {
-			return new ResponseEntity(HttpStatus.OK);
-		}
-
 	}
 
 	@PostMapping("/facultyApprove")
-	public ResponseEntity data1(String enrollment, int status, String comment) {
+	public ResponseEntity studentApprove(String enrollment, Integer status, String comment) {
 		if (!dao.save(enrollment, status, comment)) {
 			throw new RecordNotFoundException("student data is not found");
 		} else {
