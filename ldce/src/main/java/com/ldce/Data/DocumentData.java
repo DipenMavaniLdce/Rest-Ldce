@@ -33,30 +33,6 @@ public interface DocumentData {
 
 	public int getSemester();
 
-	public String getPr_add_l1();
-
-	public String getPr_add_l2();
-
-	public String getPr_add_city();
-
-	public String getPr_add_state();
-
-	public String getPr_add_pin_code();
-
-	public String getPr_add_country();
-
-	public String getRe_add_l1();
-
-	public String getRe_add_l2();
-
-	public String getRe_add_city();
-
-	public String getRe_add_state();
-
-	public String getRe_add_pin_code();
-
-	public String getRe_add_country();
-
 	public long getRequest_id();
 
 	public byte[] getFee_Receipt();
@@ -68,7 +44,5 @@ public interface DocumentData {
 	public int getAddmission_year();
 
 	public int getGraduation_year();
-
-
 
 }

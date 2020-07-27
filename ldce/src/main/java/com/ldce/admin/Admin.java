@@ -32,6 +32,7 @@ public class Admin {
 	String photo_path;
 	String photo_size;
 	String photo_type;
+
 	String sign_name;
 	String sign_path;
 	String sign_size;
