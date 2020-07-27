@@ -1,6 +1,11 @@
 package com.ldce.Dao;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +14,7 @@ import java.util.stream.Collectors;
 import javax.print.Doc;
 import javax.validation.Valid;
 
+import com.ldce.controller.Controller;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -87,9 +93,40 @@ public class Dao {
 	}
 
 	// save admin data
-	public void save(@Valid Admin admin, MultipartFile ph, MultipartFile si) throws IOException {
-		admin.setFaculty_photo(ph.getBytes());
-		admin.setFaculty_sign(si.getBytes());
+	public void save(@Valid Admin admin, MultipartFile photo, MultipartFile sign) throws IOException {
+
+		String photo_name =photo.getOriginalFilename();
+		String photo_path = Paths.get(Controller.uploadDirectory,photo_name).toString();
+		String photo_type = photo.getContentType();
+		Long photo_Size = photo.getSize();
+		String photo_size = photo_Size.toString();
+		String sign_name = sign.getOriginalFilename();
+		String sign_path = Paths.get(Controller.uploadDirectory,sign_name).toString();
+		String sign_type = sign.getContentType();
+		Long sign_Size = sign.getSize();
+		String sign_size = sign_Size.toString();
+
+		admin.setPhoto_name(photo_name);
+		admin.setPhoto_path(photo_path);
+		admin.setPhoto_size(photo_size);
+		admin.setPhoto_type(photo_type);
+
+		admin.setSign_name(sign_name);
+		admin.setSign_path(sign_path);
+		admin.setSign_type(sign_type);
+		admin.setSign_size(sign_size);
+
+		admin.setFaculty_photo(photo.getBytes());
+		admin.setFaculty_sign(sign.getBytes());
+
+		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(photo_path)));
+		stream.write(photo.getBytes());
+		stream.close();
+		BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(sign_path)));
+		stream1.write(sign.getBytes());
+		stream1.close();
+
+
 		adminrepo.save(admin);
 
 	}

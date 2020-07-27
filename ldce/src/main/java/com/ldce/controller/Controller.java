@@ -3,6 +3,7 @@ package com.ldce.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -32,7 +33,7 @@ import com.ldce.security.userdetailservice;
 @RestController
 
 public class Controller {
-
+	public static String uploadDirectory = System.getProperty("user.dir")+"\\uploads";
 	@Autowired
 	Dao dao;
 	
@@ -79,7 +80,7 @@ public class Controller {
 
 	//faculty post data mapping
 	@PostMapping("/registerFaculty")
-	public @ResponseBody String facultyAdd( @Valid Admin admin,@RequestParam("photo")MultipartFile ph,@RequestParam("sign")MultipartFile si) 
+	public @ResponseBody String facultyAdd(Admin admin,@RequestParam("photo")MultipartFile ph,@RequestParam("sign")MultipartFile si)
 	{ 
 		try {
 			dao.save(admin,ph,si);

@@ -61,4 +61,14 @@ public interface DocumentData {
 
 	public byte[] getFee_Receipt();
 
+	public byte[] getMarksheet();
+
+	public String getRanks();
+
+	public int getAddmission_year();
+
+	public int getGraduation_year();
+
+
+
 }

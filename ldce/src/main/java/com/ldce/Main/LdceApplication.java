@@ -1,5 +1,6 @@
 package com.ldce.Main;
 
+import com.ldce.controller.Controller;
 import com.ldce.filter.JwtRequestFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
@@ -11,8 +12,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.io.File;
 
 @SpringBootApplication(scanBasePackages = { "com.ldce.security", "com.ldce.admin", "com.ldce.controller",
 		"com.ldce.Dao", "com.ldce.Email" })
@@ -23,7 +27,17 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 public class LdceApplication {
 
 	public static void main(String[] args) {
+		new File(Controller.uploadDirectory).mkdir();
 		SpringApplication.run(LdceApplication.class, args);
 	}
-
+	@Bean
+	WebMvcConfigurer webMvcConfigurer(){
+		return new WebMvcConfigurer() {
+			@Override
+			public void addResourceHandlers(ResourceHandlerRegistry registry) {
+				registry.addResourceHandler("/api/upload/**")
+						.addResourceLocations("file:///C:/Users/mavan/Documents/intelij/ldce/uploads/");
+			}
+		};
+	}
 }

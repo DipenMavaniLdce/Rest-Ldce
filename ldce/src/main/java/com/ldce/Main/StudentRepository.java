@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,8 +13,11 @@ import org.springframework.data.repository.query.Param;
 
 import com.ldce.Data.DocumentData;
 import com.ldce.Data.RequestDto;
+import org.springframework.lang.Nullable;
 
 public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student> {
+
+
 	@Query("from Student where token=(from Token where tokenValue=?1)")
 	public Student findBytokenValue(String tokenValue);
 
@@ -48,6 +52,10 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 	public int updateSemester(int semester);
 
 	public Student findByEnrollment(String enrollment);
+
+
+
+
 
 //	@Query("select new RequestDto(faculty_comment,faculty_approve, List<Request> request) from Student where enrollment =?1")
 //	public RequestDto findbyReq(String enrollment);

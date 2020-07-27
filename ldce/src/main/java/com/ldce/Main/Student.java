@@ -75,11 +75,10 @@ public class Student implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL)
 	Student_guardian guardian;
 
-	@OneToMany(mappedBy = "student")
-
+	@OneToMany(mappedBy = "student",fetch = FetchType.LAZY)
 	private List<Request> request;
 
-	@OneToMany(mappedBy = "student")
+	@OneToMany(mappedBy = "student",fetch=FetchType.LAZY)
 	private List<FeeRefundDetails> feerefunddetails;
 
 	public long getStudent_id() {

@@ -1,12 +1,11 @@
 package com.ldce.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.criteria.CriteriaBuilder.In;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.ldce.admin.Admin;
@@ -148,7 +147,6 @@ public class AdminController {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<DocumentData> students = dao.penndingDocument(userDetails);
 		return students;
-
 	}
 
 	@CrossOrigin

@@ -9,9 +9,10 @@ import javax.persistence.Lob;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 @Entity
 public class Admin {
@@ -27,9 +28,18 @@ public class Admin {
 	int branch_year;
 	String course;
 
+	String photo_name;
+	String photo_path;
+	String photo_size;
+	String photo_type;
+	String sign_name;
+	String sign_path;
+	String sign_size;
+	String sign_type;
 	@Email
 	String email;
 	String contact;
+	@JsonIgnore
 	String password;
 	String gender;
 
@@ -47,12 +57,9 @@ public class Admin {
 
 	@Lob
 	byte faculty_photo[];
-	@Transient
-	String faculty_photobase64;
 	@Lob
 	byte faculty_sign[];
-	@Transient
-	String faculty_signbase64;
+
 
 	public String getFaculty_id() {
 		return faculty_id;
@@ -230,13 +237,6 @@ public class Admin {
 		this.faculty_photo = faculty_photo;
 	}
 
-	public String getFaculty_photobase64() {
-		return faculty_photobase64;
-	}
-
-	public void setFaculty_photobase64(String faculty_photobase64) {
-		this.faculty_photobase64 = faculty_photobase64;
-	}
 
 	public byte[] getFaculty_sign() {
 		return faculty_sign;
@@ -246,13 +246,71 @@ public class Admin {
 		this.faculty_sign = faculty_sign;
 	}
 
-	public String getFaculty_signbase64() {
-		return faculty_signbase64;
+	public String getPhoto_name() {
+		return photo_name;
 	}
 
-	public void setFaculty_signbase64(String faculty_signbase64) {
-		this.faculty_signbase64 = faculty_signbase64;
+	public void setPhoto_name(String photo_name) {
+		this.photo_name = photo_name;
 	}
+
+	public String getPhoto_path() {
+		return photo_path;
+	}
+
+	public void setPhoto_path(String photo_path) {
+		this.photo_path = photo_path;
+	}
+
+	public String getPhoto_size() {
+		return photo_size;
+	}
+
+	public void setPhoto_size(String photo_size) {
+		this.photo_size = photo_size;
+	}
+
+	public String getPhoto_type() {
+		return photo_type;
+	}
+
+	public void setPhoto_type(String photo_type) {
+		this.photo_type = photo_type;
+	}
+
+	public String getSign_name() {
+		return sign_name;
+	}
+
+	public void setSign_name(String sign_name) {
+		this.sign_name = sign_name;
+	}
+
+	public String getSign_path() {
+		return sign_path;
+	}
+
+	public void setSign_path(String sign_path) {
+		this.sign_path = sign_path;
+	}
+
+	public String getSign_size() {
+		return sign_size;
+	}
+
+	public void setSign_size(String sign_size) {
+		this.sign_size = sign_size;
+	}
+
+	public String getSign_type() {
+		return sign_type;
+	}
+
+	public void setSign_type(String sign_type) {
+		this.sign_type = sign_type;
+	}
+
+
 
 	@Override
 	public String toString() {
