@@ -623,9 +623,11 @@ public class Dao {
     }
 
     public HashMap<String,String> createStorage(MultipartFile file,String id,String type,String domain){
+		//types === photo/sign/feereceipt/marksheet
+		//domain student,admin,student/request etc...
 		HashMap<String,String> fileData = new HashMap<String, String>();
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		String file_name= type+"_"+id+"_"+timestamp.getTime();
+		String file_name= type+"_"+id+"_"+timestamp.getTime()+"_"+file.getOriginalFilename();
 		String file_path = Paths.get(Controller.uploadDirectory,domain,type,file_name).toString();
 		String file_url = Paths.get(domain,type,file_name).toString();
 		String file_type = file.getContentType();
