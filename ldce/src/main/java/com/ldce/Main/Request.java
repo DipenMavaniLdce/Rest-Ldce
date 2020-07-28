@@ -29,10 +29,15 @@ public class Request {
 	int status3 = 0;
 	boolean live = false;
 	String comment;
-	@Lob
-	byte Fee_Receipt[];
-	@Lob
-	byte marksheet[];
+	String fee_receipt_name;
+	String fee_receipt_url;
+	String fee_receipt_size;
+	String fee_receipt_type;
+
+	String marksheet_url;
+	String marksheet_name;
+	String marksheet_size;
+	String marksheet_type;
 
 	double cgpa;
 	String ranks;
@@ -52,20 +57,68 @@ public class Request {
 		student = null;
 	}
 
-	public byte[] getFee_Receipt() {
-		return Fee_Receipt;
+	public String getFee_receipt_name() {
+		return fee_receipt_name;
 	}
 
-	public void setFee_Receipt(byte[] fee_Receipt) {
-		Fee_Receipt = fee_Receipt;
+	public void setFee_receipt_name(String fee_receipt_name) {
+		this.fee_receipt_name = fee_receipt_name;
 	}
 
-	public byte[] getMarksheet() {
-		return marksheet;
+	public String getFee_receipt_url() {
+		return fee_receipt_url;
 	}
 
-	public void setMarksheet(byte[] marksheet) {
-		this.marksheet = marksheet;
+	public void setFee_receipt_url(String fee_receipt_url) {
+		this.fee_receipt_url = fee_receipt_url;
+	}
+
+	public String getFee_receipt_size() {
+		return fee_receipt_size;
+	}
+
+	public void setFee_receipt_size(String fee_receipt_size) {
+		this.fee_receipt_size = fee_receipt_size;
+	}
+
+	public String getFee_receipt_type() {
+		return fee_receipt_type;
+	}
+
+	public void setFee_receipt_type(String fee_receipt_type) {
+		this.fee_receipt_type = fee_receipt_type;
+	}
+
+	public String getMarksheet_url() {
+		return marksheet_url;
+	}
+
+	public void setMarksheet_url(String marksheet_url) {
+		this.marksheet_url = marksheet_url;
+	}
+
+	public String getMarksheet_name() {
+		return marksheet_name;
+	}
+
+	public void setMarksheet_name(String marksheet_name) {
+		this.marksheet_name = marksheet_name;
+	}
+
+	public String getMarksheet_size() {
+		return marksheet_size;
+	}
+
+	public void setMarksheet_size(String marksheet_size) {
+		this.marksheet_size = marksheet_size;
+	}
+
+	public String getMarksheet_type() {
+		return marksheet_type;
+	}
+
+	public void setMarksheet_type(String marksheet_type) {
+		this.marksheet_type = marksheet_type;
 	}
 
 	public Long getRequest_id() {

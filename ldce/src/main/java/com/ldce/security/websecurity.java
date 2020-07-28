@@ -28,6 +28,7 @@ public class websecurity extends WebSecurityConfigurerAdapter {
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 
+
 	@Autowired
 	UserDetailsService userDetailsService;
 	@Autowired
@@ -47,9 +48,9 @@ public class websecurity extends WebSecurityConfigurerAdapter {
 
 
 		http.csrf().disable().authorizeRequests()
-				.antMatchers("/api/admin/*","/api/upload/**").hasAnyRole("DEPARTMENT","SSHEAD","SSMENTOR")
-				.antMatchers("/api/student/*","/api/upload/**").hasAnyRole("STUDENT")
-				.antMatchers("/api/authenticate","/api/registerStudent","/signup","/api/*","/api/registerFaculty","/api/forgotPassword","/api/test")
+				.antMatchers("/api/admin/*").hasAnyRole("DEPARTMENT","SSHEAD","SSMENTOR")
+				.antMatchers("/api/student/*").hasAnyRole("STUDENT")
+				.antMatchers("/api/authenticate","/api/registerStudent","/signup","/api/*","/api/registerFaculty","/api/forgotPassword","/api/test","/api/upload/**")
 				.permitAll()
 				.anyRequest()
 				.authenticated()

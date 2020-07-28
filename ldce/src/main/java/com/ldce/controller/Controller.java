@@ -83,21 +83,18 @@ public class Controller {
 	public @ResponseBody String facultyAdd(Admin admin,@RequestParam("photo")MultipartFile ph,@RequestParam("sign")MultipartFile si)
 	{ 
 		try {
-			dao.save(admin,ph,si);
-		} catch (IOException e) {
-		
+			dao.save(admin, ph, si);
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
 		return "done";
 		
 	}
-	
-	//forgot password page
-	
-	
+
 	//forgot password post mapping
 	@PostMapping("/forgotPassword")
 	public ResponseEntity<?>  forgotPassword(@RequestParam("username") String username,@RequestParam("type") String type) throws Exception{
-		System.out.println(username+"in forgot password");
+
 		String email = dao.resetPassword(username,type);
 		HashMap<String,String> res = new HashMap<>();
 		if(email == null) {
@@ -123,7 +120,9 @@ public class Controller {
 	 			dao.save(student,info,guardian,ph,si);
 	 		} catch (IOException e) {
 	 			throw new ValidationFailException("data is not valid");
-	 		}
+	 		} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return ResponseEntity.ok(new String("Success"));
 	 	}	
 	}

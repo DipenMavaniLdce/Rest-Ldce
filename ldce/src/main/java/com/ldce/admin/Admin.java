@@ -1,12 +1,12 @@
 package com.ldce.admin;
 
-import java.sql.Date;
+
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.Transient;
+
 import javax.validation.constraints.Email;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,12 +29,12 @@ public class Admin {
 	String course;
 
 	String photo_name;
-	String photo_path;
+	String photo_url;
 	String photo_size;
 	String photo_type;
 
 	String sign_name;
-	String sign_path;
+	String sign_url;
 	String sign_size;
 	String sign_type;
 	@Email
@@ -56,10 +56,7 @@ public class Admin {
 	String re_add_pin_code;
 	String re_add_country;
 
-	@Lob
-	byte faculty_photo[];
-	@Lob
-	byte faculty_sign[];
+
 
 
 	public String getFaculty_id() {
@@ -230,22 +227,7 @@ public class Admin {
 		this.re_add_country = re_add_country;
 	}
 
-	public byte[] getFaculty_photo() {
-		return faculty_photo;
-	}
 
-	public void setFaculty_photo(byte[] faculty_photo) {
-		this.faculty_photo = faculty_photo;
-	}
-
-
-	public byte[] getFaculty_sign() {
-		return faculty_sign;
-	}
-
-	public void setFaculty_sign(byte[] faculty_sign) {
-		this.faculty_sign = faculty_sign;
-	}
 
 	public String getPhoto_name() {
 		return photo_name;
@@ -255,13 +237,7 @@ public class Admin {
 		this.photo_name = photo_name;
 	}
 
-	public String getPhoto_path() {
-		return photo_path;
-	}
 
-	public void setPhoto_path(String photo_path) {
-		this.photo_path = photo_path;
-	}
 
 	public String getPhoto_size() {
 		return photo_size;
@@ -287,12 +263,20 @@ public class Admin {
 		this.sign_name = sign_name;
 	}
 
-	public String getSign_path() {
-		return sign_path;
+	public String getPhoto_url() {
+		return photo_url;
 	}
 
-	public void setSign_path(String sign_path) {
-		this.sign_path = sign_path;
+	public void setPhoto_url(String photo_url) {
+		this.photo_url = photo_url;
+	}
+
+	public String getSign_url() {
+		return sign_url;
+	}
+
+	public void setSign_url(String sign_url) {
+		this.sign_url = sign_url;
 	}
 
 	public String getSign_size() {

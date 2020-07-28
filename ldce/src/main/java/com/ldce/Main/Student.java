@@ -57,11 +57,15 @@ public class Student implements Serializable {
 	String admission_category;
 
 	String role = "ROLE_STUDENT";
-	@Lob
-	byte student_photo[];
+	String photo_name;
+	String photo_url;
+	String photo_size;
+	String photo_type;
 
-	@Lob
-	byte student_sign[];
+	String sign_name;
+	String sign_url;
+	String sign_size;
+	String sign_type;
 
 	Boolean isactive = true;
 	int faculty_approve = 0;
@@ -225,20 +229,69 @@ public class Student implements Serializable {
 		this.course = course;
 	}
 
-	public byte[] getStudent_photo() {
-		return student_photo;
+	public String getPhoto_name() {
+		return photo_name;
 	}
 
-	public byte[] getStudent_sign() {
-		return student_sign;
+	public void setPhoto_name(String photo_name) {
+		this.photo_name = photo_name;
 	}
 
-	public void setStudent_photo(byte[] student_photo) {
-		this.student_photo = student_photo;
+
+	public String getPhoto_size() {
+		return photo_size;
 	}
 
-	public void setStudent_sign(byte[] student_sign) {
-		this.student_sign = student_sign;
+	public void setPhoto_size(String photo_size) {
+		this.photo_size = photo_size;
+	}
+
+	public String getPhoto_type() {
+		return photo_type;
+	}
+
+	public void setPhoto_type(String photo_type) {
+		this.photo_type = photo_type;
+	}
+
+	public String getSign_name() {
+		return sign_name;
+	}
+
+	public void setSign_name(String sign_name) {
+		this.sign_name = sign_name;
+	}
+
+	public String getPhoto_url() {
+		return photo_url;
+	}
+
+	public void setPhoto_url(String photo_url) {
+		this.photo_url = photo_url;
+	}
+
+	public String getSign_url() {
+		return sign_url;
+	}
+
+	public void setSign_url(String sign_url) {
+		this.sign_url = sign_url;
+	}
+
+	public String getSign_size() {
+		return sign_size;
+	}
+
+	public void setSign_size(String sign_size) {
+		this.sign_size = sign_size;
+	}
+
+	public String getSign_type() {
+		return sign_type;
+	}
+
+	public void setSign_type(String sign_type) {
+		this.sign_type = sign_type;
 	}
 
 	public Boolean getIsactive() {
@@ -305,13 +358,6 @@ public class Student implements Serializable {
 		this.graduation_year = graduation_year;
 	}
 
-	@Override
-	public String toString() {
-		return "Student [enrollment=" + enrollment + ", first_name=" + first_name + ", middle_name=" + middle_name
-				+ ", last_name=" + last_name + "faculty app" + faculty_approve + ", email=" + email + ", contact="
-				+ contact + ", password=" + password + ", gender=" + gender + ", cast=" + caste + ", religion="
-				+ religion + ", addmission_year=" + addmission_year + ", semester=" + semester + ", branch=" + branch
-				+ ", course=" + course + ", info=" + info + ", guardian=" + guardian + "]";
-	}
+
 
 }

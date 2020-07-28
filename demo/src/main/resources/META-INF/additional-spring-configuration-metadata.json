@@ -1,8 +1,0 @@
-{
-  "properties": [
-    {
-      "name": "webflux.static-path-pattern",
-      "type": "java.lang.String",
-      "description": "Description for webflux.static-path-pattern."
-  }
-] }
