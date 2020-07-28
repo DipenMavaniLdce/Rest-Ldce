@@ -29,6 +29,7 @@ public class LdceApplication {
 
 	public static void main(String[] args) {
 		new File(Controller.uploadDirectory).mkdir();
+
 		SpringApplication.run(LdceApplication.class, args);
 	}
 	@Bean

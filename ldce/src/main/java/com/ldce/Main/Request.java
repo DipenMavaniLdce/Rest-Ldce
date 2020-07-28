@@ -29,15 +29,11 @@ public class Request {
 	int status3 = 0;
 	boolean live = false;
 	String comment;
-	String fee_receipt_name;
-	String fee_receipt_url;
-	String fee_receipt_size;
-	String fee_receipt_type;
+	String document_name;
+	String document_url;
+	String document_size;
+	String document_type;
 
-	String marksheet_url;
-	String marksheet_name;
-	String marksheet_size;
-	String marksheet_type;
 
 	double cgpa;
 	String ranks;
@@ -57,68 +53,36 @@ public class Request {
 		student = null;
 	}
 
-	public String getFee_receipt_name() {
-		return fee_receipt_name;
+	public String getDocument_name() {
+		return document_name;
 	}
 
-	public void setFee_receipt_name(String fee_receipt_name) {
-		this.fee_receipt_name = fee_receipt_name;
+	public void setDocument_name(String document_name) {
+		this.document_name = document_name;
 	}
 
-	public String getFee_receipt_url() {
-		return fee_receipt_url;
+	public String getDocument_url() {
+		return document_url;
 	}
 
-	public void setFee_receipt_url(String fee_receipt_url) {
-		this.fee_receipt_url = fee_receipt_url;
+	public void setDocument_url(String document_url) {
+		this.document_url = document_url;
 	}
 
-	public String getFee_receipt_size() {
-		return fee_receipt_size;
+	public String getDocument_size() {
+		return document_size;
 	}
 
-	public void setFee_receipt_size(String fee_receipt_size) {
-		this.fee_receipt_size = fee_receipt_size;
+	public void setDocument_size(String document_size) {
+		this.document_size = document_size;
 	}
 
-	public String getFee_receipt_type() {
-		return fee_receipt_type;
+	public String getDocument_type() {
+		return document_type;
 	}
 
-	public void setFee_receipt_type(String fee_receipt_type) {
-		this.fee_receipt_type = fee_receipt_type;
-	}
-
-	public String getMarksheet_url() {
-		return marksheet_url;
-	}
-
-	public void setMarksheet_url(String marksheet_url) {
-		this.marksheet_url = marksheet_url;
-	}
-
-	public String getMarksheet_name() {
-		return marksheet_name;
-	}
-
-	public void setMarksheet_name(String marksheet_name) {
-		this.marksheet_name = marksheet_name;
-	}
-
-	public String getMarksheet_size() {
-		return marksheet_size;
-	}
-
-	public void setMarksheet_size(String marksheet_size) {
-		this.marksheet_size = marksheet_size;
-	}
-
-	public String getMarksheet_type() {
-		return marksheet_type;
-	}
-
-	public void setMarksheet_type(String marksheet_type) {
-		this.marksheet_type = marksheet_type;
+	public void setDocument_type(String document_type) {
+		this.document_type = document_type;
 	}
 
 	public Long getRequest_id() {

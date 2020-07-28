@@ -1,9 +1,6 @@
 package com.ldce.Dao;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.*;
@@ -18,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,19 +74,18 @@ public class Dao {
 		student.setSign_size(SIGN.get("file_size"));
 		student.setSign_type(SIGN.get("file_type"));
 
-		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(PHOTO.get("file_path"))));
-		stream.write(photo.getBytes());
-		stream.close();
-		BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(SIGN.get("file_path"))));
-		stream1.write(sign.getBytes());
-		stream1.close();
+		boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
+		boolean isSignStored = storeFile(photo,SIGN.get("file_path"),SIGN.get("file_name"));
 
 
 		student.setToken(new Token());
 		student.setInfo(info);
 		student.setGuardian(guardian);
 		try {
-			studentRepo.save(student);
+			if(isPhotoStored && isSignStored){
+				studentRepo.save(student);
+			}
+
 		} catch (Exception E) {
 			throw E;
 		}
@@ -125,15 +122,14 @@ public class Dao {
 		admin.setSign_size(SIGN.get("file_size"));
 		admin.setSign_type(SIGN.get("file_type"));
 
-		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(PHOTO.get("file_path"))));
-		stream.write(photo.getBytes());
-		stream.close();
-		BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(SIGN.get("file_path"))));
-		stream1.write(sign.getBytes());
-		stream1.close();
+		boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
+		boolean isSignStored = storeFile(photo,SIGN.get("file_path"),SIGN.get("file_name"));
+
 
 		try {
-			adminrepo.save(admin);
+			if(isPhotoStored && isSignStored) {
+				adminrepo.save(admin);
+			}
 		} catch (Exception E) {
 			throw E;
 		}
@@ -193,16 +189,16 @@ public class Dao {
 			Admin admin = adminrepo.findByEmail(username);
 
 			if (admin != null) {
-				SIGN = createStorage(sign,username,"sign","student");
+				SIGN = createStorage(sign,username,"sign","admin");
 				admin.setSign_name(SIGN.get("file_name"));
 				admin.setSign_url(SIGN.get("file_url"));
 				admin.setSign_size(SIGN.get("file_size"));
 				admin.setSign_type(SIGN.get("file_type"));
-				BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(SIGN.get("file_path"))));
-				stream1.write(sign.getBytes());
-				stream1.close();
 
-				adminrepo.save(admin);
+				boolean isSignStored = storeFile(sign,SIGN.get("file_path"),SIGN.get("file_name"));
+				if(isSignStored){
+					adminrepo.save(admin);
+				}
 				return true;
 			} else
 				return false;
@@ -215,12 +211,11 @@ public class Dao {
 				student.setSign_url(SIGN.get("file_url"));
 				student.setSign_size(SIGN.get("file_size"));
 				student.setSign_type(SIGN.get("file_type"));
-				BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(SIGN.get("file_path"))));
-				stream1.write(sign.getBytes());
-				stream1.close();
 
-
-				studentRepo.save(student);
+				boolean isSignStored = storeFile(sign,SIGN.get("file_path"),SIGN.get("file_name"));
+				if(isSignStored){
+					studentRepo.save(student);
+				}
 				return true;
 			} else
 				return false;
@@ -241,12 +236,10 @@ public class Dao {
 				admin.setPhoto_size(PHOTO.get("file_size"));
 				admin.setPhoto_type(PHOTO.get("file_type"));
 
-				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(PHOTO.get("file_path"))));
-				stream.write(photo.getBytes());
-				stream.close();
-
-				adminrepo.save(admin);
-
+				boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
+				if(isPhotoStored){
+					adminrepo.save(admin);
+				}
 				return true;
 			} else
 				return false;
@@ -259,14 +252,12 @@ public class Dao {
 				student.setPhoto_url(PHOTO.get("file_url"));
 				student.setPhoto_size(PHOTO.get("file_size"));
 				student.setPhoto_type(PHOTO.get("file_type"));
-
-				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(PHOTO.get("file_path"))));
-				stream.write(photo.getBytes());
-				stream.close();
-
-
-				studentRepo.save(student);
+				boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
+				if(isPhotoStored){
+					studentRepo.save(student);
+				}
 				return true;
+
 			} else
 				return false;
 		}
@@ -355,7 +346,7 @@ public class Dao {
 
 	}
 
-	public int saveRequest(String type, String enrollment, MultipartFile fee_Receipt, MultipartFile marksheet, double cgpa, int graduation_year) throws IOException {
+	public int saveRequest(String type, String enrollment, MultipartFile request_document , double cgpa, int graduation_year) throws IOException {
 		Student student = studentRepo.findByEnrollment(enrollment);
 		Request Document = requestRepository.findByReq(type, enrollment);
 		if (Document == null) {
@@ -363,33 +354,14 @@ public class Dao {
 			Document.setLive(true);
 			Document.setType(type);
 			Document.setStudent(student);
-			Map<String,String> FEE_RECEIPT=createStorage(fee_Receipt,student.getEnrollment(),"feereceipt","request");
-			Map<String,String> MARKSHEET;
+			Map<String,String> DOCUMENT=createStorage(request_document,student.getEnrollment(),type,"student\\request\\"+type);
 
-			Document.setFee_receipt_name(FEE_RECEIPT.get("file_name"));
-			Document.setFee_receipt_url(FEE_RECEIPT.get("file_url"));
-			Document.setFee_receipt_size(FEE_RECEIPT.get("file_size"));
-			Document.setFee_receipt_type(FEE_RECEIPT.get("file_type"));
+			Document.setDocument_name(DOCUMENT.get("file_name"));
+			Document.setDocument_url(DOCUMENT.get("file_url"));
+			Document.setDocument_size(DOCUMENT.get("file_size"));
+			Document.setDocument_type(DOCUMENT.get("file_type"));
 
-
-			BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(FEE_RECEIPT.get("file_path"))));
-			stream1.write(fee_Receipt.getBytes());
-			stream1.close();
-
-
-
-			if(marksheet != null){
-				MARKSHEET=createStorage(marksheet,student.getEnrollment(),"marksheet","request");
-				Document.setMarksheet_name(MARKSHEET.get("file_name"));
-				Document.setMarksheet_url(MARKSHEET.get("file_url"));
-				Document.setMarksheet_size(MARKSHEET.get("file_size"));
-				Document.setMarksheet_type(MARKSHEET.get("file_type"));
-
-				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(MARKSHEET.get("file_path"))));
-				stream.write(marksheet.getBytes());
-				stream.close();
-			}
-
+			boolean isDocumentStored = storeFile(request_document,DOCUMENT.get("file_path"),DOCUMENT.get("file_name"));
 
 			Document.setCgpa(cgpa);
 			if(graduation_year != 0 && student.getGraduation_year() != graduation_year) {
@@ -397,13 +369,18 @@ public class Dao {
 				student.setGraduation_year(graduation_year);
 				studentRepo.save(student);
 			}
-			requestRepository.save(Document);
+			if(isDocumentStored){
+				requestRepository.save(Document);
+			}else{
+				return 400;
+			}
+
 			return 200;
 		} else {
 			if (Document.isLive()) {
 				return 409;
 			} else {
-				resetRequest(Document, fee_Receipt, marksheet, cgpa,student.getEnrollment());
+				resetRequest(Document, request_document, cgpa,student.getEnrollment(),type);
 				if(graduation_year != 0 && student.getGraduation_year() != graduation_year) {
 					student.setGraduation_year(graduation_year);
 					studentRepo.save(student);
@@ -521,39 +498,19 @@ public class Dao {
 		return temp;
 	}
 
-	public void resetRequest(Request request, MultipartFile fee_Receipt, MultipartFile marksheet, double cgpa,String username) throws IOException {
+	public void resetRequest(Request request,  MultipartFile request_document, double cgpa,String username,String type) throws IOException {
 		request.setApplied_date(new Date());
 		request.setComment(null);
 		request.setStatus1(0);
 		request.setStatus2(0);
 		request.setStatus3(0);
-		Map<String,String> FEE_RECEIPT=createStorage(fee_Receipt,username,"feereceipt","request");
-		Map<String,String> MARKSHEET;
+		Map<String,String> DOCUMENT=createStorage(request_document,username,type,"student\\request\\"+type);
+		request.setDocument_name(DOCUMENT.get("file_name"));
+		request.setDocument_url(DOCUMENT.get("file_url"));
+		request.setDocument_size(DOCUMENT.get("file_size"));
+		request.setDocument_type(DOCUMENT.get("file_type"));
 
-		request.setFee_receipt_name(FEE_RECEIPT.get("file_name"));
-		request.setFee_receipt_url(FEE_RECEIPT.get("file_url"));
-		request.setFee_receipt_size(FEE_RECEIPT.get("file_size"));
-		request.setFee_receipt_type(FEE_RECEIPT.get("file_type"));
-
-
-		BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(FEE_RECEIPT.get("file_path"))));
-		stream1.write(fee_Receipt.getBytes());
-		stream1.close();
-
-
-
-		if(marksheet != null){
-			MARKSHEET=createStorage(marksheet,username,"marksheet","request");
-			request.setMarksheet_name(MARKSHEET.get("file_name"));
-			request.setMarksheet_url(MARKSHEET.get("file_url"));
-			request.setMarksheet_size(MARKSHEET.get("file_size"));
-			request.setMarksheet_type(MARKSHEET.get("file_type"));
-
-			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(MARKSHEET.get("file_path"))));
-			stream.write(marksheet.getBytes());
-			stream.close();
-		}
-
+		boolean isDocumetStored = storeFile(request_document,DOCUMENT.get("file_path"),DOCUMENT.get("file_name"));
 		request.setCgpa(cgpa);
 		request.setLive(true);
 	}
@@ -628,7 +585,7 @@ public class Dao {
 		HashMap<String,String> fileData = new HashMap<String, String>();
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		String file_name= type+"_"+id+"_"+timestamp.getTime()+"_"+file.getOriginalFilename();
-		String file_path = Paths.get(Controller.uploadDirectory,domain,type,file_name).toString();
+		String file_path = Paths.get(Controller.uploadDirectory,domain,type).toString();
 		String file_url = Paths.get(domain,type,file_name).toString();
 		String file_type = file.getContentType();
 		Long file_Size = file.getSize();
@@ -639,5 +596,24 @@ public class Dao {
 		fileData.put("file_size",file_size);
 		fileData.put("file_url",file_url);
 		return fileData;
+	}
+
+	public boolean storeFile(MultipartFile file,String file_path,String file_name ) throws IOException {
+		boolean fileExists = true;
+		System.out.println("in store file");
+		System.out.println(file_path);
+		File f = new File(file_path);
+		if (!f.exists()) {
+
+			fileExists =  f.mkdirs();
+			System.out.println(fileExists+"fileExist");
+		}
+		if(fileExists){
+			BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(Paths.get(file_path,file_name).toString())));
+			stream1.write(file.getBytes());
+			stream1.close();
+			return true;
+		}
+		return false;
 	}
 }

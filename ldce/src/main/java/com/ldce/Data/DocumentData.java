@@ -29,15 +29,21 @@ public interface DocumentData {
 
 	public String getCourse();
 
-	public byte[] getStudent_photo();
+
+	public String getPhoto_url();
+	public String getPhoto_type();
+	public String getPhoto_size();
+	public String getPhoto_name();
+
+	public String getDocument_size();
+	public String getDocument_url();
+	public String getDocument_name();
+	public String getDocument_type();
 
 	public int getSemester();
 
 	public long getRequest_id();
 
-	public byte[] getFee_Receipt();
-
-	public byte[] getMarksheet();
 
 	public String getRanks();
 

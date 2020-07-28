@@ -120,34 +120,33 @@ public class StudentController {
 	@PostMapping("/DocumentSubmit/{type}")
 	public ResponseEntity<?> requestCertificate(@PathVariable("type") String type,
 			@RequestAttribute("username") String username,
-			@RequestParam("feeReceipt") MultipartFile feeReceipt,
-			@RequestParam(name = "marksheet", required = false) MultipartFile marksheet,
+			@RequestParam(name="request_document",required = true) MultipartFile request_document,
 			@RequestParam(name = "cgpa", required = false, defaultValue = "0") Double cgpa,
 			@RequestParam(name = "graduation_year", required = false, defaultValue = "0") Integer graduation_year, HttpServletRequest request) throws IOException {
 
 		HashMap<String, String> res = new HashMap<String, String>();
 		System.out.println(type);
-		System.out.println(feeReceipt);
-		System.out.println(marksheet);
+
+		System.out.println(request_document);
 		System.out.println(cgpa);
 		System.out.println(graduation_year);
 		
 		switch (type) {
 		case "bonafide":
-			if (feeReceipt == null) {
-				res.put("error", "Fee Receipt Required!");
+			if (request_document == null) {
+				res.put("error", "Document required Required!");
 				return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
 			}
 			break;
 		case "character":
-			if (feeReceipt == null || graduation_year == null) {
+			if (request_document == null || graduation_year == null) {
 				res.put("error", "Please give all required details!");
 				return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
 			}
 			break;
 		case "conduct":
 		case "rank":
-			if (feeReceipt == null || marksheet == null || cgpa == null || graduation_year == null) {
+			if (request_document == null  || cgpa == null || graduation_year == null) {
 				res.put("error", "Please give all required details!");
 				return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
 			}
@@ -157,7 +156,7 @@ public class StudentController {
 			return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
 		}
 
-		int code = dao.saveRequest(type, username, feeReceipt, marksheet, cgpa, graduation_year);
+		int code = dao.saveRequest(type, username, request_document, cgpa, graduation_year);
 		if (code == 409) {
 			res.put("error", "Document Request Already Exist!");
 			return new ResponseEntity<>(res, HttpStatus.CONFLICT);
