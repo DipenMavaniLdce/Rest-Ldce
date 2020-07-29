@@ -170,14 +170,26 @@ public class StudentController {
 	}
 
 	@PostMapping("/feeRefund")
-	public ModelAndView feeRefund(@Valid FeeRefundDetails feerefund,
+	public ResponseEntity<?> feeRefund(@Valid FeeRefundDetails feerefund,
+			@RequestAttribute("username") String username,
 			@RequestParam("fee_recipt") MultipartFile fee_recipt) {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		System.out.println(feerefund);
-		if (dao.saveFeeRefundDetails(feerefund, userDetails.getEnrollment(), fee_recipt)) {
-			return new ModelAndView("redirect:/student/");
-		} else {
-			return new ModelAndView("redirect:/student/");
+		HashMap<String, String> res = new HashMap<String, String>();
+		try {
+			int code = dao.saveFeeRefundDetails(feerefund, username, fee_recipt);
+			if (code == 409) {
+				res.put("error", " Request Already Exist!");
+				return new ResponseEntity<>(res, HttpStatus.CONFLICT);
+			} else if (code == 200) {
+				return new ResponseEntity<>(res, HttpStatus.OK);
+			} else {
+				res.put("error", "Server Error");
+				return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+		} catch (IOException e) {
+			res.put("error", "Server Error");
+			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+
 		}
 
 	}

@@ -32,6 +32,46 @@ public class FeeRefundDetails {
 	int status3 = 0;
 	boolean live = false;
 	String comment;
+
+	String document_name;
+	String document_url;
+	String document_size;
+	String document_type;
+
+	public void setDocument_name(String document_name) {
+		this.document_name = document_name;
+	}
+
+	public void setDocument_url(String document_url) {
+		this.document_url = document_url;
+	}
+
+	public void setDocument_size(String document_size) {
+		this.document_size = document_size;
+	}
+
+	public void setDocument_type(String document_type) {
+		this.document_type = document_type;
+	}
+
+	public String getDocument_name() {
+		return document_name;
+	}
+
+	public String getDocument_url() {
+		return document_url;
+	}
+
+	public String getDocument_size() {
+		return document_size;
+	}
+
+	public String getDocument_type() {
+		return document_type;
+	}
+
+
+
 	@Lob
 	byte Fee_Receipt[];
 	Date Applied_date = new Date();

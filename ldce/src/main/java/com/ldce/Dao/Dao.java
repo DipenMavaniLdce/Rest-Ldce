@@ -330,19 +330,30 @@ public class Dao {
 
 	}
 
-	public boolean saveFeeRefundDetails(FeeRefundDetails fee, String enrollment, MultipartFile fee_Receipt) {
+	public int  saveFeeRefundDetails(FeeRefundDetails fee, String enrollment, MultipartFile request_document) throws IOException {
 		Student student = studentRepo.findByEnrollment(enrollment);
-		fee.setStudent(student);
-		System.out.println(fee);
-		try {
-			fee.setFee_Receipt(fee_Receipt.getBytes());
-			feerefunddetailsRepository.save(fee);
+		FeeRefundDetails feeRefund = feerefunddetailsRepository.findByEnrollment(enrollment);
+		if(feeRefund==null || feeRefund!=null && !feeRefund.isLive()) {
+			fee.setStudent(student);
+			System.out.println(fee);
+			Map<String, String> DOCUMENT = createStorage(request_document, enrollment, "feereceipt", "student\\request\\feereceipt");
+			fee.setDocument_name(DOCUMENT.get("file_name"));
+			fee.setDocument_url(DOCUMENT.get("file_url"));
+			fee.setDocument_size(DOCUMENT.get("file_size"));
+			fee.setDocument_type(DOCUMENT.get("file_type"));
+			boolean isDocumentStored = storeFile(request_document, DOCUMENT.get("file_path"), DOCUMENT.get("file_name"));
 
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
+			if (isDocumentStored) {
+				feerefunddetailsRepository.save(fee);
+			} else {
+				return 400;
+			}
+
+			return 200;
 		}
-		return true;
+		else
+				return 409;
+
 
 	}
 
