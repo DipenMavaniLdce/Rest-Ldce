@@ -30,51 +30,57 @@ public class FeeRefundDetails {
 	int status1 = 0;
 	int status2 = 0;
 	int status3 = 0;
-	boolean live = false;
+	boolean live = true;
 	String comment;
+	double amount;
 
-	String document_name;
-	String document_url;
-	String document_size;
-	String document_type;
+	String fee_document_name;
+	String fee_document_url;
+	String fee_document_size;
+	String fee_document_type;
 
-	public void setDocument_name(String document_name) {
-		this.document_name = document_name;
+
+	public double getAmount() {
+		return amount;
 	}
 
-	public void setDocument_url(String document_url) {
-		this.document_url = document_url;
+	public void setAmount(double amount) {
+		this.amount = amount;
 	}
 
-	public void setDocument_size(String document_size) {
-		this.document_size = document_size;
-	}
+	public void setFee_document_name(String fee_document_name) {
+        this.fee_document_name = fee_document_name;
+    }
 
-	public void setDocument_type(String document_type) {
-		this.document_type = document_type;
-	}
+    public void setFee_document_url(String fee_document_url) {
+        this.fee_document_url = fee_document_url;
+    }
 
-	public String getDocument_name() {
-		return document_name;
-	}
+    public void setFee_document_size(String fee_document_size) {
+        this.fee_document_size = fee_document_size;
+    }
 
-	public String getDocument_url() {
-		return document_url;
-	}
+    public void setFee_document_type(String fee_document_type) {
+        this.fee_document_type = fee_document_type;
+    }
 
-	public String getDocument_size() {
-		return document_size;
-	}
+    public String getFee_document_name() {
+        return fee_document_name;
+    }
 
-	public String getDocument_type() {
-		return document_type;
-	}
+    public String getFee_document_url() {
+        return fee_document_url;
+    }
 
+    public String getFee_document_size() {
+        return fee_document_size;
+    }
 
+    public String getFee_document_type() {
+        return fee_document_type;
+    }
 
-	@Lob
-	byte Fee_Receipt[];
-	Date Applied_date = new Date();
+    Date Applied_date = new Date();
 	@ManyToOne(fetch = FetchType.LAZY)
 
 	@JoinColumn(name = "fee_refund_enrollment", referencedColumnName = "enrollment")
@@ -188,14 +194,6 @@ public class FeeRefundDetails {
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-
-	public byte[] getFee_Receipt() {
-		return Fee_Receipt;
-	}
-
-	public void setFee_Receipt(byte[] fee_Receipt) {
-		Fee_Receipt = fee_Receipt;
 	}
 
 	public Date getApplied_date() {

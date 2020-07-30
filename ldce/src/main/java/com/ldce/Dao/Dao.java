@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.print.Doc;
 import javax.validation.Valid;
 
+import com.ldce.Data.FeeRefundData;
 import com.ldce.controller.Controller;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -337,10 +338,10 @@ public class Dao {
 			fee.setStudent(student);
 			System.out.println(fee);
 			Map<String, String> DOCUMENT = createStorage(request_document, enrollment, "feereceipt", "student\\request\\feereceipt");
-			fee.setDocument_name(DOCUMENT.get("file_name"));
-			fee.setDocument_url(DOCUMENT.get("file_url"));
-			fee.setDocument_size(DOCUMENT.get("file_size"));
-			fee.setDocument_type(DOCUMENT.get("file_type"));
+			fee.setFee_document_name(DOCUMENT.get("file_name"));
+			fee.setFee_document_url(DOCUMENT.get("file_url"));
+			fee.setFee_document_size(DOCUMENT.get("file_size"));
+			fee.setFee_document_type(DOCUMENT.get("file_type"));
 			boolean isDocumentStored = storeFile(request_document, DOCUMENT.get("file_path"), DOCUMENT.get("file_name"));
 
 			if (isDocumentStored) {
@@ -413,6 +414,20 @@ public class Dao {
 		return students;
 	}
 
+	public List<FeeRefundData> penddingFeeRefund(userdetails userDetails) {
+		String role = userDetails.getRole();
+		int branch = userDetails.getBranch();
+		if (role.equals("ROLE_DEPARTMENT")) {
+			return studentRepo.findByfeerefundStatus1(branch);
+		}
+		else if (role.equals("ROLE_SSMENTOR")) {
+			return studentRepo.findByfeerefundStatus2();
+		} else if (role.equals("ROLE_SSHEAD")) {
+			return studentRepo.findByfeerefundStatus3();
+		} else
+			return null;
+	}
+
 	public List<DocumentData> penndingDocument(userdetails userDetails) {
 		String role = userDetails.getRole();
 		int branch = userDetails.getBranch();
@@ -425,7 +440,55 @@ public class Dao {
 		} else
 			return null;
 	}
+public boolean UpdateFeeRefundStatus(userdetails userDetails, String enrollment,Integer status, String comment){
+	String role = userDetails.getRole();
+	FeeRefundDetails fee = feerefunddetailsRepository.findByEnrollment(enrollment);
+	if (status==1){
+		if(role.equals("ROLE_DEPARTMENT")){
+			fee.setStatus1(1);
+			feerefunddetailsRepository.save(fee);
+			return true;
+		}
+		else if(role.equals("ROLE_SSMENTOR")){
+			fee.setStatus2(1);
+			feerefunddetailsRepository.save(fee);
+			return true;
+		}
+		else if (role.equals("ROLE_SSHEAD")) {
+			fee.setStatus3(1);
+			fee.setLive(false);
+			feerefunddetailsRepository.save(fee);
+			return true;
+		} else
+			return false;
 
+	}
+	else{
+		if (role.equals("ROLE_DEPARTMENT")) {
+			fee.setStatus1(2);
+			fee.setStatus2(2);
+			fee.setStatus3(2);
+			fee.setComment(comment);
+			fee.setLive(false);
+			feerefunddetailsRepository.save(fee);
+			return true;
+		} else if (role.equals("ROLE_SSMENTOR")) {
+			fee.setStatus2(2);
+			fee.setStatus3(2);
+			fee.setComment(comment);
+			fee.setLive(false);
+			feerefunddetailsRepository.save(fee);
+			return true;
+		} else if (role.equals("ROLE_SSHEAD")) {
+			fee.setStatus3(2);
+			fee.setComment(comment);
+			fee.setLive(false);
+			feerefunddetailsRepository.save(fee);
+			return true;
+		} else
+			return false;
+	}
+}
 	public boolean UpdateStatus(userdetails userDetails, String enrollment, String type, Integer status, String comment,String rank) {
 		String role = userDetails.getRole();
 

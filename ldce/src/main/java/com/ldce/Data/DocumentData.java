@@ -51,4 +51,6 @@ public interface DocumentData {
 
 	public int getGraduation_year();
 
+
+
 }

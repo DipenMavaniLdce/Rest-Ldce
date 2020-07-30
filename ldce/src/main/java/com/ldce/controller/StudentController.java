@@ -172,10 +172,10 @@ public class StudentController {
 	@PostMapping("/feeRefund")
 	public ResponseEntity<?> feeRefund(@Valid FeeRefundDetails feerefund,
 			@RequestAttribute("username") String username,
-			@RequestParam("fee_recipt") MultipartFile fee_recipt) {
+			@RequestParam(name="request_document",required = true) MultipartFile request_document) {
 		HashMap<String, String> res = new HashMap<String, String>();
 		try {
-			int code = dao.saveFeeRefundDetails(feerefund, username, fee_recipt);
+			int code = dao.saveFeeRefundDetails(feerefund, username, request_document);
 			if (code == 409) {
 				res.put("error", " Request Already Exist!");
 				return new ResponseEntity<>(res, HttpStatus.CONFLICT);

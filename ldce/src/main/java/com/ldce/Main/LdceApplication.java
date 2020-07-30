@@ -26,7 +26,6 @@ import java.io.File;
 		"com.ldce.Email", "com.ldce.util", "com.ldce.filter" })
 @EnableJpaRepositories(basePackages = { "com.ldce.admin", "com.ldce.Main" })
 public class LdceApplication {
-
 	public static void main(String[] args) {
 		new File(Controller.uploadDirectory).mkdir();
 
@@ -38,7 +37,7 @@ public class LdceApplication {
 			@Override
 			public void addResourceHandlers(ResourceHandlerRegistry registry) {
 				registry.addResourceHandler("/api/upload/**")
-						.addResourceLocations("file:///C:/Users/mavan/Documents/intelij/ldce/uploads/");
+						.addResourceLocations("file:///C:/Users/Dhaval/IdeaProjects/Rest-Ldce/uploads/");
 
 			}
 		};

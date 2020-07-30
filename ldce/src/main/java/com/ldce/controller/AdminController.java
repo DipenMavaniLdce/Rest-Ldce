@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ldce.Data.FeeRefundData;
 import com.ldce.admin.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -86,6 +87,25 @@ public class AdminController {
 		// System.out.println(a);
 		return admin;
 	}
+	@PostMapping("/FeeRefundApprove")
+	public ResponseEntity<?> feeRefundApprove(String enrollment, Integer status, String comment){
+		HashMap<String, String> res = new HashMap<String, String>();
+		if(enrollment==null || status == null) {
+			res.put("error","Type, Enrollment and Status is Required");
+			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
+		}
+		if(status==2 && comment==null) {
+			res.put("error","Comment is Required");
+			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
+		}
+		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (!dao.UpdateFeeRefundStatus(userDetails, enrollment, status, comment)) {
+			throw new RecordNotFoundException("student data is not found");
+		} else {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+
+	}
 
 	@PostMapping("/DocumentApprove")
 	public ResponseEntity<?> documentApprove(String enrollment, String type, Integer status, String comment, String rank) {
@@ -147,6 +167,15 @@ public class AdminController {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<DocumentData> students = dao.penndingDocument(userDetails);
 		return students;
+	}
+
+
+	@CrossOrigin
+	@GetMapping("/pendingFeeRefund")
+	public List<FeeRefundData> getFeeApprove() {
+		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<FeeRefundData> details = dao.penddingFeeRefund(userDetails);
+		return details;
 	}
 
 	@CrossOrigin

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.ldce.Data.FeeRefundData;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -38,11 +39,25 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.status1=0 AND branch =:branchid", nativeQuery = true)
 	public List<DocumentData> findByStatus1(@Param("branchid") int branch);
 
+
+
 	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.status1=1 AND r.status2=0", nativeQuery = true)
 	public List<DocumentData> findByStatus2();
 
 	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.status1=1 AND r.status2=1 AND r.status3=0", nativeQuery = true)
 	public List<DocumentData> findByStatus3();
+
+
+	@Query(value = "SELECT * from student s inner JOIN fee_refund_details f on f.fee_refund_enrollment=s.enrollment AND f.status1=0 AND branch =:branchid", nativeQuery = true)
+	public List<FeeRefundData> findByfeerefundStatus1(@Param("branchid") int branch);
+
+
+	@Query(value = "SELECT * from student s inner JOIN fee_refund_details f on  f.fee_refund_enrollment=s.enrollment AND f.status1=1 AND f.status2=0", nativeQuery = true)
+	public List<FeeRefundData> findByfeerefundStatus2();
+
+
+	@Query(value = "SELECT * from student s inner JOIN fee_refund_details f on  f.fee_refund_enrollment=s.enrollment AND f.status1=1 AND f.status2=1 AND r.status3=0", nativeQuery = true)
+	public List<FeeRefundData> findByfeerefundStatus3();
 
 //	@Query("from Student where semester=1?")
 //	public List<Student> updateBranch(int semester);
