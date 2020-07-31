@@ -46,6 +46,8 @@ public interface DocumentData {
 
 
 	public String getRanks();
+	
+	public double getCgpa();
 
 	public int getAddmission_year();
 

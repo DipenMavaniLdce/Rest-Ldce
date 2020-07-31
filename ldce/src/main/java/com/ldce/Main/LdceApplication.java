@@ -37,7 +37,7 @@ public class LdceApplication {
 			@Override
 			public void addResourceHandlers(ResourceHandlerRegistry registry) {
 				registry.addResourceHandler("/api/upload/**")
-						.addResourceLocations("file:///C:/Users/Dhaval/IdeaProjects/Rest-Ldce/uploads/");
+						.addResourceLocations("file:///F:/Web/LDCE/Rest-Ldce/ldce/uploads/");
 
 			}
 		};
