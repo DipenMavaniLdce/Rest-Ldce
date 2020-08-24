@@ -1,23 +1,9 @@
 package com.ldce.Data;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-
-import org.aspectj.weaver.ast.Var;
-
-import com.ldce.Main.Request;
-import com.ldce.Main.Student;
-import com.ldce.Main.Student_guardian;
-import com.ldce.Main.Student_info;
-import com.ldce.Main.Token;
+import com.ldce.Model.Student.Student_guardian;
+import com.ldce.Model.Student.Student_info;
 
 public class StudentDto implements Serializable {
 

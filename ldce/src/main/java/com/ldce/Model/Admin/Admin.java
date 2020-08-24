@@ -1,4 +1,4 @@
-package com.ldce.admin;
+package com.ldce.Model.Admin;
 
 
 import java.time.LocalDate;

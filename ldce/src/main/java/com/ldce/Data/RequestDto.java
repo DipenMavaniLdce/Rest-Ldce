@@ -2,7 +2,7 @@ package com.ldce.Data;
 
 import java.util.List;
 
-import com.ldce.Main.Request;
+import com.ldce.Model.Request.Request;
 
 public class RequestDto {
 	String faculty_comment;

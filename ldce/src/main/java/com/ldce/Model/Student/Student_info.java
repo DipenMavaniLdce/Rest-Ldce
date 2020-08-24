@@ -1,4 +1,4 @@
-package com.ldce.Main;
+package com.ldce.Model.Student;
 
 import java.sql.Date;
 import java.time.LocalDate;

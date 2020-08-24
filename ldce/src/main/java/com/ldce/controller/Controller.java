@@ -3,12 +3,18 @@ package com.ldce.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 
-import com.ldce.Main.*;
+import com.ldce.Model.Authentication.AuthenticationRequest;
+import com.ldce.Model.Authentication.AuthenticationResponce;
+import com.ldce.Model.Request.Request;
+import com.ldce.Model.Request.RequestRepository;
+import com.ldce.Model.Student.Student;
+import com.ldce.Model.Student.StudentRepository;
+import com.ldce.Model.Student.Student_guardian;
+import com.ldce.Model.Student.Student_info;
 import com.ldce.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -21,10 +27,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.ldce.Dao.Dao;
-import com.ldce.admin.Admin;
+import com.ldce.Model.Admin.Admin;
 import com.ldce.exception.ValidationFailException;
 import com.ldce.security.userdetailservice;
 
@@ -110,7 +115,7 @@ public class Controller {
 
 	@CrossOrigin
 	@PostMapping("/registerStudent")
-	public ResponseEntity<?> beAdd( @Valid Student student,BindingResult E,@Valid Student_info info,@Valid Student_guardian guardian,@RequestParam("photo")MultipartFile ph,@RequestParam("sign")MultipartFile si) {
+	public ResponseEntity<?> beAdd(@Valid Student student, BindingResult E, @Valid Student_info info, @Valid Student_guardian guardian, @RequestParam("photo")MultipartFile ph, @RequestParam("sign")MultipartFile si) {
 		System.out.println("hear");
 		if (E.hasErrors()) {
 			throw new ValidationException();

@@ -1,10 +1,7 @@
-package com.ldce.Main;
+package com.ldce.Model.Student;
 
 import java.io.Serializable;
-import java.util.Base64;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,16 +10,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
-import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-import org.hibernate.validator.constraints.UniqueElements;
+import com.ldce.Model.FeeRefund.FeeRefundDetails;
+import com.ldce.Model.Request.Request;
+import com.ldce.Main.Token;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

@@ -6,9 +6,6 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.print.Doc;
-import javax.validation.Valid;
-
 import com.ldce.Data.FeeRefundData;
 import com.ldce.controller.Controller;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -16,26 +13,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ldce.Data.DocumentData;
 import com.ldce.Data.RequestDto;
 import com.ldce.Email.EmailSender;
-import com.ldce.Main.FeeRefundDetails;
-import com.ldce.Main.FeeRefundDetailsRepository;
-import com.ldce.Main.Request;
-import com.ldce.Main.RequestRepository;
-import com.ldce.Main.Student;
-import com.ldce.Main.StudentRepository;
-import com.ldce.Main.Student_guardian;
-import com.ldce.Main.Student_info;
+import com.ldce.Model.FeeRefund.FeeRefundDetails;
+import com.ldce.Model.FeeRefund.FeeRefundDetailsRepository;
+import com.ldce.Model.Request.Request;
+import com.ldce.Model.Request.RequestRepository;
+import com.ldce.Model.Student.Student;
+import com.ldce.Model.Student.StudentRepository;
+import com.ldce.Model.Student.Student_guardian;
+import com.ldce.Model.Student.Student_info;
 import com.ldce.Main.Token;
 import com.ldce.SearchSpecification.ObjectMapperUtils;
 import com.ldce.SearchSpecification.StudentSpecification;
-import com.ldce.admin.Admin;
-import com.ldce.admin.AdminRepository;
+import com.ldce.Model.Admin.Admin;
+import com.ldce.Model.Admin.AdminRepository;
 import com.ldce.security.userdetails;
 
 @Component
@@ -560,8 +556,7 @@ public boolean UpdateFeeRefundStatus(userdetails userDetails, String enrollment,
 		return i;
 	}
 
-	public RequestDto ttmp(String enrollment) {
-		System.out.println(enrollment);
+	public RequestDto getStudentDashbord(String enrollment) {
 		RequestDto reqdto = ObjectMapperUtils.map(studentRepo.findByEnrollment(enrollment), RequestDto.class);
 		return reqdto;
 	}
@@ -690,4 +685,6 @@ public boolean UpdateFeeRefundStatus(userdetails userDetails, String enrollment,
 		}
 		return false;
 	}
+
+
 }

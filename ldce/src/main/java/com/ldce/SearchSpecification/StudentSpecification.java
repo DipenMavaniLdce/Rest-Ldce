@@ -4,7 +4,7 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.ldce.Main.Student;
+import com.ldce.Model.Student.Student;
 
 public class StudentSpecification {
 	public static Specification<Student> getStudentByBranch(Integer branch) {

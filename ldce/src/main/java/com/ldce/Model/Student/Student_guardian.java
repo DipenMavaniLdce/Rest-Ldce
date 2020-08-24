@@ -1,4 +1,4 @@
-package com.ldce.Main;
+package com.ldce.Model.Student;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

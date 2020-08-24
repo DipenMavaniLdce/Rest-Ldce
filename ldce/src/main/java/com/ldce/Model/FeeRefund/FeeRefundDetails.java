@@ -1,4 +1,4 @@
-package com.ldce.Main;
+package com.ldce.Model.FeeRefund;
 
 import java.util.Date;
 
@@ -8,9 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import com.ldce.Model.Student.Student;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -84,7 +84,7 @@ public class FeeRefundDetails {
 	@ManyToOne(fetch = FetchType.LAZY)
 
 	@JoinColumn(name = "fee_refund_enrollment", referencedColumnName = "enrollment")
-	Student student;
+    Student student;
 
 	public FeeRefundDetails() {
 

@@ -4,7 +4,7 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.ldce.Main.Request;
+import com.ldce.Model.Request.Request;
 
 public class ReqCountSpecification {
 

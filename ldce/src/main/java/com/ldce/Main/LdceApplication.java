@@ -19,12 +19,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import java.io.File;
 
-@SpringBootApplication(scanBasePackages = { "com.ldce.security", "com.ldce.admin", "com.ldce.controller",
+@SpringBootApplication(scanBasePackages = { "com.ldce.security", "com.ldce.Model.Admin", "com.ldce.controller",
 		"com.ldce.Dao", "com.ldce.Email" })
-@EntityScan(basePackages = { "com.ldce.admin", "com.ldce.controller", "com.ldce.Main" })
-@ComponentScan(basePackages = { "com.ldce.security", "com.ldce.admin", "com.ldce.controller", "com.ldce.Dao",
+@EntityScan(basePackages = { "com.ldce.Model", "com.ldce.controller", "com.ldce.Main" })
+@ComponentScan(basePackages = { "com.ldce.security", "com.ldce.Model", "com.ldce.controller", "com.ldce.Dao",
 		"com.ldce.Email", "com.ldce.util", "com.ldce.filter" })
-@EnableJpaRepositories(basePackages = { "com.ldce.admin", "com.ldce.Main" })
+@EnableJpaRepositories(basePackages = { "com.ldce.Model", "com.ldce.Main" })
 public class LdceApplication {
 	public static void main(String[] args) {
 		new File(Controller.uploadDirectory).mkdir();
@@ -37,7 +37,7 @@ public class LdceApplication {
 			@Override
 			public void addResourceHandlers(ResourceHandlerRegistry registry) {
 				registry.addResourceHandler("/api/upload/**")
-						.addResourceLocations("file:///F:/Web/LDCE/Rest-Ldce/ldce/uploads/");
+						.addResourceLocations("file:///C:/Users/mavan/Documents/intelij/ldce/uploads/");
 
 			}
 		};

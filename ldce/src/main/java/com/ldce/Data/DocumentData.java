@@ -1,11 +1,5 @@
 package com.ldce.Data;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Value;
-
-import com.ldce.Main.Request;
-
 public interface DocumentData {
 	public long getStudent_id();
 

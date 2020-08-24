@@ -1,4 +1,4 @@
-package com.ldce.admin;
+package com.ldce.Model.Admin;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

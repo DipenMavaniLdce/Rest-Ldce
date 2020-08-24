@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ldce.Data.FeeRefundData;
-import com.ldce.admin.Admin;
+import com.ldce.Model.Admin.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -18,24 +18,18 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.ldce.Dao.Dao;
 import com.ldce.Data.DocumentData;
-import com.ldce.Data.RequestDto;
-import com.ldce.Data.StudentDto;
-import com.ldce.Main.RequestRepository;
-import com.ldce.Main.Student;
-import com.ldce.Main.StudentRepository;
+import com.ldce.Model.Request.RequestRepository;
+import com.ldce.Model.Student.Student;
+import com.ldce.Model.Student.StudentRepository;
 import com.ldce.SearchSpecification.CountSpecification;
-import com.ldce.SearchSpecification.ObjectMapperUtils;
 import com.ldce.SearchSpecification.ReqCountSpecification;
 import com.ldce.exception.RecordNotFoundException;
 import com.ldce.security.userdetails;
@@ -170,12 +164,21 @@ public class AdminController {
 	}
 
 
+
 	@CrossOrigin
 	@GetMapping("/pendingFeeRefund")
 	public List<FeeRefundData> getFeeApprove() {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<FeeRefundData> details = dao.penddingFeeRefund(userDetails);
 		return details;
+	}
+
+	@CrossOrigin
+	@GetMapping("/acceptedDocument")
+	public List<DocumentData> getAcceptedDocument() {
+		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<DocumentData> students = dao.penndingDocument(userDetails);
+		return students;
 	}
 
 	@CrossOrigin

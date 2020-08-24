@@ -6,10 +6,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.ldce.Main.Student;
-import com.ldce.Main.StudentRepository;
-import com.ldce.admin.Admin;
-import com.ldce.admin.AdminRepository;
+import com.ldce.Model.Student.Student;
+import com.ldce.Model.Student.StudentRepository;
+import com.ldce.Model.Admin.Admin;
+import com.ldce.Model.Admin.AdminRepository;
 
 @Service
 public class userdetailservice implements UserDetailsService {

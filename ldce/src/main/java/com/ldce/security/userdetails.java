@@ -7,8 +7,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.ldce.Main.Student;
-import com.ldce.admin.Admin;
+import com.ldce.Model.Student.Student;
+import com.ldce.Model.Admin.Admin;
 
 public class userdetails implements UserDetails {
 

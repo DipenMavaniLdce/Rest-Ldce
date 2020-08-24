@@ -1,4 +1,4 @@
-package com.ldce.Main;
+package com.ldce.Model.Authentication;
 
 public class AuthenticationRequest {
 	private String username;

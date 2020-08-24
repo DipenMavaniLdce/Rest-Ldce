@@ -16,11 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ldce.Dao.Dao;
 import com.ldce.Data.RequestDto;
-import com.ldce.Main.FeeRefundDetails;
-import com.ldce.Main.FeeRefundDetailsRepository;
-import com.ldce.Main.Student;
-import com.ldce.Main.Student_guardian;
-import com.ldce.Main.Student_info;
+import com.ldce.Model.FeeRefund.FeeRefundDetails;
+import com.ldce.Model.FeeRefund.FeeRefundDetailsRepository;
+import com.ldce.Model.Student.Student;
+import com.ldce.Model.Student.Student_guardian;
+import com.ldce.Model.Student.Student_info;
 import com.ldce.security.userdetails;
 
 @RestController()
@@ -48,9 +48,9 @@ public class StudentController {
 	}
 
 	@GetMapping("studentDashboard")
-	public RequestDto getdashBoard() {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return dao.ttmp(userDetails.getEnrollment());
+	public RequestDto getdashBoard(@RequestAttribute("username") String username) {
+
+		return dao.getStudentDashbord(username);
 	}
 
 	@GetMapping("feeRefund")
