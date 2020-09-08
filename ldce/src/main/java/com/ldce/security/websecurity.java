@@ -39,7 +39,7 @@ public class websecurity extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 	auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
-	System.out.println("reach");
+
 		
 	}
 

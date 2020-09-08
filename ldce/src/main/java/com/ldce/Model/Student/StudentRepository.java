@@ -1,10 +1,12 @@
 package com.ldce.Model.Student;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import com.ldce.Data.FeeRefundData;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,6 +20,9 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 
 	@Query("from Student where token=(from Token where tokenValue=?1)")
 	public Student findBytokenValue(String tokenValue);
+
+	@Query("from Student")
+	public List<DocumentData> findwholedocs();
 
 	public Student findByEmail(String email);
 
@@ -56,6 +61,10 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 	@Query(value = "SELECT * from student s inner JOIN fee_refund_details f on  f.fee_refund_enrollment=s.enrollment AND f.status1=1 AND f.status2=1 AND r.status3=0", nativeQuery = true)
 	public List<FeeRefundData> findByfeerefundStatus3();
 
+	//modified_date<=?
+	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.modified_date=?1 AND r.last_modified_by=?2", nativeQuery = true)
+	public List<DocumentData> findByApprovedDate(Date date,String lastModifiedBy);
+
 //	@Query("from Student where semester=1?")
 //	public List<Student> updateBranch(int semester);
 	@Transactional
@@ -64,7 +73,6 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 	public int updateSemester(int semester);
 
 	public Student findByEnrollment(String enrollment);
-
 
 
 

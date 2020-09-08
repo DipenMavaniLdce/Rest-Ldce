@@ -1,10 +1,17 @@
 package com.ldce.SearchSpecification;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Predicate;
 
+import com.ldce.Data.DocumentData;
+import com.ldce.Data.StudentDto;
+import com.ldce.Model.Request.Request;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.ldce.Model.Student.Student;
+
+import java.util.Date;
 
 public class StudentSpecification {
 	public static Specification<Student> getStudentByBranch(Integer branch) {
@@ -76,4 +83,38 @@ public class StudentSpecification {
 				return null;
 		};
 	}
+	public static Specification<Student> getStudentByModifiedDate(Date date) {
+		return (root, query, criteriaBuilder) -> {
+
+			if(date==null) return null;
+			Join<Student, Request> requestJoin = root.join("request");
+			Predicate equalPredicate = criteriaBuilder.equal(requestJoin.get("modified_date"),date);
+			query.distinct(true);
+			return equalPredicate;
+		};
+
+	}
+
+	public static Specification<Student> getStudentByfirstlevel(String role) {
+		return (root, query, criteriaBuilder) -> {
+			Join<Student, Request> requestJoin = root.join("request");
+			Predicate equalPredicate = criteriaBuilder.equal(requestJoin.get("last_modified_by"),role);
+
+			return equalPredicate;
+		};
+
+	}
+
+	public static Specification<Student> getStudentByEnrollment(String enrollment) {
+
+		return (root, query, criteriaBuilder) -> {
+			if(enrollment==null) return null;
+			Predicate equalPredicate = criteriaBuilder.equal(root.get("enrollment"), enrollment);
+
+			return equalPredicate;
+		};
+
+	}
+
+
 }

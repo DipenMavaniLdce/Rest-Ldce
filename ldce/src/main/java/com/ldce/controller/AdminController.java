@@ -1,6 +1,9 @@
 package com.ldce.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +12,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ldce.Data.FeeRefundData;
+import com.ldce.Data.RequestDto;
 import com.ldce.Model.Admin.Admin;
+import com.ldce.SearchSpecification.ObjectMapperUtils;
+import com.ldce.SearchSpecification.StudentSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -39,6 +45,8 @@ import com.ldce.security.userdetails;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
+
+	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 	@Autowired
 	StudentRepository strp;
@@ -103,6 +111,8 @@ public class AdminController {
 
 	@PostMapping("/DocumentApprove")
 	public ResponseEntity<?> documentApprove(String enrollment, String type, Integer status, String comment, String rank) {
+		System.out.println(enrollment + type + status+comment+rank);
+
 		HashMap<String, String> res = new HashMap<String, String>();
 		if(enrollment==null || type == null || status == null) {
 			res.put("error","Type, Enrollment and Status is Required");
@@ -179,6 +189,20 @@ public class AdminController {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<DocumentData> students = dao.penndingDocument(userDetails);
 		return students;
+	}
+
+	@CrossOrigin
+	@PostMapping("/findDocument")
+	public List<RequestDto> findDocument(Date date,String enrollment) {
+
+		System.out.println(enrollment+ date+"..........................................");
+
+	userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String role = userDetails.getRole();
+
+		role = role.equals("ROLE_DEPARTMENT")?userDetails.getBranch()+role:role;
+		System.out.print("..........................");
+		return dao.findrequest(date,role,enrollment);
 	}
 
 	@CrossOrigin

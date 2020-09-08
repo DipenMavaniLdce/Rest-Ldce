@@ -77,8 +77,12 @@ public class Student implements Serializable {
 	@OneToMany(mappedBy = "student",fetch = FetchType.LAZY)
 	private List<Request> request;
 
+
+
 	@OneToMany(mappedBy = "student",fetch=FetchType.LAZY)
 	private List<FeeRefundDetails> feerefunddetails;
+
+
 
 	public long getStudent_id() {
 		return student_id;

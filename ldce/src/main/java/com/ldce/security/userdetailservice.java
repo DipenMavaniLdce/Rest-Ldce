@@ -25,21 +25,20 @@ public class userdetailservice implements UserDetailsService {
 		String usertype[] = username.split(",");
 		String user = usertype[0];
 		String type = usertype[1];
-		System.out.println(user);
-		System.out.println(type);
+
 		if (type.equals("STUDENT")) {
 			Student student = studentRepo.findByEnrollment(user);
 			if (student == null) {
-				System.out.println("ni malojbhbhjb");
+
 				return null;
 			}
 			return new userdetails(student);
 
 		} else if (type.equals("ADMIN")) {
 			Admin admin = adminrepo.findByEmail(user);
-			System.out.println(admin);
+
 			if (admin == null) {
-				System.out.println("ni malo");
+
 				return null;
 			}
 			return new userdetails(admin);

@@ -1,14 +1,10 @@
 package com.ldce.Model.Request;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.ldce.Model.Student.Student;
 import org.springframework.context.annotation.Scope;
@@ -21,9 +17,7 @@ public class Request {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long request_id;
-
 	String type;
-
 	int status1 = 0;
 	int status2 = 0;
 	int status3 = 0;
@@ -33,16 +27,14 @@ public class Request {
 	String document_url;
 	String document_size;
 	String document_type;
-
-
+	String last_modified_by;
+	Date modified_date= new Date();
 	double cgpa;
 	String ranks;
 	Date Applied_date = new Date();
 	@ManyToOne(fetch = FetchType.LAZY)
-
 	@JoinColumn(name = "request_enrollment", referencedColumnName = "enrollment")
     Student student;
-
 	public Request() {
 
 		status1 = 0;
@@ -51,6 +43,29 @@ public class Request {
 		Applied_date = new Date();
 		comment = null;
 		student = null;
+	}
+
+	@PreUpdate
+	public void Onupdate() throws ParseException {
+		Date d = new Date();
+		setModified_date(new Date(d.getYear(),d.getMonth(),d.getDay()));
+
+	}
+
+	public String getLast_modified_by() {
+		return last_modified_by;
+	}
+
+	public void setLast_modified_by(String last_modified_by) {
+		this.last_modified_by = last_modified_by;
+	}
+
+	public void setModified_date(Date modified_date) {
+		this.modified_date = modified_date;
+	}
+
+	public Date getModified_date() {
+		return modified_date;
 	}
 
 	public String getDocument_name() {

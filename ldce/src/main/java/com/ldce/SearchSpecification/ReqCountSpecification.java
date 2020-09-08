@@ -6,6 +6,8 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.ldce.Model.Request.Request;
 
+import java.util.Date;
+
 public class ReqCountSpecification {
 
 	public static Specification<Request> CountBystatus1(Integer status1) {
@@ -40,5 +42,26 @@ public class ReqCountSpecification {
 		};
 
 	}
+//
+//	public static Specification<Request> getRequestByDate(Date date ) {
+//		return (root, query, criteriaBuilder) -> {
+//
+//			Predicate equalPredicate = criteriaBuilder.equal(root.get("modified_date"), date);
+//
+//			return equalPredicate;
+//
+//		};
+//
+//	}
+//	public static Specification<Request> getRequestByenrollment(String enrollment) {
+//		return (root, query, criteriaBuilder) -> {
+//
+//			Predicate equalPredicate = criteriaBuilder.equal(root.get("request_enrollment"), enrollment);
+//
+//			return equalPredicate;
+//
+//		};
+
+//	}
 
 }

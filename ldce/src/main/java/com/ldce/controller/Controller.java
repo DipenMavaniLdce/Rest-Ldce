@@ -2,11 +2,16 @@ package com.ldce.controller;
 
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
+import javax.print.Doc;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 
+import com.ldce.Data.DocumentData;
+import com.ldce.Data.RequestDto;
 import com.ldce.Model.Authentication.AuthenticationRequest;
 import com.ldce.Model.Authentication.AuthenticationResponce;
 import com.ldce.Model.Request.Request;
@@ -15,9 +20,13 @@ import com.ldce.Model.Student.Student;
 import com.ldce.Model.Student.StudentRepository;
 import com.ldce.Model.Student.Student_guardian;
 import com.ldce.Model.Student.Student_info;
+import com.ldce.SearchSpecification.ObjectMapperUtils;
+import com.ldce.SearchSpecification.StudentSpecification;
 import com.ldce.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -59,6 +68,7 @@ public class Controller {
 	Request request;
 
 
+	@CrossOrigin
 	@PostMapping("/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
 		try{
@@ -132,8 +142,11 @@ public class Controller {
 	 	}	
 	}
 			
-			
-			
+
+	@GetMapping("/test")
+	public String test (){
+return "working";
+	}
 	
 	
 }

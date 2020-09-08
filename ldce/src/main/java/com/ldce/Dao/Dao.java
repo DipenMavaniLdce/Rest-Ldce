@@ -30,6 +30,7 @@ import com.ldce.Model.Student.Student_info;
 import com.ldce.Main.Token;
 import com.ldce.SearchSpecification.ObjectMapperUtils;
 import com.ldce.SearchSpecification.StudentSpecification;
+
 import com.ldce.Model.Admin.Admin;
 import com.ldce.Model.Admin.AdminRepository;
 import com.ldce.security.userdetails;
@@ -385,7 +386,7 @@ public class Dao {
 
 			return 200;
 		} else {
-			if (Document.isLive()) {
+			if (Document.isLive() || Document.getStatus3()==1) {
 				return 409;
 			} else {
 				resetRequest(Document, request_document, cgpa,student.getEnrollment(),type);
@@ -489,11 +490,17 @@ public boolean UpdateFeeRefundStatus(userdetails userDetails, String enrollment,
 		String role = userDetails.getRole();
 
 		Request request = requestRepository.findByReq(type, enrollment);
+		System.out.println(request.getType() + ".");
+if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBranch()+role);
+			else request.setLast_modified_by(role);
+
 		if (status==1) {
 			if (role.equals("ROLE_DEPARTMENT")) {
+
 				request.setStatus1(1);
 				if (rank!=null) request.setRanks(rank);
 				requestRepository.save(request);
+
 				return true;
 			} else if (role.equals("ROLE_SSMENTOR")) {
 				request.setStatus2(1);
@@ -533,6 +540,23 @@ public boolean UpdateFeeRefundStatus(userdetails userDetails, String enrollment,
 		}
 	}
 
+
+	public List<RequestDto> findrequest(Date date , String role,String enrollment) {
+
+
+		List<Student> students = studentRepo.findAll( Specification.where(
+				StudentSpecification.getStudentByModifiedDate(	new Date(date.getYear(),date.getMonth(),date.getDay()))
+						.and(StudentSpecification.getStudentByEnrollment(enrollment))
+						.and(StudentSpecification.getStudentByfirstlevel(role))));
+
+
+		List<RequestDto> data = ObjectMapperUtils.mapAll(students, RequestDto.class);
+
+		return data;
+
+	}
+
+
 	public List<Student> findAllStudent(String caste, Integer addmission_year, String gender, Integer semester, Integer branch,
 			String course) {
 		
@@ -567,12 +591,13 @@ public boolean UpdateFeeRefundStatus(userdetails userDetails, String enrollment,
 		return temp;
 	}
 
-	public void resetRequest(Request request,  MultipartFile request_document, double cgpa,String username,String type) throws IOException {
-		request.setApplied_date(new Date());
-		request.setComment(null);
+	public void resetRequest(Request request,  MultipartFile request_document, Double cgpa,String username,String type) throws IOException {
+
+	if(request.getStatus1()==2){
 		request.setStatus1(0);
-		request.setStatus2(0);
-		request.setStatus3(0);
+	}else if(request.getStatus1()==2) request.setStatus1(0);
+	else if(request.getStatus3()==2) request.setStatus3(0);
+
 		Map<String,String> DOCUMENT=createStorage(request_document,username,type,"student\\request\\"+type);
 		request.setDocument_name(DOCUMENT.get("file_name"));
 		request.setDocument_url(DOCUMENT.get("file_url"));
@@ -580,7 +605,7 @@ public boolean UpdateFeeRefundStatus(userdetails userDetails, String enrollment,
 		request.setDocument_type(DOCUMENT.get("file_type"));
 
 		boolean isDocumetStored = storeFile(request_document,DOCUMENT.get("file_path"),DOCUMENT.get("file_name"));
-		request.setCgpa(cgpa);
+		if(cgpa!=null) request.setCgpa(cgpa);
 		request.setLive(true);
 	}
 

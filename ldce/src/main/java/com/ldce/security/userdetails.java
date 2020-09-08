@@ -50,7 +50,7 @@ this.enrollment=null;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		System.out.println(Collections.singleton(new SimpleGrantedAuthority(role)));
+
 		return Collections.singleton(new SimpleGrantedAuthority(role));
 	}
 
