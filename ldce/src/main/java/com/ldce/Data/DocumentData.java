@@ -47,6 +47,8 @@ public interface DocumentData {
 
 	public int getGraduation_year();
 
+	public String getComment();
+
 
 
 }
