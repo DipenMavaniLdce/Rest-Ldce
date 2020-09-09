@@ -4,13 +4,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-@RestController
+@Controller
 public class HomeController {
 
-    @GetMapping(value = "/")
+    @RequestMapping(path = "/",method =RequestMethod.GET)
     public String index() {
         System.out.println("in home");
-        return "index.html";
+        return "index";
     }
 
 }
