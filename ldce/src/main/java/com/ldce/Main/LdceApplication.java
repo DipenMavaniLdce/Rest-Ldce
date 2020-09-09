@@ -28,19 +28,19 @@ public class LdceApplication {
 		new File(Controller.uploadDirectory).mkdir();
 		SpringApplication.run(LdceApplication.class, args);
 	}
-	@Bean
-	WebMvcConfigurer webMvcConfigurer(){
-		return new WebMvcConfigurer() {
-			@Override
-			public void addResourceHandlers(ResourceHandlerRegistry registry) {
-				registry.addResourceHandler("/api/upload/**")
-						.addResourceLocations("file:///C:/Users/mavan/Documents/intelij/ldce/uploads/");
-
-			}
-
-
-		};
-
-	}
+//	@Bean
+//	WebMvcConfigurer webMvcConfigurer(){
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//				registry.addResourceHandler("/api/upload/**")
+//						.addResourceLocations("file:///C:/Users/mavan/Documents/intelij/ldce/uploads/");
+//
+//			}
+//
+//
+//		};
+//
+//	}
 
 }
