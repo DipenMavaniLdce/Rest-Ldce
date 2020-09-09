@@ -40,7 +40,7 @@ public class websecurity extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 	auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
 
-		
+
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class websecurity extends WebSecurityConfigurerAdapter {
 		http.csrf().disable().authorizeRequests()
 				.antMatchers("/api/admin/*").hasAnyRole("DEPARTMENT","SSHEAD","SSMENTOR")
 				.antMatchers("/api/student/*").hasAnyRole("STUDENT")
-				.antMatchers("/api/authenticate","/api/registerStudent","/signup","/api/*","/api/registerFaculty","/api/forgotPassword","/api/test","/api/upload/**")
+				.antMatchers("/api/authenticate","/api/registerStudent","/signup","/api/*","/api/registerFaculty","/api/forgotPassword","/api/test","/api/upload/**","/**")
 				.permitAll()
 				.anyRequest()
 				.authenticated()
