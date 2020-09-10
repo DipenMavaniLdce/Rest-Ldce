@@ -22,12 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ldce.Dao.Dao;
@@ -40,7 +35,7 @@ import com.ldce.SearchSpecification.ReqCountSpecification;
 import com.ldce.exception.RecordNotFoundException;
 import com.ldce.security.userdetails;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 @Secured(value = { "ROLE_DEPARTMENT", "ROLE_SSMENTOR", "ROLE_SSHEAD" })
 @RestController
 @RequestMapping("/api/admin")
@@ -59,35 +54,36 @@ public class AdminController {
 
 	@CrossOrigin
 	@GetMapping("/adminDashbord")
-	public Map getdashBoard() {
+	public ResponseEntity<?> getdashBoard() {
 		Map<String, Long> map = new HashMap<String, Long>();
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (userDetails.getRole().equals("ROLE_DEPARTMENT")) {
 			map.put("Registered Student", strp.count(Specification.where(CountSpecification
 					.CountByBranch(userDetails.getBranch()).and(CountSpecification.CountByFaculty_approve(0)))));
 			map.put("Applied Document", strp.countByStatus1(userDetails.getBranch()));
-			return map;
+			return ResponseEntity.ok(map);
 		} else if (userDetails.getRole().equals("ROLE_SSMENTOR")) {
 			map.put("Applied Document", reqrepo.count(Specification
 					.where(ReqCountSpecification.CountBystatus1(1).and(ReqCountSpecification.CountBystatus2(0)))));
-			return map;
+			return ResponseEntity.ok(map);
 		} else if (userDetails.getRole().equals("ROLE_SSHEAD")) {
 			map.put("Applied Document", reqrepo.count(Specification.where(ReqCountSpecification.CountBystatus1(1)
 					.and(ReqCountSpecification.CountBystatus2(1)).and(ReqCountSpecification.CountBystatus3(0)))));
-			return map;
+			return ResponseEntity.ok(map);
 		} else {
-			return null;
+			HashMap<String, String> res = new HashMap<String, String>();
+			res.put("error","invalid role");
+			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	// json data to logged in user
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/data")
-	public Admin getData() {
+	public ResponseEntity<?> getData() {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Admin admin = dao.adminCrenditials(userDetails.getEmail());
-		// System.out.println(a);
-		return admin;
+		return ResponseEntity.ok(admin);
 	}
 	@PostMapping("/FeeRefundApprove")
 	public ResponseEntity<?> feeRefundApprove(String enrollment, Integer status, String comment){
@@ -159,7 +155,7 @@ public class AdminController {
 	@CrossOrigin
 	@GetMapping("/pendingRegList")
 	public List<Student> getStudentData() {
-		System.out.println("heeeeee");
+
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<Student> student = dao.pendingRegistration(userDetails.getBranch());
 		return student;
@@ -195,13 +191,13 @@ public class AdminController {
 	@PostMapping("/findDocument")
 	public List<RequestDto> findDocument(Date date,String enrollment) {
 
-		System.out.println(enrollment+ date+"..........................................");
+
 
 	userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String role = userDetails.getRole();
 
 		role = role.equals("ROLE_DEPARTMENT")?userDetails.getBranch()+role:role;
-		System.out.print("..........................");
+
 		return dao.findrequest(date,role,enrollment);
 	}
 
@@ -221,8 +217,9 @@ public class AdminController {
     @PostMapping("/changePhoto")
     public ResponseEntity<?> chnagePhoto(HttpServletRequest request, @RequestParam("photo") MultipartFile adminPhoto)
             throws IOException {
+
         String username = (String) request.getAttribute("username");
-        System.out.println(username);
+
         HashMap<String, String> res = new HashMap<String, String>();
         if (dao.updatephoto(username, adminPhoto,"ADMIN")) {
 

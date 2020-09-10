@@ -593,11 +593,9 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 
 	public void resetRequest(Request request,  MultipartFile request_document, Double cgpa,String username,String type) throws IOException {
 
-	if(request.getStatus1()==2){
 		request.setStatus1(0);
-	}else if(request.getStatus1()==2) request.setStatus1(0);
-	else if(request.getStatus3()==2) request.setStatus3(0);
-
+		request.setStatus2(0);
+		request.setStatus3(0);
 		Map<String,String> DOCUMENT=createStorage(request_document,username,type,"student\\request\\"+type);
 		request.setDocument_name(DOCUMENT.get("file_name"));
 		request.setDocument_url(DOCUMENT.get("file_url"));
@@ -694,13 +692,9 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 
 	public boolean storeFile(MultipartFile file,String file_path,String file_name ) throws IOException {
 		boolean fileExists = true;
-		System.out.println("in store file");
-		System.out.println(file_path);
 		File f = new File(file_path);
 		if (!f.exists()) {
-
 			fileExists =  f.mkdirs();
-			System.out.println(fileExists+"fileExist");
 		}
 		if(fileExists){
 			BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(Paths.get(file_path,file_name).toString())));

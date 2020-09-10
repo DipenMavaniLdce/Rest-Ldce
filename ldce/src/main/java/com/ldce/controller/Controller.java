@@ -24,6 +24,7 @@ import com.ldce.SearchSpecification.ObjectMapperUtils;
 import com.ldce.SearchSpecification.StudentSpecification;
 import com.ldce.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -45,7 +46,6 @@ import com.ldce.security.userdetailservice;
 @CrossOrigin
 @RequestMapping("/api")
 @RestController
-
 public class Controller {
 	public static String uploadDirectory = System.getProperty("user.dir")+"\\uploads";
 	@Autowired
@@ -66,9 +66,11 @@ public class Controller {
 	private JwtUtil jwtUtil;
 
 	Request request;
+	
 
 
-	@CrossOrigin
+
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
 		try{
@@ -94,20 +96,24 @@ public class Controller {
 
 
 	//faculty post data mapping
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/registerFaculty")
-	public @ResponseBody String facultyAdd(Admin admin,@RequestParam("photo")MultipartFile ph,@RequestParam("sign")MultipartFile si)
-	{ 
+	public ResponseEntity<?> facultyAdd(Admin admin,@RequestParam("photo")MultipartFile ph,@RequestParam("sign")MultipartFile si)
+	{
+
 		try {
 			dao.save(admin, ph, si);
 		}catch (Exception e) {
 			e.printStackTrace();
+			throw new ValidationFailException("data is not valid");
 		}
-		return "done";
+		return ResponseEntity.ok(new String("Success"));
 		
 	}
 
 	//forgot password post mapping
 	@PostMapping("/forgotPassword")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<?>  forgotPassword(@RequestParam("username") String username,@RequestParam("type") String type) throws Exception{
 
 		String email = dao.resetPassword(username,type);
@@ -121,12 +127,11 @@ public class Controller {
 			return new ResponseEntity<>(res,HttpStatus.OK);
 		}
 	}
-	
 
-	@CrossOrigin
+
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/registerStudent")
 	public ResponseEntity<?> beAdd(@Valid Student student, BindingResult E, @Valid Student_info info, @Valid Student_guardian guardian, @RequestParam("photo")MultipartFile ph, @RequestParam("sign")MultipartFile si) {
-		System.out.println("hear");
 		if (E.hasErrors()) {
 			throw new ValidationException();
 		}
@@ -137,7 +142,9 @@ public class Controller {
 	 			throw new ValidationFailException("data is not valid");
 	 		} catch (Exception e) {
 				e.printStackTrace();
+	 			throw new ValidationFailException("data is not valid");
 			}
+
 			return ResponseEntity.ok(new String("Success"));
 	 	}	
 	}

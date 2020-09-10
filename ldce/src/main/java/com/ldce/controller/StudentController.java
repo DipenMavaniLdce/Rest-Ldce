@@ -32,12 +32,8 @@ public class StudentController {
 	@Autowired
 	FeeRefundDetailsRepository frdr;
 
-	@GetMapping("/")
-	public ModelAndView getStatus() {
-		return new ModelAndView("StudentDashBoard.html");
-	}
-
 	// account confirmation using email
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/confirm-account")
 	public ModelAndView confirmStudentAccount(@RequestParam("token") String tokenValue) {
 		if (dao.validateEmail(tokenValue)) {
@@ -47,12 +43,13 @@ public class StudentController {
 		}
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("studentDashboard")
 	public RequestDto getdashBoard(@RequestAttribute("username") String username) {
-
 		return dao.getStudentDashbord(username);
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("feeRefund")
 	public FeeRefundDetails getfeerefund() {
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -61,6 +58,7 @@ public class StudentController {
 	}
 
 	// change photo
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/changePhoto")
 	public ResponseEntity<?> chnagePhoto(HttpServletRequest request, @RequestParam("photo") MultipartFile studentPhoto)
 			throws IOException {
@@ -79,6 +77,7 @@ public class StudentController {
 	}
 
 	// update sign
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/changeSign")
 	public ResponseEntity<?> chnagesign(HttpServletRequest request, @RequestParam("sign") MultipartFile studentSign)
 			throws IOException {
@@ -95,6 +94,7 @@ public class StudentController {
 
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/updateStudent")
 	public ResponseEntity<?> updateProfile(HttpServletRequest request, @Valid Student Student, @Valid Student_info info,
 			@Valid Student_guardian guardian) throws IOException {
@@ -112,11 +112,12 @@ public class StudentController {
 	// json data to logged in user
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/data")
-	public Student getData(@RequestAttribute("username") String username) {
+	public ResponseEntity<?> getData(@RequestAttribute("username") String username) {
 		Student student = dao.search(username);
-		return student;
+		return ResponseEntity.ok(student);
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/DocumentSubmit/{type}")
 	public ResponseEntity<?> requestCertificate(@PathVariable("type") String type,
 			@RequestAttribute("username") String username,
@@ -169,6 +170,7 @@ public class StudentController {
 
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/feeRefund")
 	public ResponseEntity<?> feeRefund(@Valid FeeRefundDetails feerefund,
 			@RequestAttribute("username") String username,
@@ -194,6 +196,7 @@ public class StudentController {
 
 	}
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/changePassword")
 	public ResponseEntity<?> changePassword(HttpServletRequest request) {
 		String username = (String) request.getAttribute("username");
