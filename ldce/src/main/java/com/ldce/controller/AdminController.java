@@ -157,7 +157,7 @@ public class AdminController {
 	public List<Student> getStudentData() {
 
 		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		List<Student> student = dao.pendingRegistration(userDetails.getBranch());
+		List<Student> student = dao.pendingRegistration(userDetails.getBranch(),userDetails.getCourse());
 		return student;
 	}
 

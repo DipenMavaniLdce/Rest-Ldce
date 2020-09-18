@@ -18,8 +18,11 @@ boolean isactive;
 String role;
 int branch;
 String enrollment;
+String course;
 
-public userdetails(){
+
+
+	public userdetails(){
 	this.email=null;
 	this.password=null;
 	this.isactive=false;
@@ -45,6 +48,7 @@ this.password=admin.getPassword();
 this.isactive=true;
 this.role=admin.getRole();
 this.branch=admin.getBranch();
+this.course = admin.getCourse();
 this.enrollment=null;
 }
 	
@@ -136,6 +140,12 @@ this.enrollment=null;
 	public void setEnrollment(String enrollment) {
 		this.enrollment = enrollment;
 	}
-	
-	
+
+	public void setCourse(String course) {
+		this.course = course;
+	}
+
+	public String getCourse() {
+		return course;
+	}
 }

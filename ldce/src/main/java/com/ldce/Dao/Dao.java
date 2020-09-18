@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.ldce.Data.FeeRefundData;
+import com.ldce.Main.LdceApplication;
 import com.ldce.controller.Controller;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +109,7 @@ public class Dao {
 	public void save(Admin admin, MultipartFile photo, MultipartFile sign) throws Exception {
 
 		Map<String,String> PHOTO=createStorage(photo,admin.getFaculty_id(),"photo","admin");
-		Map<String,String> SIGN=createStorage(photo,admin.getFaculty_id(),"sign","admin");
+		Map<String,String> SIGN=createStorage(sign,admin.getFaculty_id(),"sign","admin");
 
 		admin.setPhoto_name(PHOTO.get("file_name"));
 		admin.setPhoto_url(PHOTO.get("file_url"));
@@ -172,8 +173,8 @@ public class Dao {
 
 
 
-	public List<Student> searchList(int branch) {
-		System.out.println("start");
+	public List<Student> searchList(int branch,String course) {
+
 		List<Student> student = studentRepo.findByBranchActive(branch);
 
 		return student;
@@ -183,10 +184,12 @@ public class Dao {
 
 
 		Map<String,String> SIGN;
+		String OldFileName;
 		if(type.equals("ADMIN")){
 			Admin admin = adminrepo.findByEmail(username);
 
 			if (admin != null) {
+				OldFileName = admin.getSign_url();
 				SIGN = createStorage(sign,username,"sign","admin");
 				admin.setSign_name(SIGN.get("file_name"));
 				admin.setSign_url(SIGN.get("file_url"));
@@ -196,6 +199,7 @@ public class Dao {
 				boolean isSignStored = storeFile(sign,SIGN.get("file_path"),SIGN.get("file_name"));
 				if(isSignStored){
 					adminrepo.save(admin);
+					deleteOldFile(LdceApplication.uploadDirectory+"\\"+OldFileName);
 				}
 				return true;
 			} else
@@ -204,6 +208,7 @@ public class Dao {
 		else{
 			Student student = studentRepo.findByEnrollment(username);
 			if (student != null) {
+				OldFileName = student.getSign_url();
 				SIGN = createStorage(sign,username,"sign","student");
 				student.setSign_name(SIGN.get("file_name"));
 				student.setSign_url(SIGN.get("file_url"));
@@ -213,6 +218,7 @@ public class Dao {
 				boolean isSignStored = storeFile(sign,SIGN.get("file_path"),SIGN.get("file_name"));
 				if(isSignStored){
 					studentRepo.save(student);
+					deleteOldFile(LdceApplication.uploadDirectory+"\\"+OldFileName);
 				}
 				return true;
 			} else
@@ -223,12 +229,13 @@ public class Dao {
 
 	public boolean updatephoto(String username, MultipartFile photo,String type) throws IOException {
 		Map<String,String> PHOTO;
+		String OldFileName;
 		if(type.equals("ADMIN")){
 
 			Admin admin = adminrepo.findByEmail(username);
 			if (admin != null) {
 				PHOTO = createStorage(photo,username,"photo","admin");
-
+				OldFileName = admin.getPhoto_url();
 				admin.setPhoto_name(PHOTO.get("file_name"));
 				admin.setPhoto_url(PHOTO.get("file_url"));
 				admin.setPhoto_size(PHOTO.get("file_size"));
@@ -237,6 +244,7 @@ public class Dao {
 				boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
 				if(isPhotoStored){
 					adminrepo.save(admin);
+					deleteOldFile(LdceApplication.uploadDirectory+"\\"+OldFileName);
 				}
 				return true;
 			} else
@@ -245,6 +253,7 @@ public class Dao {
 		else{
 			Student student = studentRepo.findByEnrollment(username);
 			if (student != null) {
+				OldFileName = student.getPhoto_url();
 				PHOTO = createStorage(photo,username,"photo","student");
 				student.setPhoto_name(PHOTO.get("file_name"));
 				student.setPhoto_url(PHOTO.get("file_url"));
@@ -253,6 +262,7 @@ public class Dao {
 				boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
 				if(isPhotoStored){
 					studentRepo.save(student);
+					deleteOldFile(LdceApplication.uploadDirectory+"\\"+OldFileName);
 				}
 				return true;
 
@@ -405,9 +415,9 @@ public class Dao {
 		return new Request();
 	}
 
-	public List<Student> pendingRegistration(int branch) {
+	public List<Student> pendingRegistration(int branch,String course) {
 		List<Student> students = null;
-		students = searchList(branch);
+		students = searchList(branch,course);
 		return students;
 	}
 
@@ -677,7 +687,7 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 		HashMap<String,String> fileData = new HashMap<String, String>();
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		String file_name= type+"_"+id+"_"+timestamp.getTime()+"_"+file.getOriginalFilename();
-		String file_path = Paths.get(Controller.uploadDirectory,domain,type).toString();
+		String file_path = Paths.get(LdceApplication.uploadDirectory,domain,type).toString();
 		String file_url = Paths.get(domain,type,file_name).toString();
 		String file_type = file.getContentType();
 		Long file_Size = file.getSize();
@@ -705,5 +715,19 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 		return false;
 	}
 
+	public void deleteOldFile(String filename){
+		try{
+			boolean delete = new File(filename).delete();
+			if(delete){
+				System.out.println("old file deleted success fully");
+			}else{
+				System.out.println("old file not deleted");
+			}
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+
+	}
 
 }
