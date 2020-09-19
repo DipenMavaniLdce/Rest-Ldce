@@ -26,10 +26,10 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 
 	public Student findByEmail(String email);
 
-	@Query("from Student where branch=?1 AND faculty_approve=0")
-	public List<Student> findByBranchActive(int branch);
+	@Query("from Student where branch=?1 AND faculty_approve=0 AND course=?2")
+	public List<Student> findByBranchActive(int branch,String course);
 
-	//public List<Student> findByFaculty_approveAndCourseAndBranch(int faculty_approve,String course,int branch);
+
 
 	@Query("from Student")
 	public List<Student> findByBranchActivee();

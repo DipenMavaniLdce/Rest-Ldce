@@ -1,4 +1,4 @@
-package com.ldce.ldce;
+package com.ldce;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

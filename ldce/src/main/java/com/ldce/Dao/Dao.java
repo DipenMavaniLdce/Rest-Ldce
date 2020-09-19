@@ -175,7 +175,7 @@ public class Dao {
 
 	public List<Student> searchList(int branch,String course) {
 
-		List<Student> student = studentRepo.findByBranchActive(branch);
+		List<Student> student = studentRepo.findByBranchActive(branch,course);
 
 		return student;
 	}
