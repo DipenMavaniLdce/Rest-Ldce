@@ -2,16 +2,16 @@ package com.ldce.controller;
 
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
+import java.util.logging.Logger;
 
-import javax.print.Doc;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 
-import com.ldce.Data.DocumentData;
-import com.ldce.Data.RequestDto;
+import com.ldce.Dao.Dao;
+import com.ldce.Main.LdceApplication;
+import com.ldce.security.CustomUserDetailService;
+import com.ldce.util.JwtUtil;
 import com.ldce.Model.Authentication.AuthenticationRequest;
 import com.ldce.Model.Authentication.AuthenticationResponce;
 import com.ldce.Model.Request.Request;
@@ -20,31 +20,24 @@ import com.ldce.Model.Student.Student;
 import com.ldce.Model.Student.StudentRepository;
 import com.ldce.Model.Student.Student_guardian;
 import com.ldce.Model.Student.Student_info;
-import com.ldce.SearchSpecification.ObjectMapperUtils;
-import com.ldce.SearchSpecification.StudentSpecification;
-import com.ldce.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ldce.Dao.Dao;
 import com.ldce.Model.Admin.Admin;
 import com.ldce.exception.ValidationFailException;
-import com.ldce.security.userdetailservice;
 
-@CrossOrigin
+
+
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 @RestController
 public class Controller {
@@ -61,8 +54,10 @@ public class Controller {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+
 	@Autowired
-	private userdetailservice myUserDetailsService;
+	private CustomUserDetailService myUserDetailsService;
+
 	@Autowired
 	private JwtUtil jwtUtil;
 
@@ -108,7 +103,10 @@ public class Controller {
 			e.printStackTrace();
 			throw new ValidationFailException("data is not valid");
 		}
-		return ResponseEntity.ok(new String("Success"));
+		HashMap<String,String> res = new HashMap<>();
+		res.put("message","Registration done");
+		return new ResponseEntity<>(res,HttpStatus.OK);
+
 		
 	}
 
@@ -133,29 +131,32 @@ public class Controller {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/registerStudent")
 	public ResponseEntity<?> beAdd(@Valid Student student, BindingResult E, @Valid Student_info info, @Valid Student_guardian guardian, @RequestParam("photo")MultipartFile ph, @RequestParam("sign")MultipartFile si) {
+
 		if (E.hasErrors()) {
+			System.out.println(E);
 			throw new ValidationException();
 		}
 		else {
 	 		try {
 	 			dao.save(student,info,guardian,ph,si);
-	 		} catch (IOException e) {
-	 			throw new ValidationFailException("data is not valid");
-	 		} catch (Exception e) {
+
+	 		}
+	 		catch (Exception e) {
+
+
 				e.printStackTrace();
 	 			throw new ValidationFailException("data is not valid");
 			}
 
-			return ResponseEntity.ok(new String("Success"));
-	 	}	
+			HashMap<String,String> res = new HashMap<>();
+			res.put("message","Registration done");
+			return new ResponseEntity<>(res,HttpStatus.OK);
+
+		}
 	}
 			
 
-	@GetMapping("/test")
-	public String test (){
-return "working";
-	}
-	
+
 	
 }
 		

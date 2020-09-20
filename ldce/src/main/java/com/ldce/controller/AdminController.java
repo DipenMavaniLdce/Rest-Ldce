@@ -2,7 +2,6 @@ package com.ldce.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,11 +10,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ldce.Dao.Dao;
+import com.ldce.Data.DocumentData;
 import com.ldce.Data.FeeRefundData;
 import com.ldce.Data.RequestDto;
+import com.ldce.SearchSpecification.CountSpecification;
+import com.ldce.SearchSpecification.ReqCountSpecification;
 import com.ldce.Model.Admin.Admin;
-import com.ldce.SearchSpecification.ObjectMapperUtils;
-import com.ldce.SearchSpecification.StudentSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -25,15 +26,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ldce.Dao.Dao;
-import com.ldce.Data.DocumentData;
 import com.ldce.Model.Request.RequestRepository;
 import com.ldce.Model.Student.Student;
 import com.ldce.Model.Student.StudentRepository;
-import com.ldce.SearchSpecification.CountSpecification;
-import com.ldce.SearchSpecification.ReqCountSpecification;
 import com.ldce.exception.RecordNotFoundException;
-import com.ldce.security.userdetails;
+import com.ldce.security.CustomUserDetails;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @Secured(value = { "ROLE_DEPARTMENT", "ROLE_SSMENTOR", "ROLE_SSHEAD" })
@@ -56,7 +53,7 @@ public class AdminController {
 	@GetMapping("/adminDashbord")
 	public ResponseEntity<?> getdashBoard() {
 		Map<String, Long> map = new HashMap<String, Long>();
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (userDetails.getRole().equals("ROLE_DEPARTMENT")) {
 			map.put("Registered Student", strp.count(Specification.where(CountSpecification
 					.CountByBranch(userDetails.getBranch()).and(CountSpecification.CountByFaculty_approve(0)))));
@@ -81,7 +78,7 @@ public class AdminController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/data")
 	public ResponseEntity<?> getData() {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Admin admin = dao.adminCrenditials(userDetails.getEmail());
 		return ResponseEntity.ok(admin);
 	}
@@ -96,7 +93,7 @@ public class AdminController {
 			res.put("error","Comment is Required");
 			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
 		}
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (!dao.UpdateFeeRefundStatus(userDetails, enrollment, status, comment)) {
 			throw new RecordNotFoundException("student data is not found");
 		} else {
@@ -122,7 +119,7 @@ public class AdminController {
 			res.put("error","Comment is Required");
 			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
 		}
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (!dao.UpdateStatus(userDetails, enrollment, type, status, comment,rank)) {
 			throw new RecordNotFoundException("student data is not found");
 		} else {
@@ -156,7 +153,7 @@ public class AdminController {
 	@GetMapping("/pendingRegList")
 	public List<Student> getStudentData() {
 
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<Student> student = dao.pendingRegistration(userDetails.getBranch(),userDetails.getCourse());
 		return student;
 	}
@@ -164,7 +161,7 @@ public class AdminController {
 	@CrossOrigin
 	@GetMapping("/pendingDocument")
 	public List<DocumentData> getDocApprove() {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<DocumentData> students = dao.penndingDocument(userDetails);
 		return students;
 	}
@@ -174,7 +171,7 @@ public class AdminController {
 	@CrossOrigin
 	@GetMapping("/pendingFeeRefund")
 	public List<FeeRefundData> getFeeApprove() {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<FeeRefundData> details = dao.penddingFeeRefund(userDetails);
 		return details;
 	}
@@ -182,18 +179,18 @@ public class AdminController {
 	@CrossOrigin
 	@GetMapping("/acceptedDocument")
 	public List<DocumentData> getAcceptedDocument() {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<DocumentData> students = dao.penndingDocument(userDetails);
 		return students;
 	}
 
 	@CrossOrigin
 	@PostMapping("/findDocument")
-	public List<RequestDto> findDocument(Date date,String enrollment) {
+	public List<RequestDto> findDocument(Date date, String enrollment) {
 
 
 
-	userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String role = userDetails.getRole();
 
 		role = role.equals("ROLE_DEPARTMENT")?userDetails.getBranch()+role:role;
@@ -204,7 +201,7 @@ public class AdminController {
 	@CrossOrigin
 	@GetMapping("/Auth")
 	public HashMap<String, String> getAdminAuth() {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		HashMap<String, String> auth = new HashMap<>();
 		auth.put("Email", userDetails.getEmail());
 
@@ -254,8 +251,10 @@ public class AdminController {
 		String username = (String) request.getAttribute("username");
 		String password = request.getParameter("password");
 		String current_password = request.getParameter("current_password");
+
 		HashMap<String, String> res = new HashMap<String, String>();
 		String s = dao.changePasswordDao(username, password, current_password,"ADMIN");
+
 		if (s == null) {
 			res.put("error", "Server error");
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);

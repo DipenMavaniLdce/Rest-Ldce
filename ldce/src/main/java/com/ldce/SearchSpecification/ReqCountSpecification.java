@@ -6,8 +6,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.ldce.Model.Request.Request;
 
-import java.util.Date;
-
 public class ReqCountSpecification {
 
 	public static Specification<Request> CountBystatus1(Integer status1) {

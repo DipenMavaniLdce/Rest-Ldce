@@ -14,10 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+import com.ldce.Main.Token;
 import com.ldce.Model.FeeRefund.FeeRefundDetails;
 import com.ldce.Model.Request.Request;
-import com.ldce.Main.Token;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,35 +33,50 @@ public class Student implements Serializable {
 	String enrollment;
 	@NotEmpty
 	String first_name;
+	@NotEmpty
 	String middle_name;
 	String last_name;
 	@Email
+	@NotEmpty
 	@Column(unique = true)
 	String email;
+	@NotEmpty
 	String contact;
 	@JsonIgnore
 	String password;
+	@NotEmpty
 	String gender;
+	@NotEmpty
 	String caste;
+	@NotEmpty
 	String religion;
+	@NotNull
 	int addmission_year;
 	int graduation_year;
+	@NotNull
 	int semester;
+	@NotNull
 	int branch;
+	@NotEmpty
 	String course;
+
 	String faculty_comment;
+	@NotEmpty
 	String admission_category;
 
 	String role = "ROLE_STUDENT";
+
 	String photo_name;
 	String photo_url;
 	String photo_size;
 	String photo_type;
 
+
 	String sign_name;
 	String sign_url;
 	String sign_size;
 	String sign_type;
+
 
 	Boolean isactive = true;
 	int faculty_approve = 0;

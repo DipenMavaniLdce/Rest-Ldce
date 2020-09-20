@@ -6,19 +6,21 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.ldce.Data.DocumentData;
 import com.ldce.Data.FeeRefundData;
+import com.ldce.Data.RequestDto;
 import com.ldce.Main.LdceApplication;
-import com.ldce.controller.Controller;
+import com.ldce.SearchSpecification.ObjectMapperUtils;
+import com.ldce.SearchSpecification.StudentSpecification;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ldce.Data.DocumentData;
-import com.ldce.Data.RequestDto;
 import com.ldce.Email.EmailSender;
 import com.ldce.Model.FeeRefund.FeeRefundDetails;
 import com.ldce.Model.FeeRefund.FeeRefundDetailsRepository;
@@ -29,12 +31,10 @@ import com.ldce.Model.Student.StudentRepository;
 import com.ldce.Model.Student.Student_guardian;
 import com.ldce.Model.Student.Student_info;
 import com.ldce.Main.Token;
-import com.ldce.SearchSpecification.ObjectMapperUtils;
-import com.ldce.SearchSpecification.StudentSpecification;
 
 import com.ldce.Model.Admin.Admin;
 import com.ldce.Model.Admin.AdminRepository;
-import com.ldce.security.userdetails;
+import com.ldce.security.CustomUserDetails;
 
 @Component
 @Scope("prototype")
@@ -54,6 +54,9 @@ public class Dao {
 
 	@Autowired
 	FeeRefundDetailsRepository feerefunddetailsRepository;
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	Request request;
 
@@ -76,7 +79,7 @@ public class Dao {
 		boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
 		boolean isSignStored = storeFile(photo,SIGN.get("file_path"),SIGN.get("file_name"));
 
-
+		student.setPassword(passwordEncoder.encode(student.getPassword()));
 		student.setToken(new Token());
 		student.setInfo(info);
 		student.setGuardian(guardian);
@@ -86,6 +89,10 @@ public class Dao {
 			}
 
 		} catch (Exception E) {
+			deleteOldFile(LdceApplication.uploadDirectory+"\\"+student.getSign_url());
+			deleteOldFile(LdceApplication.uploadDirectory+"\\"+student.getPhoto_url());
+			System.out.println("in Exception");
+
 			throw E;
 		}
 		// emailSender.createMail(student.getEmail(),student.getToken().getTokenValue());
@@ -124,6 +131,7 @@ public class Dao {
 		boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
 		boolean isSignStored = storeFile(photo,SIGN.get("file_path"),SIGN.get("file_name"));
 
+		admin.setPassword(passwordEncoder.encode(admin.getPassword()));
 
 		try {
 			if(isPhotoStored && isSignStored) {
@@ -146,7 +154,7 @@ public class Dao {
                 return null;
             }else{
 				password= generateCommonLangPassword();
-				student.setPassword(password);
+				student.setPassword(passwordEncoder.encode(password));
 				studentRepo.save(student);
 				System.out.println("save");
             	email = student.getEmail();
@@ -159,7 +167,7 @@ public class Dao {
             }
 	        else{
 				password= generateCommonLangPassword();
-				admin.setPassword(password);
+				admin.setPassword(passwordEncoder.encode(password));
 				adminrepo.save(admin);
 	        	email = username;
 			}
@@ -367,6 +375,10 @@ public class Dao {
 
 	public int saveRequest(String type, String enrollment, MultipartFile request_document , double cgpa, int graduation_year) throws IOException {
 		Student student = studentRepo.findByEnrollment(enrollment);
+		int isApproved = student.getFaculty_approve();
+		if(isApproved == 2 || isApproved == 0)
+			return 400;
+
 		Request Document = requestRepository.findByReq(type, enrollment);
 		if (Document == null) {
 			Document = getReq();
@@ -421,7 +433,7 @@ public class Dao {
 		return students;
 	}
 
-	public List<FeeRefundData> penddingFeeRefund(userdetails userDetails) {
+	public List<FeeRefundData> penddingFeeRefund(CustomUserDetails userDetails) {
 		String role = userDetails.getRole();
 		int branch = userDetails.getBranch();
 		if (role.equals("ROLE_DEPARTMENT")) {
@@ -435,7 +447,7 @@ public class Dao {
 			return null;
 	}
 
-	public List<DocumentData> penndingDocument(userdetails userDetails) {
+	public List<DocumentData> penndingDocument(CustomUserDetails userDetails) {
 		String role = userDetails.getRole();
 		int branch = userDetails.getBranch();
 		if (role.equals("ROLE_DEPARTMENT")) {
@@ -447,7 +459,7 @@ public class Dao {
 		} else
 			return null;
 	}
-public boolean UpdateFeeRefundStatus(userdetails userDetails, String enrollment,Integer status, String comment){
+public boolean UpdateFeeRefundStatus(CustomUserDetails userDetails, String enrollment, Integer status, String comment){
 	String role = userDetails.getRole();
 	FeeRefundDetails fee = feerefunddetailsRepository.findByEnrollment(enrollment);
 	if (status==1){
@@ -496,7 +508,7 @@ public boolean UpdateFeeRefundStatus(userdetails userDetails, String enrollment,
 			return false;
 	}
 }
-	public boolean UpdateStatus(userdetails userDetails, String enrollment, String type, Integer status, String comment,String rank) {
+	public boolean UpdateStatus(CustomUserDetails userDetails, String enrollment, String type, Integer status, String comment, String rank) {
 		String role = userDetails.getRole();
 
 		Request request = requestRepository.findByReq(type, enrollment);
@@ -551,7 +563,7 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 	}
 
 
-	public List<RequestDto> findrequest(Date date , String role,String enrollment) {
+	public List<RequestDto> findrequest(Date date , String role, String enrollment) {
 
 
 		List<Student> students = studentRepo.findAll( Specification.where(
@@ -617,7 +629,7 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 		request.setLive(true);
 	}
 
-	public boolean transferStudent(userdetails userDetails, int from, int to) {
+	public boolean transferStudent(CustomUserDetails userDetails, int from, int to) {
 		String role = userDetails.getRole();
 		if (role.equals("ROLE_DEPARTMENT")) {
 
@@ -628,11 +640,11 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 	public String changePasswordDao(String username,String password, String current_password,String type){
 		if(type.equals("ADMIN")) {
 			Admin admin = adminrepo.findByEmail(username);
-			if(!admin.getPassword().equals(current_password)){
+			if(!passwordEncoder.matches(current_password,admin.getPassword())){
 				return "false";
 			}else {
 				try{
-					admin.setPassword(password);
+					admin.setPassword(passwordEncoder.encode(password));
 					adminrepo.save(admin);
 					return "true";
 				}
@@ -644,11 +656,11 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 		}
 		else {
 			Student student = studentRepo.findByEnrollment(username);
-			if(!student.getPassword().equals(current_password)){
+			if(!passwordEncoder.matches(current_password,student.getPassword())){
 				return "false";
 			}else {
 				try{
-					student.setPassword(password);
+					student.setPassword(passwordEncoder.encode(password));
 					studentRepo.save(student);
 					return "true";
 				}

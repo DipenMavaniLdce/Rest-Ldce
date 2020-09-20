@@ -5,15 +5,13 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.ldce.Data.DocumentData;
 import com.ldce.Data.FeeRefundData;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import com.ldce.Data.DocumentData;
 
 public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student> {
 

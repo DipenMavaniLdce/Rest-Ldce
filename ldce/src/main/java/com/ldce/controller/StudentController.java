@@ -21,9 +21,10 @@ import com.ldce.Model.FeeRefund.FeeRefundDetailsRepository;
 import com.ldce.Model.Student.Student;
 import com.ldce.Model.Student.Student_guardian;
 import com.ldce.Model.Student.Student_info;
-import com.ldce.security.userdetails;
+import com.ldce.security.CustomUserDetails;
 
-@RestController()
+@RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/student")
 public class StudentController {
 	@Autowired
@@ -52,7 +53,7 @@ public class StudentController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("feeRefund")
 	public FeeRefundDetails getfeerefund() {
-		userdetails userDetails = (userdetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		System.out.println(userDetails);
 		return dao.feerefund(userDetails.getEnrollment());
 	}
@@ -163,7 +164,11 @@ public class StudentController {
 			return new ResponseEntity<>(res, HttpStatus.CONFLICT);
 		} else if (code == 200) {
 			return new ResponseEntity<>(res, HttpStatus.OK);
-		} else {
+		}else if(code == 400){
+			res.put("error", "profile is not approved yet");
+			return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+		}
+		else {
 			res.put("error", "Server Error");
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

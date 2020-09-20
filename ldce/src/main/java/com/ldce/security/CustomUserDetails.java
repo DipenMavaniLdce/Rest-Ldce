@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.ldce.Model.Student.Student;
 import com.ldce.Model.Admin.Admin;
 
-public class userdetails implements UserDetails {
+public class CustomUserDetails implements UserDetails {
 
 String email;
 String password;
@@ -22,7 +22,7 @@ String course;
 
 
 
-	public userdetails(){
+	public CustomUserDetails(){
 	this.email=null;
 	this.password=null;
 	this.isactive=false;
@@ -32,7 +32,7 @@ String course;
 }
 
 
-public userdetails(Student student) {
+public CustomUserDetails(Student student) {
 this.email=student.getEmail();
 this.password=student.getPassword();
 this.isactive=true;
@@ -42,16 +42,16 @@ this.enrollment=student.getEnrollment();
 }
 
 
-public userdetails(Admin admin) {
-this.email=admin.getEmail();
-this.password=admin.getPassword();
-this.isactive=true;
-this.role=admin.getRole();
-this.branch=admin.getBranch();
-this.course = admin.getCourse();
-this.enrollment=null;
-}
-	
+	public CustomUserDetails(Admin admin) {
+		this.email=admin.getEmail();
+		this.password=admin.getPassword();
+		this.isactive=true;
+		this.role=admin.getRole();
+		this.branch=admin.getBranch();
+		this.course = admin.getCourse();
+		this.enrollment=null;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 

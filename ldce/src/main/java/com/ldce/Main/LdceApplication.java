@@ -19,6 +19,7 @@ import java.io.File;
 		"com.ldce.Email", "com.ldce.util", "com.ldce.filter" })
 @EnableJpaRepositories(basePackages = { "com.ldce.Model", "com.ldce.Main" })
 public class LdceApplication {
+
 	public static String uploadDirectory =  "C:\\Users\\mavan\\Documents\\uploads";
 	public static void main(String[] args) {
 		new File(uploadDirectory).mkdirs();

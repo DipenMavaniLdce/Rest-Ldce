@@ -4,15 +4,15 @@ import java.util.List;
 
 public class ErrorResponse {
 
-	String string;
+	String error;
 	List<String> details;
 
 	public String getString() {
-		return string;
+		return error;
 	}
 
 	public void setString(String string) {
-		this.string = string;
+		this.error = string;
 	}
 
 	public List<String> getDetails() {
@@ -25,7 +25,7 @@ public class ErrorResponse {
 
 	public ErrorResponse(String string, List<String> details) {
 		super();
-		this.string = string;
+		this.error = string;
 		this.details = details;
 	}
 

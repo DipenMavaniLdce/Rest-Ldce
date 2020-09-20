@@ -12,7 +12,7 @@ import com.ldce.Model.Admin.Admin;
 import com.ldce.Model.Admin.AdminRepository;
 
 @Service
-public class userdetailservice implements UserDetailsService {
+public class CustomUserDetailService implements UserDetailsService {
 	@Autowired
 	StudentRepository studentRepo;
 	@Autowired
@@ -20,7 +20,6 @@ public class userdetailservice implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// System.out.println("userdetailservice");
 
 		String usertype[] = username.split(",");
 		String user = usertype[0];
@@ -32,7 +31,7 @@ public class userdetailservice implements UserDetailsService {
 
 				return null;
 			}
-			return new userdetails(student);
+			return new CustomUserDetails(student);
 
 		} else if (type.equals("ADMIN")) {
 			Admin admin = adminrepo.findByEmail(user);
@@ -41,9 +40,9 @@ public class userdetailservice implements UserDetailsService {
 
 				return null;
 			}
-			return new userdetails(admin);
+			return new CustomUserDetails(admin);
 		} else
-			return new userdetails();
+			return new CustomUserDetails();
 	}
 
 }

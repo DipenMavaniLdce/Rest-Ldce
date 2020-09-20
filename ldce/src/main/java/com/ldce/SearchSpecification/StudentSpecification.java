@@ -1,11 +1,8 @@
 package com.ldce.SearchSpecification;
 
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Predicate;
 
-import com.ldce.Data.DocumentData;
-import com.ldce.Data.StudentDto;
 import com.ldce.Model.Request.Request;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -19,7 +16,7 @@ public class StudentSpecification {
 
 			if (branch != null && branch != 0) {
 				Predicate equalPredicate = criteriaBuilder.equal(root.get("branch"), branch);
-				System.out.println(equalPredicate);
+
 				return equalPredicate;
 			} else
 				return null;

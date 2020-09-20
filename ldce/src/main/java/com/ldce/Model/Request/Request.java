@@ -1,10 +1,10 @@
 package com.ldce.Model.Request;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 import com.ldce.Model.Student.Student;
 import org.springframework.context.annotation.Scope;
@@ -17,6 +17,7 @@ public class Request {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long request_id;
+	@NotEmpty
 	String type;
 	int status1 = 0;
 	int status2 = 0;
@@ -27,6 +28,7 @@ public class Request {
 	String document_url;
 	String document_size;
 	String document_type;
+
 	String last_modified_by;
 	Date modified_date= new Date();
 	double cgpa;
