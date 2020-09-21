@@ -17,6 +17,8 @@ import com.ldce.Data.RequestDto;
 import com.ldce.SearchSpecification.CountSpecification;
 import com.ldce.SearchSpecification.ReqCountSpecification;
 import com.ldce.Model.Admin.Admin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -52,22 +54,28 @@ public class AdminController {
 	@CrossOrigin
 	@GetMapping("/adminDashbord")
 	public ResponseEntity<?> getdashBoard() {
+		Logger logger = LoggerFactory.getLogger(AdminController.class);
 		Map<String, Long> map = new HashMap<String, Long>();
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		logger.trace("userDetails found");
 		if (userDetails.getRole().equals("ROLE_DEPARTMENT")) {
+			logger.trace(userDetails.getRole()+" found");
 			map.put("Registered Student", strp.count(Specification.where(CountSpecification
 					.CountByBranch(userDetails.getBranch()).and(CountSpecification.CountByFaculty_approve(0)))));
 			map.put("Applied Document", strp.countByStatus1(userDetails.getBranch()));
 			return ResponseEntity.ok(map);
 		} else if (userDetails.getRole().equals("ROLE_SSMENTOR")) {
+			logger.trace(userDetails.getRole()+" found");
 			map.put("Applied Document", reqrepo.count(Specification
 					.where(ReqCountSpecification.CountBystatus1(1).and(ReqCountSpecification.CountBystatus2(0)))));
 			return ResponseEntity.ok(map);
 		} else if (userDetails.getRole().equals("ROLE_SSHEAD")) {
+			logger.trace(userDetails.getRole()+" found");
 			map.put("Applied Document", reqrepo.count(Specification.where(ReqCountSpecification.CountBystatus1(1)
 					.and(ReqCountSpecification.CountBystatus2(1)).and(ReqCountSpecification.CountBystatus3(0)))));
 			return ResponseEntity.ok(map);
 		} else {
+			logger.warn("invalid roll found found");
 			HashMap<String, String> res = new HashMap<String, String>();
 			res.put("error","invalid role");
 			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
@@ -78,7 +86,9 @@ public class AdminController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/data")
 	public ResponseEntity<?> getData() {
+		Logger logger = LoggerFactory.getLogger(AdminController.class);
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		logger.trace(userDetails.getRole()+" found");
 		Admin admin = dao.adminCrenditials(userDetails.getEmail());
 		return ResponseEntity.ok(admin);
 	}
