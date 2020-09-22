@@ -197,7 +197,15 @@ public class AdminController {
 	@CrossOrigin
 	@PostMapping("/findDocument")
 	public List<RequestDto> findDocument(Date date, String enrollment) {
-		return dao.findrequest(date,enrollment);
+
+
+
+	CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String role = userDetails.getRole();
+
+		role = role.equals("ROLE_DEPARTMENT")?userDetails.getBranch()+role:role;
+
+		return dao.findrequest(date,role,enrollment);
 	}
 
 	@CrossOrigin

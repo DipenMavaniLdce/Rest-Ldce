@@ -48,8 +48,10 @@ public class Request {
 	}
 
 	@PreUpdate
-	public void OnUpdate() throws ParseException {
-		setModified_date(new Date());
+	public void Onupdate() throws ParseException {
+		Date d = new Date();
+		setModified_date(new Date(d.getYear(),d.getMonth(),d.getDay()));
+
 	}
 
 	public String getLast_modified_by() {
