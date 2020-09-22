@@ -13,6 +13,8 @@ import com.ldce.Main.LdceApplication;
 import com.ldce.SearchSpecification.ObjectMapperUtils;
 import com.ldce.SearchSpecification.StudentSpecification;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -317,30 +319,42 @@ public class Dao {
 	}
 
 	public Student search(String email) {
+		Logger logger = LoggerFactory.getLogger(Dao.class);
 		Student student = null;
 		student = studentRepo.findByEnrollment(email);
+		if(student != null)
+			logger.trace("student data found");
+		else
+			logger.warn("student data not found");
 		return student;
 	}
 	public  Admin adminCrenditials(String email){
 		Admin admin = null;
+		Logger logger = LoggerFactory.getLogger(Dao.class);
 		admin = adminrepo.findByEmail(email);
+		logger.trace("admin found");
 		return  admin;
 	}
 	public boolean save(String enrollment, int status, String comment) {
 		// TODO Auto-generated method stub
-		System.out.println(enrollment);
-		Student student = studentRepo.findByEnrollment(enrollment);
 
+		Student student = studentRepo.findByEnrollment(enrollment);
+		Logger logger = LoggerFactory.getLogger(Dao.class);
 		if (student != null) {
 			if (status == 1) {
 				student.setFaculty_approve(1);
+				logger.trace("Student registration profile approved by faculty");
 			} else {
 				student.setFaculty_approve(2);
+				logger.trace("Student registration profile rejected by faculty");
 			}
 			student.setFaculty_comment(comment);
+			logger.trace("Faculty added a comment");
 			studentRepo.save(student);
+			logger.trace("Student profile updated");
 			return true;
 		} else {
+			logger.trace("Student no found");
 			return false;
 		}
 
@@ -350,8 +364,9 @@ public class Dao {
 		Student student = studentRepo.findByEnrollment(enrollment);
 		FeeRefundDetails feeRefund = feerefunddetailsRepository.findByEnrollment(enrollment);
 		if(feeRefund==null || feeRefund!=null && !feeRefund.isLive()) {
+
 			fee.setStudent(student);
-			System.out.println(fee);
+
 			Map<String, String> DOCUMENT = createStorage(request_document, enrollment, "feereceipt", "student\\request\\feereceipt");
 			fee.setFee_document_name(DOCUMENT.get("file_name"));
 			fee.setFee_document_url(DOCUMENT.get("file_url"));
@@ -375,12 +390,19 @@ public class Dao {
 
 	public int saveRequest(String type, String enrollment, MultipartFile request_document , double cgpa, int graduation_year) throws IOException {
 		Student student = studentRepo.findByEnrollment(enrollment);
+		Logger logger = LoggerFactory.getLogger(Dao.class);
+
+
 		int isApproved = student.getFaculty_approve();
-		if(isApproved == 2 || isApproved == 0)
+
+		if(isApproved == 2 || isApproved == 0){
 			return 400;
+		}
 
 		Request Document = requestRepository.findByReq(type, enrollment);
+
 		if (Document == null) {
+			//new document is created
 			Document = getReq();
 			Document.setLive(true);
 			Document.setType(type);
@@ -396,7 +418,7 @@ public class Dao {
 
 			Document.setCgpa(cgpa);
 			if(graduation_year != 0 && student.getGraduation_year() != graduation_year) {
-				System.out.println("in in");
+
 				student.setGraduation_year(graduation_year);
 				studentRepo.save(student);
 			}
