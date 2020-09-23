@@ -590,9 +590,9 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 				StudentSpecification.getStudentByModifiedDate(date)
 						.and(StudentSpecification.getStudentByEnrollment(enrollment))));
 
-
+		System.out.println(students.toString());
 		List<RequestDto> data = ObjectMapperUtils.mapAll(students, RequestDto.class);
-
+		System.out.println(data);
 		return data;
 
 	}

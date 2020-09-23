@@ -7,6 +7,7 @@ import com.ldce.Model.Request.Request;
 public class RequestDto {
 	String faculty_comment;
 	int faculty_approve;
+	String photo_url;
 	String enrollment;
 	String first_name;
 	String middle_name;
@@ -17,6 +18,14 @@ public class RequestDto {
 	int branch;
 	String course;
 	List<Request> request;
+
+	public String getPhoto_url() {
+		return photo_url;
+	}
+
+	public void setPhoto_url(String photo_url) {
+		this.photo_url = photo_url;
+	}
 
 	public void setEnrollment(String enrollment) {
 		this.enrollment = enrollment;

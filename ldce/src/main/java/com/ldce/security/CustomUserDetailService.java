@@ -1,5 +1,8 @@
 package com.ldce.security;
 
+import com.ldce.filter.JwtRequestFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +23,8 @@ public class CustomUserDetailService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Logger logger = LoggerFactory.getLogger(CustomUserDetailService.class);
+		logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
 		String usertype[] = username.split(",");
 		String user = usertype[0];
@@ -28,18 +33,20 @@ public class CustomUserDetailService implements UserDetailsService {
 		if (type.equals("STUDENT")) {
 			Student student = studentRepo.findByEnrollment(user);
 			if (student == null) {
-
+				logger.trace("Student not found from database");
 				return null;
 			}
+			logger.trace("Student found from database");
 			return new CustomUserDetails(student);
 
 		} else if (type.equals("ADMIN")) {
 			Admin admin = adminrepo.findByEmail(user);
 
 			if (admin == null) {
-
+				logger.trace("Admin not found from database");
 				return null;
 			}
+			logger.trace("Admin not found from database");
 			return new CustomUserDetails(admin);
 		} else
 			return new CustomUserDetails();
