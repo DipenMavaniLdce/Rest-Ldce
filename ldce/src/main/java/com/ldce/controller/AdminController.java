@@ -199,12 +199,13 @@ public class AdminController {
 	public List<RequestDto> findDocument(Date date, String enrollment) {
 
 
-
+	Logger logger = LoggerFactory.getLogger(AdminController.class);
+	logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~FindDocument~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String role = userDetails.getRole();
 
 		role = role.equals("ROLE_DEPARTMENT")?userDetails.getBranch()+role:role;
-
+		logger.info(role+"  found");
 		return dao.findrequest(date,role,enrollment);
 	}
 
