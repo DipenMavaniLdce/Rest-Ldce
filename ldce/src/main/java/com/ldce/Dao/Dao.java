@@ -13,6 +13,7 @@ import com.ldce.Main.LdceApplication;
 import com.ldce.SearchSpecification.ObjectMapperUtils;
 import com.ldce.SearchSpecification.StudentSpecification;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -718,6 +719,7 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 
     public HashMap<String,String> createStorage(MultipartFile file,String id,String type,String domain){
 		//types === photo/sign/feereceipt/marksheet
+
 		//domain student,admin,student/request etc...
 		HashMap<String,String> fileData = new HashMap<String, String>();
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -736,31 +738,55 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 	}
 
 	public boolean storeFile(MultipartFile file,String file_path,String file_name ) throws IOException {
+		Logger logger = LoggerFactory.getLogger(Dao.class);
+		logger.info("request come for store file at path:  "+file_path);
+		logger.info("Name of the file is  "+file_name);
 		boolean fileExists = true;
 		File f = new File(file_path);
 		if (!f.exists()) {
+			logger.info("file path does not exist"+file_path);
 			fileExists =  f.mkdirs();
+			if(fileExists)
+				logger.info("path created successfully "+file_path);
+			else
+				logger.info("unable to create filepath successfully "+file_name);
 		}
 		if(fileExists){
-			BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(Paths.get(file_path,file_name).toString())));
-			stream1.write(file.getBytes());
-			stream1.close();
+			try{
+
+				BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(Paths.get(file_path,file_name).toString())));
+				logger.info("stream created at "+file_path);
+				stream1.write(file.getBytes());
+				stream1.close();
+				logger.info("stream closed at "+file_path);
+
+			}
+			catch(Exception e){
+				logger.error("Exception occured during storing a file: ",file_name);
+				logger.error(e.toString());
+				return  false;
+			}
 			return true;
 		}
 		return false;
 	}
 
 	public void deleteOldFile(String filename){
+		Logger logger = LoggerFactory.getLogger(Dao.class);
+		logger.info("request come for delete old file "+filename);
 		try{
 			boolean delete = new File(filename).delete();
 			if(delete){
-				System.out.println("old file deleted success fully");
+				logger.info(filename+" deleted success fully");
+
 			}else{
-				System.out.println("old file not deleted");
+				logger.info(filename+" is not deleted");
 			}
 		}
 		catch (Exception e){
-			e.printStackTrace();
+			logger.error("exception occure for deleting old file "+filename);
+			logger.error(e.toString());
+
 		}
 
 	}
