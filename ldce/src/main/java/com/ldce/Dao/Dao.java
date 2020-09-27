@@ -92,8 +92,8 @@ public class Dao {
 			}
 
 		} catch (Exception E) {
-			deleteOldFile(LdceApplication.uploadDirectory+"\\"+student.getSign_url());
-			deleteOldFile(LdceApplication.uploadDirectory+"\\"+student.getPhoto_url());
+			deleteOldFile(LdceApplication.uploadDirectory+"/"+student.getSign_url());
+			deleteOldFile(LdceApplication.uploadDirectory+"/"+student.getPhoto_url());
 			System.out.println("in Exception");
 
 			throw E;
@@ -210,7 +210,7 @@ public class Dao {
 				boolean isSignStored = storeFile(sign,SIGN.get("file_path"),SIGN.get("file_name"));
 				if(isSignStored){
 					adminrepo.save(admin);
-					deleteOldFile(LdceApplication.uploadDirectory+"\\"+OldFileName);
+					deleteOldFile(LdceApplication.uploadDirectory+"/"+OldFileName);
 				}
 				return true;
 			} else
@@ -229,7 +229,7 @@ public class Dao {
 				boolean isSignStored = storeFile(sign,SIGN.get("file_path"),SIGN.get("file_name"));
 				if(isSignStored){
 					studentRepo.save(student);
-					deleteOldFile(LdceApplication.uploadDirectory+"\\"+OldFileName);
+					deleteOldFile(LdceApplication.uploadDirectory+"/"+OldFileName);
 				}
 				return true;
 			} else
@@ -255,7 +255,7 @@ public class Dao {
 				boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
 				if(isPhotoStored){
 					adminrepo.save(admin);
-					deleteOldFile(LdceApplication.uploadDirectory+"\\"+OldFileName);
+					deleteOldFile(LdceApplication.uploadDirectory+"/"+OldFileName);
 				}
 				return true;
 			} else
@@ -273,7 +273,7 @@ public class Dao {
 				boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
 				if(isPhotoStored){
 					studentRepo.save(student);
-					deleteOldFile(LdceApplication.uploadDirectory+"\\"+OldFileName);
+					deleteOldFile(LdceApplication.uploadDirectory+"/"+OldFileName);
 				}
 				return true;
 
@@ -368,7 +368,7 @@ public class Dao {
 
 			fee.setStudent(student);
 
-			Map<String, String> DOCUMENT = createStorage(request_document, enrollment, "feereceipt", "student\\request\\feereceipt");
+			Map<String, String> DOCUMENT = createStorage(request_document, enrollment, "feereceipt", "student/request/feereceipt");
 			fee.setFee_document_name(DOCUMENT.get("file_name"));
 			fee.setFee_document_url(DOCUMENT.get("file_url"));
 			fee.setFee_document_size(DOCUMENT.get("file_size"));
@@ -408,7 +408,7 @@ public class Dao {
 			Document.setLive(true);
 			Document.setType(type);
 			Document.setStudent(student);
-			Map<String,String> DOCUMENT=createStorage(request_document,student.getEnrollment(),type,"student\\request\\"+type);
+			Map<String,String> DOCUMENT=createStorage(request_document,student.getEnrollment(),type,"student/request/");
 
 			Document.setDocument_name(DOCUMENT.get("file_name"));
 			Document.setDocument_url(DOCUMENT.get("file_url"));
@@ -642,7 +642,7 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 		request.setStatus1(0);
 		request.setStatus2(0);
 		request.setStatus3(0);
-		Map<String,String> DOCUMENT=createStorage(request_document,username,type,"student\\request\\"+type);
+		Map<String,String> DOCUMENT=createStorage(request_document,username,type,"student/request/");
 		request.setDocument_name(DOCUMENT.get("file_name"));
 		request.setDocument_url(DOCUMENT.get("file_url"));
 		request.setDocument_size(DOCUMENT.get("file_size"));
