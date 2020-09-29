@@ -1,1 +1,0 @@
-{"version":3,"sources":["login.css"],"names":[],"mappings":"AACA,6BACI,qBAAsB,CACtB,SAAU,CACV,iBACJ","file":"9.8449faf4.chunk.css","sourcesContent":["\n.form-group.role-error::after{\n    content: \"select type\";\n    color: red;\n    text-align: center;\n}\n"]}

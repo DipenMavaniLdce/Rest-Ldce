@@ -1,1 +1,0 @@
-{"version":3,"sources":["Dashbord.css"],"names":[],"mappings":"AAAA,eACC,sBACD,CAEA,cACC,qBACD,CACA,eACC,oBACD,CACA,YACC,qBACD","file":"7.f7e2553b.chunk.css","sourcesContent":[".card.Accepted {\n\tborder: 1px solid green;\n}\n\n.card.Pending {\n\tborder: 1px solid blue;\n}\n.card.Rejected {\n\tborder: 1px solid red;\n}\n.card:hover {\n\ttransform: scale(1.05);\n}\n"]}
