@@ -2,6 +2,7 @@ package com.ldce.controller;
 
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -87,9 +88,13 @@ public class Controller {
 	}
 
 
+@GetMapping("/test")
+public  String publictest() {
+	Date d = new Date();
+//	dao.findrequest(new Date(d.getYear(),d.getMonth(),d.getDay()), "ROLE_DEPARTMENT","170280116025" );
+	return "tested";
 
-
-
+}
 
 	//faculty post data mapping
 	@CrossOrigin(origins = "http://localhost:3000")

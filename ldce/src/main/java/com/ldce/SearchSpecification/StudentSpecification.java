@@ -80,28 +80,33 @@ public class StudentSpecification {
 				return null;
 		};
 	}
-	public static Specification<Student> getStudentByModifiedDate(Date date) {
+	public static Specification<Student> getRequestData(Date start,Date end,String role) {
 		return (root, query, criteriaBuilder) -> {
 
-			if(date==null) return null;
+			if(start==null || end ==null) return null;
 			Join<Student, Request> requestJoin = root.join("request");
-			Predicate equalPredicate = criteriaBuilder.equal(requestJoin.get("modified_date"),date);
-			query.distinct(true);
+			Predicate equalPredicate = criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(requestJoin.get("modified_date"),start)
+										,criteriaBuilder.lessThanOrEqualTo(requestJoin.get("modified_date"),end)
+										,criteriaBuilder.equal(requestJoin.get("last_modified_by"),role)
+										);
+					
+					//equal(requestJoin.get("modified_date"),date);
+		query.distinct(true);
 			return equalPredicate;
 		};
 
 	}
 
-	public static Specification<Student> getStudentByfirstlevel(String role) {
-		return (root, query, criteriaBuilder) -> {
-			Join<Student, Request> requestJoin = root.join("request");
-			Predicate equalPredicate = criteriaBuilder.equal(requestJoin.get("last_modified_by"),role);
-
-			return equalPredicate;
-		};
-
-	}
-
+//	public static Specification<Student> getStudentByfirstlevel(String role) {
+//		return (root, query, criteriaBuilder) -> {
+//			Join<Student, Request> requestJoin = root.join("request");
+//			Predicate equalPredicate = criteriaBuilder.equal(requestJoin.get("last_modified_by"),role);
+//
+//			return equalPredicate;
+//		};
+//
+//	}
+//
 	public static Specification<Student> getStudentByEnrollment(String enrollment) {
 
 		return (root, query, criteriaBuilder) -> {
