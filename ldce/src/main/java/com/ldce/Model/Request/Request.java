@@ -1,6 +1,9 @@
 package com.ldce.Model.Request;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -49,8 +52,14 @@ public class Request {
 
 	@PreUpdate
 	public void Onupdate() throws ParseException {
+		
+//		String pattern = "yyyy-MM-dd";
+//		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+//
+//		String s = simpleDateFormat.format(start);
+		
 		Date d = new Date();
-		setModified_date(new Date(d.getYear(),d.getMonth(),d.getDay()));
+		setModified_date(d);
 
 	}
 

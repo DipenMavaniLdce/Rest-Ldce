@@ -586,23 +586,29 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 	}
 
 
-	public List<RequestDto> findrequest(Date start ,Date end ,String role, String enrollment) {
+	public List<DocumentData> findrequest(Date start ,Date end ,String role, String enrollment) {
 
 			if((start== null || end==null) && enrollment==null) return null;
-		Date startDate = start == null ? null : new Date(start.getYear(),start.getMonth(),start.getDay());
-		Date endDate = end == null ? null : new Date(end.getYear(),end.getMonth(),end.getDay());
-		List<Student> students = studentRepo.findAll( Specification.where(
-				StudentSpecification.getRequestData(startDate,endDate	,role) )
-					.and(StudentSpecification.getStudentByEnrollment(enrollment)));
+	
+	//	List<Student> students = studentRepo.findAll( Specification.where(StudentSpecification.getRequestData(start,end	,role) ));
+			//		.and(StudentSpecification.getStudentByEnrollment(enrollment))
 //						.and(StudentSpecification.getStudentByfirstlevel(role))
 //						
-				
-
-		System.out.println(students.toString());
-		System.out.println(students);
-		List<RequestDto> data = ObjectMapperUtils.mapAll(students, RequestDto.class);
-		System.out.println(data);
-		return data;
+//		if(start!=null)start.setTime(0);
+//		if(end!=null)end.setTime(0);
+		System.out.println("............................okkkkkk..................................");
+		System.out.println(enrollment);
+		
+		
+		List<DocumentData> students = studentRepo.findDocument(start,end,enrollment);
+		
+		
+		
+		
+		System.out.println("..............................................................");
+		//List<RequestDto> data = ObjectMapperUtils.mapAll(students, RequestDto.class);
+		
+		return students;
 
 	}
 

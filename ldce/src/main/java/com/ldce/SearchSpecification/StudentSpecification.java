@@ -8,6 +8,8 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.ldce.Model.Student.Student;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class StudentSpecification {
@@ -84,12 +86,29 @@ public class StudentSpecification {
 		return (root, query, criteriaBuilder) -> {
 
 			if(start==null || end ==null) return null;
+		
+			
+			String pattern = "yyyy-MM-dd";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+			String s = simpleDateFormat.format(start);
+		//	String e = simpleDateFormat.format(end);
+			
+//		LocalDateTime st = 	LocalDateTime.parse);
+//		LocalDateTime ed= 	LocalDateTime.parse(e);
+//			
+	System.out.println(s+"...............................................");
+//		System.out.println(ed+"..................................................");
 			Join<Student, Request> requestJoin = root.join("request");
-			Predicate equalPredicate = criteriaBuilder.and(criteriaBuilder.greaterThanOrEqualTo(requestJoin.get("modified_date"),start)
-										,criteriaBuilder.lessThanOrEqualTo(requestJoin.get("modified_date"),end)
-										,criteriaBuilder.equal(requestJoin.get("last_modified_by"),role)
-										);
-					
+			
+			System.out.println(requestJoin.get("modified_date"));
+			
+			Predicate equalPredicate = //criteriaBuilder.and(
+										criteriaBuilder.equal(requestJoin.get("modified_date"), new Date(start.getYear(),start.getMonth(),start.getDate()));//(requestJoin.get("modified_date"),start)
+										//,criteriaBuilder.lessThanOrEqualTo(requestJoin.get("modified_date"),end)
+										//,criteriaBuilder.equal(requestJoin.get("last_modified_by"),role)
+										//);
+					System.out.println(equalPredicate.toString());
 					//equal(requestJoin.get("modified_date"),date);
 		query.distinct(true);
 			return equalPredicate;

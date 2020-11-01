@@ -196,7 +196,7 @@ public class AdminController {
 
 	@CrossOrigin
 	@PostMapping("/findDocument")
-	public List<RequestDto> findDocument(Date start , Date end, String enrollment) {
+	public List<DocumentData> findDocument(Date start , Date end, String enrollment) {
 
 
 	Logger logger = LoggerFactory.getLogger(AdminController.class);

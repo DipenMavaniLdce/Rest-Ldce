@@ -20,7 +20,7 @@ import java.io.File;
 @EnableJpaRepositories(basePackages = { "com.ldce.Model", "com.ldce.Main" })
 public class LdceApplication {
 
-	public static String uploadDirectory =  "/home/vivek/myStuff/projects/LDCE/Rest-Ldce/uploads";
+	public static String uploadDirectory =  "G:\\maven.1604047499613\\ldce/uploads/";
 	public static void main(String[] args) {
 		new File(uploadDirectory).mkdirs();
 		SpringApplication.run(LdceApplication.class, args);
