@@ -1,19 +1,12 @@
 package com.ldce.Model.Student;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDate;
 
 @Entity
 
@@ -24,10 +17,13 @@ public class Student_info {
 	String father_name;
 	String mother_name;
 	String aadhar;
+	String voter_id;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	LocalDate date_of_birth;
 	String blood_group;
+	String thelasemia;
 
+	boolean is_in_ld_hostel;
 	String re_add_l1;
 	String re_add_l2;
 	String re_add_city;
@@ -71,6 +67,14 @@ public class Student_info {
 		this.aadhar = aadhar;
 	}
 
+	public String getVoter_id() {
+		return voter_id;
+	}
+
+	public void setVoter_id(String voter_id) {
+		this.voter_id = voter_id;
+	}
+
 	public LocalDate getDate_of_birth() {
 		return date_of_birth;
 	}
@@ -85,6 +89,22 @@ public class Student_info {
 
 	public void setBlood_group(String blood_group) {
 		this.blood_group = blood_group;
+	}
+
+	public String getThelasemia() {
+		return thelasemia;
+	}
+
+	public void setThelasemia(String thelasemia) {
+		this.thelasemia = thelasemia;
+	}
+
+	public boolean isIs_in_ld_hostel() {
+		return is_in_ld_hostel;
+	}
+
+	public void setIs_in_ld_hostel(boolean is_in_ld_hostel) {
+		this.is_in_ld_hostel = is_in_ld_hostel;
 	}
 
 	public String getRe_add_l1() {
@@ -226,7 +246,7 @@ public class Student_info {
 	@Override
 	public String toString() {
 		return "Student_info [id=" + id + ", father_name=" + father_name + ", mother_name=" + mother_name + ", aadhar="
-				+ aadhar + ", dob=" + date_of_birth + ", blood_group=" + blood_group + ", re_add_l1=" + re_add_l1
+				+ aadhar + ", voter_id=" + voter_id + ", dob=" + date_of_birth + ", blood_group=" + blood_group + ", thelasemia=" + thelasemia + ", is_in_ld_hostel=" + is_in_ld_hostel + ", re_add_l1=" + re_add_l1
 				+ ", re_add_l2=" + re_add_l2 + ", re_add_city=" + re_add_city + ", re_add_state=" + re_add_state
 				+ ", re_add_pincode=" + re_add_pin_code + ", re_add_country=" + re_add_country + ", pr_add_l1="
 				+ pr_add_l1 + ", pr_add_l2=" + pr_add_l2 + ", pr_add_city=" + pr_add_city + ", pr_add_state="
