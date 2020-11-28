@@ -424,6 +424,7 @@ public class Dao {
 				studentRepo.save(student);
 			}
 			if(isDocumentStored){
+				if(!type.equals("character")) {Document.setStatus1(1);}
 				requestRepository.save(Document);
 			}else{
 				return 400;
