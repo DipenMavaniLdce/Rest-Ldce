@@ -48,6 +48,11 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 
 	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.status1=1 AND r.status2=1 AND r.status3=0", nativeQuery = true)
 	public List<DocumentData> findByStatus3();
+	
+	
+	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment where (r.modified_date >= ?1 or ?1 IS null) and (modified_date <= ?2 or ?2 IS null) and (s.enrollment= ?3 or ?3 IS null)", nativeQuery = true)
+	public List<DocumentData> findDocument(Date start,Date end , String enrollment);
+	
 
 
 	@Query(value = "SELECT * from student s inner JOIN fee_refund_details f on f.fee_refund_enrollment=s.enrollment AND f.status1=0 AND branch =:branchid", nativeQuery = true)

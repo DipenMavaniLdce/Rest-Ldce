@@ -8,6 +8,8 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.ldce.Model.Student.Student;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class StudentSpecification {
@@ -80,28 +82,50 @@ public class StudentSpecification {
 				return null;
 		};
 	}
-	public static Specification<Student> getStudentByModifiedDate(Date date) {
+	public static Specification<Student> getRequestData(Date start,Date end,String role) {
 		return (root, query, criteriaBuilder) -> {
 
-			if(date==null) return null;
+			if(start==null || end ==null) return null;
+		
+			
+			String pattern = "yyyy-MM-dd";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+			String s = simpleDateFormat.format(start);
+		//	String e = simpleDateFormat.format(end);
+			
+//		LocalDateTime st = 	LocalDateTime.parse);
+//		LocalDateTime ed= 	LocalDateTime.parse(e);
+//			
+	System.out.println(s+"...............................................");
+//		System.out.println(ed+"..................................................");
 			Join<Student, Request> requestJoin = root.join("request");
-			Predicate equalPredicate = criteriaBuilder.equal(requestJoin.get("modified_date"),date);
-			query.distinct(true);
+			
+			System.out.println(requestJoin.get("modified_date"));
+			
+			Predicate equalPredicate = //criteriaBuilder.and(
+										criteriaBuilder.equal(requestJoin.get("modified_date"), new Date(start.getYear(),start.getMonth(),start.getDate()));//(requestJoin.get("modified_date"),start)
+										//,criteriaBuilder.lessThanOrEqualTo(requestJoin.get("modified_date"),end)
+										//,criteriaBuilder.equal(requestJoin.get("last_modified_by"),role)
+										//);
+					System.out.println(equalPredicate.toString());
+					//equal(requestJoin.get("modified_date"),date);
+		query.distinct(true);
 			return equalPredicate;
 		};
 
 	}
 
-	public static Specification<Student> getStudentByfirstlevel(String role) {
-		return (root, query, criteriaBuilder) -> {
-			Join<Student, Request> requestJoin = root.join("request");
-			Predicate equalPredicate = criteriaBuilder.equal(requestJoin.get("last_modified_by"),role);
-
-			return equalPredicate;
-		};
-
-	}
-
+//	public static Specification<Student> getStudentByfirstlevel(String role) {
+//		return (root, query, criteriaBuilder) -> {
+//			Join<Student, Request> requestJoin = root.join("request");
+//			Predicate equalPredicate = criteriaBuilder.equal(requestJoin.get("last_modified_by"),role);
+//
+//			return equalPredicate;
+//		};
+//
+//	}
+//
 	public static Specification<Student> getStudentByEnrollment(String enrollment) {
 
 		return (root, query, criteriaBuilder) -> {

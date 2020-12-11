@@ -196,7 +196,7 @@ public class AdminController {
 
 	@CrossOrigin
 	@PostMapping("/findDocument")
-	public List<RequestDto> findDocument(Date date, String enrollment) {
+	public List<DocumentData> findDocument(Date start , Date end, String enrollment) {
 
 
 	Logger logger = LoggerFactory.getLogger(AdminController.class);
@@ -206,7 +206,9 @@ public class AdminController {
 
 		role = role.equals("ROLE_DEPARTMENT")?userDetails.getBranch()+role:role;
 		logger.info(role+"  found");
-		return dao.findrequest(date,role,enrollment);
+	
+		System.out.println(start + "  ......  " + end + " ...." + enrollment);
+		return dao.findrequest(start,end , role,enrollment);
 	}
 
 	@CrossOrigin
