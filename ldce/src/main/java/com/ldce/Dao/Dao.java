@@ -67,7 +67,7 @@ public class Dao {
 	public void save(Student student, Student_info info, Student_guardian guardian, MultipartFile photo,
 			MultipartFile sign) throws Exception {
 		Map<String,String> PHOTO=createStorage(photo,student.getEnrollment(),"photo","student");
-		Map<String,String> SIGN=createStorage(photo,student.getEnrollment(),"sign","student");
+		Map<String,String> SIGN=createStorage(sign,student.getEnrollment(),"sign","student");
 
 		student.setPhoto_name(PHOTO.get("file_name"));
 		student.setPhoto_url(PHOTO.get("file_url"));
@@ -80,7 +80,7 @@ public class Dao {
 		student.setSign_type(SIGN.get("file_type"));
 
 		boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
-		boolean isSignStored = storeFile(photo,SIGN.get("file_path"),SIGN.get("file_name"));
+		boolean isSignStored = storeFile(sign,SIGN.get("file_path"),SIGN.get("file_name"));
 
 		student.setPassword(passwordEncoder.encode(student.getPassword()));
 		student.setToken(new Token());
@@ -132,7 +132,7 @@ public class Dao {
 		admin.setSign_type(SIGN.get("file_type"));
 
 		boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
-		boolean isSignStored = storeFile(photo,SIGN.get("file_path"),SIGN.get("file_name"));
+		boolean isSignStored = storeFile(sign,SIGN.get("file_path"),SIGN.get("file_name"));
 
 		admin.setPassword(passwordEncoder.encode(admin.getPassword()));
 
