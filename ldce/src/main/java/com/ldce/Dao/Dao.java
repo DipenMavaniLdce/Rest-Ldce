@@ -66,8 +66,8 @@ public class Dao {
 	// saveStudent
 	public void save(Student student, Student_info info, Student_guardian guardian, MultipartFile photo,
 			MultipartFile sign) throws Exception {
-		Map<String,String> PHOTO=createStorage(photo,student.getEnrollment(),"photo","student");
-		Map<String,String> SIGN=createStorage(sign,student.getEnrollment(),"sign","student");
+		Map<String, String> PHOTO = createStorage(photo, student.getEnrollment(), "photo", "student");
+		Map<String, String> SIGN = createStorage(sign, student.getEnrollment(), "sign", "student");
 
 		student.setPhoto_name(PHOTO.get("file_name"));
 		student.setPhoto_url(PHOTO.get("file_url"));
@@ -79,21 +79,21 @@ public class Dao {
 		student.setSign_size(SIGN.get("file_size"));
 		student.setSign_type(SIGN.get("file_type"));
 
-		boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
-		boolean isSignStored = storeFile(sign,SIGN.get("file_path"),SIGN.get("file_name"));
+		boolean isPhotoStored = storeFile(photo, PHOTO.get("file_path"), PHOTO.get("file_name"));
+		boolean isSignStored = storeFile(sign, SIGN.get("file_path"), SIGN.get("file_name"));
 
 		student.setPassword(passwordEncoder.encode(student.getPassword()));
 		student.setToken(new Token());
 		student.setInfo(info);
 		student.setGuardian(guardian);
 		try {
-			if(isPhotoStored && isSignStored){
+			if (isPhotoStored && isSignStored) {
 				studentRepo.save(student);
 			}
 
 		} catch (Exception E) {
-			deleteOldFile(LdceApplication.uploadDirectory+"/"+student.getSign_url());
-			deleteOldFile(LdceApplication.uploadDirectory+"/"+student.getPhoto_url());
+			deleteOldFile(LdceApplication.uploadDirectory + "/" + student.getSign_url());
+			deleteOldFile(LdceApplication.uploadDirectory + "/" + student.getPhoto_url());
 			System.out.println("in Exception");
 
 			throw E;
@@ -118,8 +118,8 @@ public class Dao {
 	// save admin data
 	public void save(Admin admin, MultipartFile photo, MultipartFile sign) throws Exception {
 
-		Map<String,String> PHOTO=createStorage(photo,admin.getFaculty_id(),"photo","admin");
-		Map<String,String> SIGN=createStorage(sign,admin.getFaculty_id(),"sign","admin");
+		Map<String, String> PHOTO = createStorage(photo, admin.getFaculty_id(), "photo", "admin");
+		Map<String, String> SIGN = createStorage(sign, admin.getFaculty_id(), "sign", "admin");
 
 		admin.setPhoto_name(PHOTO.get("file_name"));
 		admin.setPhoto_url(PHOTO.get("file_url"));
@@ -131,105 +131,99 @@ public class Dao {
 		admin.setSign_size(SIGN.get("file_size"));
 		admin.setSign_type(SIGN.get("file_type"));
 
-		boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
-		boolean isSignStored = storeFile(sign,SIGN.get("file_path"),SIGN.get("file_name"));
+		boolean isPhotoStored = storeFile(photo, PHOTO.get("file_path"), PHOTO.get("file_name"));
+		boolean isSignStored = storeFile(sign, SIGN.get("file_path"), SIGN.get("file_name"));
 
 		admin.setPassword(passwordEncoder.encode(admin.getPassword()));
 
 		try {
-			if(isPhotoStored && isSignStored) {
+			if (isPhotoStored && isSignStored) {
 				adminrepo.save(admin);
 			}
 		} catch (Exception E) {
 			throw E;
 		}
 
-
 	}
 
 //reset password email sender
-	public String resetPassword(String username,String type) {
+	public String resetPassword(String username, String type) {
 		String email;
 		String password;
-		if(type.equals("STUDENT")){
-            Student student = studentRepo.findByEnrollment(username);
-            if(student == null){
-                return null;
-            }else{
-				password= generateCommonLangPassword();
+		if (type.equals("STUDENT")) {
+			Student student = studentRepo.findByEnrollment(username);
+			if (student == null) {
+				return null;
+			} else {
+				password = generateCommonLangPassword();
 				student.setPassword(passwordEncoder.encode(password));
 				studentRepo.save(student);
 				System.out.println("save");
-            	email = student.getEmail();
+				email = student.getEmail();
 			}
 
-        }else{
-	        Admin admin = adminrepo.findByEmail(username);
-	        if(admin == null){
-	            return null;
-            }
-	        else{
-				password= generateCommonLangPassword();
+		} else {
+			Admin admin = adminrepo.findByEmail(username);
+			if (admin == null) {
+				return null;
+			} else {
+				password = generateCommonLangPassword();
 				admin.setPassword(passwordEncoder.encode(password));
 				adminrepo.save(admin);
-	        	email = username;
+				email = username;
 			}
-        }
+		}
 
-		emailSender.createResetPasswordMail(email,username,password);
+		emailSender.createResetPasswordMail(email, username, password);
 		return email;
 	}
 
-	//reset password update
+	// reset password update
 
+	public List<Student> searchList(int branch, String course) {
 
-
-	public List<Student> searchList(int branch,String course) {
-
-		List<Student> student = studentRepo.findByBranchActive(branch,course);
+		List<Student> student = studentRepo.findByBranchActive(branch, course);
 
 		return student;
 	}
 
-	public boolean updatesign(String username, MultipartFile sign,String type) throws IOException {
+	public boolean updatesign(String username, MultipartFile sign, String type) throws IOException {
 
-
-		Map<String,String> SIGN;
+		Map<String, String> SIGN;
 		String OldFileName;
-		if(type.equals("ADMIN")){
+		if (type.equals("ADMIN")) {
 			Admin admin = adminrepo.findByEmail(username);
 
 			if (admin != null) {
 				OldFileName = admin.getSign_url();
-				SIGN = createStorage(sign,username,"sign","admin");
+				SIGN = createStorage(sign, username, "sign", "admin");
 				admin.setSign_name(SIGN.get("file_name"));
 				admin.setSign_url(SIGN.get("file_url"));
 				admin.setSign_size(SIGN.get("file_size"));
 				admin.setSign_type(SIGN.get("file_type"));
 
-				boolean isSignStored = storeFile(sign,SIGN.get("file_path"),SIGN.get("file_name"));
-				if(isSignStored){
+				boolean isSignStored = storeFile(sign, SIGN.get("file_path"), SIGN.get("file_name"));
+				if (isSignStored) {
 					adminrepo.save(admin);
-					deleteOldFile(LdceApplication.uploadDirectory+"/"+OldFileName);
+					deleteOldFile(LdceApplication.uploadDirectory + "/" + OldFileName);
 				}
 				return true;
 			} else
 				return false;
-		}
-		else{
+		} else {
 			Student student = studentRepo.findByEnrollment(username);
 			if (student != null) {
 				OldFileName = student.getSign_url();
-				SIGN = createStorage(sign,username,"sign","student");
+				SIGN = createStorage(sign, username, "sign", "student");
 				student.setSign_name(SIGN.get("file_name"));
 				student.setSign_url(SIGN.get("file_url"));
 				student.setSign_size(SIGN.get("file_size"));
 				student.setSign_type(SIGN.get("file_type"));
 
-				boolean isSignStored = storeFile(sign,SIGN.get("file_path"),SIGN.get("file_name"));
-				if(isSignStored){
+				boolean isSignStored = storeFile(sign, SIGN.get("file_path"), SIGN.get("file_name"));
+				if (isSignStored) {
 					studentRepo.save(student);
-					deleteOldFile(LdceApplication.uploadDirectory+"/"+OldFileName);
+					deleteOldFile(LdceApplication.uploadDirectory + "/" + OldFileName);
 				}
 				return true;
 			} else
@@ -238,42 +232,41 @@ public class Dao {
 
 	}
 
-	public boolean updatephoto(String username, MultipartFile photo,String type) throws IOException {
-		Map<String,String> PHOTO;
+	public boolean updatephoto(String username, MultipartFile photo, String type) throws IOException {
+		Map<String, String> PHOTO;
 		String OldFileName;
-		if(type.equals("ADMIN")){
+		if (type.equals("ADMIN")) {
 
 			Admin admin = adminrepo.findByEmail(username);
 			if (admin != null) {
-				PHOTO = createStorage(photo,username,"photo","admin");
+				PHOTO = createStorage(photo, username, "photo", "admin");
 				OldFileName = admin.getPhoto_url();
 				admin.setPhoto_name(PHOTO.get("file_name"));
 				admin.setPhoto_url(PHOTO.get("file_url"));
 				admin.setPhoto_size(PHOTO.get("file_size"));
 				admin.setPhoto_type(PHOTO.get("file_type"));
 
-				boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
-				if(isPhotoStored){
+				boolean isPhotoStored = storeFile(photo, PHOTO.get("file_path"), PHOTO.get("file_name"));
+				if (isPhotoStored) {
 					adminrepo.save(admin);
-					deleteOldFile(LdceApplication.uploadDirectory+"/"+OldFileName);
+					deleteOldFile(LdceApplication.uploadDirectory + "/" + OldFileName);
 				}
 				return true;
 			} else
 				return false;
-		}
-		else{
+		} else {
 			Student student = studentRepo.findByEnrollment(username);
 			if (student != null) {
 				OldFileName = student.getPhoto_url();
-				PHOTO = createStorage(photo,username,"photo","student");
+				PHOTO = createStorage(photo, username, "photo", "student");
 				student.setPhoto_name(PHOTO.get("file_name"));
 				student.setPhoto_url(PHOTO.get("file_url"));
 				student.setPhoto_size(PHOTO.get("file_size"));
 				student.setPhoto_type(PHOTO.get("file_type"));
-				boolean isPhotoStored = storeFile(photo,PHOTO.get("file_path"),PHOTO.get("file_name"));
-				if(isPhotoStored){
+				boolean isPhotoStored = storeFile(photo, PHOTO.get("file_path"), PHOTO.get("file_name"));
+				if (isPhotoStored) {
 					studentRepo.save(student);
-					deleteOldFile(LdceApplication.uploadDirectory+"/"+OldFileName);
+					deleteOldFile(LdceApplication.uploadDirectory + "/" + OldFileName);
 				}
 				return true;
 
@@ -323,19 +316,21 @@ public class Dao {
 		Logger logger = LoggerFactory.getLogger(Dao.class);
 		Student student = null;
 		student = studentRepo.findByEnrollment(email);
-		if(student != null)
+		if (student != null)
 			logger.trace("student data found");
 		else
 			logger.warn("student data not found");
 		return student;
 	}
-	public  Admin adminCrenditials(String email){
+
+	public Admin adminCrenditials(String email) {
 		Admin admin = null;
 		Logger logger = LoggerFactory.getLogger(Dao.class);
 		admin = adminrepo.findByEmail(email);
 		logger.trace("admin found");
-		return  admin;
+		return admin;
 	}
+
 	public boolean save(String enrollment, int status, String comment) {
 		// TODO Auto-generated method stub
 
@@ -361,19 +356,22 @@ public class Dao {
 
 	}
 
-	public int  saveFeeRefundDetails(FeeRefundDetails fee, String enrollment, MultipartFile request_document) throws IOException {
+	public int saveFeeRefundDetails(FeeRefundDetails fee, String enrollment, MultipartFile request_document)
+			throws IOException {
 		Student student = studentRepo.findByEnrollment(enrollment);
 		FeeRefundDetails feeRefund = feerefunddetailsRepository.findByEnrollment(enrollment);
-		if(feeRefund==null || feeRefund!=null && !feeRefund.isLive()) {
+		if (feeRefund == null || feeRefund != null && !feeRefund.isLive()) {
 
 			fee.setStudent(student);
 
-			Map<String, String> DOCUMENT = createStorage(request_document, enrollment, "feereceipt", "student/request/feereceipt");
+			Map<String, String> DOCUMENT = createStorage(request_document, enrollment, "feereceipt",
+					"student/request/feereceipt");
 			fee.setFee_document_name(DOCUMENT.get("file_name"));
 			fee.setFee_document_url(DOCUMENT.get("file_url"));
 			fee.setFee_document_size(DOCUMENT.get("file_size"));
 			fee.setFee_document_type(DOCUMENT.get("file_type"));
-			boolean isDocumentStored = storeFile(request_document, DOCUMENT.get("file_path"), DOCUMENT.get("file_name"));
+			boolean isDocumentStored = storeFile(request_document, DOCUMENT.get("file_path"),
+					DOCUMENT.get("file_name"));
 
 			if (isDocumentStored) {
 				feerefunddetailsRepository.save(fee);
@@ -382,61 +380,63 @@ public class Dao {
 			}
 
 			return 200;
-		}
-		else
-				return 409;
-
+		} else
+			return 409;
 
 	}
 
-	public int saveRequest(String type, String enrollment, MultipartFile request_document , double cgpa, int graduation_year) throws IOException {
+	public int saveRequest(String type, String enrollment, MultipartFile request_document, double cgpa,
+			int graduation_year) throws IOException {
 		Student student = studentRepo.findByEnrollment(enrollment);
 		Logger logger = LoggerFactory.getLogger(Dao.class);
 
-
 		int isApproved = student.getFaculty_approve();
 
-		if(isApproved == 2 || isApproved == 0){
+		if (isApproved == 2 || isApproved == 0) {
 			return 400;
 		}
 
 		Request Document = requestRepository.findByReq(type, enrollment);
 
 		if (Document == null) {
-			//new document is created
+			// new document is created
 			Document = getReq();
 			Document.setLive(true);
 			Document.setType(type);
 			Document.setStudent(student);
-			Map<String,String> DOCUMENT=createStorage(request_document,student.getEnrollment(),type,"student/request/");
+			Map<String, String> DOCUMENT = createStorage(request_document, student.getEnrollment(), type,
+					"student/request/");
 
 			Document.setDocument_name(DOCUMENT.get("file_name"));
 			Document.setDocument_url(DOCUMENT.get("file_url"));
 			Document.setDocument_size(DOCUMENT.get("file_size"));
 			Document.setDocument_type(DOCUMENT.get("file_type"));
 
-			boolean isDocumentStored = storeFile(request_document,DOCUMENT.get("file_path"),DOCUMENT.get("file_name"));
+			boolean isDocumentStored = storeFile(request_document, DOCUMENT.get("file_path"),
+					DOCUMENT.get("file_name"));
 
 			Document.setCgpa(cgpa);
-			if(graduation_year != 0 && student.getGraduation_year() != graduation_year) {
+			if (graduation_year != 0 && student.getGraduation_year() != graduation_year) {
 
 				student.setGraduation_year(graduation_year);
 				studentRepo.save(student);
 			}
-			if(isDocumentStored){
-				if(!type.equals("character")) {Document.setStatus1(1);}
+			if (isDocumentStored) {
+				if (!type.equals("character")) {
+					Document.setStatus1(1);
+				}
 				requestRepository.save(Document);
-			}else{
+			} else {
 				return 400;
 			}
 
 			return 200;
 		} else {
-			if (Document.isLive() || Document.getStatus3()==1) {
+			if (Document.isLive() || Document.getStatus3() == 1) {
 				return 409;
 			} else {
-				resetRequest(Document, request_document, cgpa,student.getEnrollment(),type);
-				if(graduation_year != 0 && student.getGraduation_year() != graduation_year) {
+				resetRequest(Document, request_document, cgpa, student.getEnrollment(), type);
+				if (graduation_year != 0 && student.getGraduation_year() != graduation_year) {
 					student.setGraduation_year(graduation_year);
 					studentRepo.save(student);
 				}
@@ -451,9 +451,9 @@ public class Dao {
 		return new Request();
 	}
 
-	public List<Student> pendingRegistration(int branch,String course) {
+	public List<Student> pendingRegistration(int branch, String course) {
 		List<Student> students = null;
-		students = searchList(branch,course);
+		students = searchList(branch, course);
 		return students;
 	}
 
@@ -462,8 +462,7 @@ public class Dao {
 		int branch = userDetails.getBranch();
 		if (role.equals("ROLE_DEPARTMENT")) {
 			return studentRepo.findByfeerefundStatus1(branch);
-		}
-		else if (role.equals("ROLE_SSMENTOR")) {
+		} else if (role.equals("ROLE_SSMENTOR")) {
 			return studentRepo.findByfeerefundStatus2();
 		} else if (role.equals("ROLE_SSHEAD")) {
 			return studentRepo.findByfeerefundStatus3();
@@ -483,68 +482,72 @@ public class Dao {
 		} else
 			return null;
 	}
-public boolean UpdateFeeRefundStatus(CustomUserDetails userDetails, String enrollment, Integer status, String comment){
-	String role = userDetails.getRole();
-	FeeRefundDetails fee = feerefunddetailsRepository.findByEnrollment(enrollment);
-	if (status==1){
-		if(role.equals("ROLE_DEPARTMENT")){
-			fee.setStatus1(1);
-			feerefunddetailsRepository.save(fee);
-			return true;
-		}
-		else if(role.equals("ROLE_SSMENTOR")){
-			fee.setStatus2(1);
-			feerefunddetailsRepository.save(fee);
-			return true;
-		}
-		else if (role.equals("ROLE_SSHEAD")) {
-			fee.setStatus3(1);
-			fee.setLive(false);
-			feerefunddetailsRepository.save(fee);
-			return true;
-		} else
-			return false;
 
+	public boolean UpdateFeeRefundStatus(CustomUserDetails userDetails, String enrollment, Integer status,
+			String comment) {
+		String role = userDetails.getRole();
+		FeeRefundDetails fee = feerefunddetailsRepository.findByEnrollment(enrollment);
+		if (status == 1) {
+			if (role.equals("ROLE_DEPARTMENT")) {
+				fee.setStatus1(1);
+				feerefunddetailsRepository.save(fee);
+				return true;
+			} else if (role.equals("ROLE_SSMENTOR")) {
+				fee.setStatus2(1);
+				feerefunddetailsRepository.save(fee);
+				return true;
+			} else if (role.equals("ROLE_SSHEAD")) {
+				fee.setStatus3(1);
+				fee.setLive(false);
+				feerefunddetailsRepository.save(fee);
+				return true;
+			} else
+				return false;
+
+		} else {
+			if (role.equals("ROLE_DEPARTMENT")) {
+				fee.setStatus1(2);
+				fee.setStatus2(2);
+				fee.setStatus3(2);
+				fee.setComment(comment);
+				fee.setLive(false);
+				feerefunddetailsRepository.save(fee);
+				return true;
+			} else if (role.equals("ROLE_SSMENTOR")) {
+				fee.setStatus2(2);
+				fee.setStatus3(2);
+				fee.setComment(comment);
+				fee.setLive(false);
+				feerefunddetailsRepository.save(fee);
+				return true;
+			} else if (role.equals("ROLE_SSHEAD")) {
+				fee.setStatus3(2);
+				fee.setComment(comment);
+				fee.setLive(false);
+				feerefunddetailsRepository.save(fee);
+				return true;
+			} else
+				return false;
+		}
 	}
-	else{
-		if (role.equals("ROLE_DEPARTMENT")) {
-			fee.setStatus1(2);
-			fee.setStatus2(2);
-			fee.setStatus3(2);
-			fee.setComment(comment);
-			fee.setLive(false);
-			feerefunddetailsRepository.save(fee);
-			return true;
-		} else if (role.equals("ROLE_SSMENTOR")) {
-			fee.setStatus2(2);
-			fee.setStatus3(2);
-			fee.setComment(comment);
-			fee.setLive(false);
-			feerefunddetailsRepository.save(fee);
-			return true;
-		} else if (role.equals("ROLE_SSHEAD")) {
-			fee.setStatus3(2);
-			fee.setComment(comment);
-			fee.setLive(false);
-			feerefunddetailsRepository.save(fee);
-			return true;
-		} else
-			return false;
-	}
-}
-	public boolean UpdateStatus(CustomUserDetails userDetails, String enrollment, String type, Integer status, String comment, String rank) {
+
+	public boolean UpdateStatus(CustomUserDetails userDetails, String enrollment, String type, Integer status,
+			String comment, String rank) {
 		String role = userDetails.getRole();
 
 		Request request = requestRepository.findByReq(type, enrollment);
 		System.out.println(request.getType() + ".");
-if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBranch()+role);
-			else request.setLast_modified_by(role);
+		if (role.equals("ROLE_DEPARTMENT"))
+			request.setLast_modified_by(userDetails.getBranch() + role);
+		else
+			request.setLast_modified_by(role);
 
-		if (status==1) {
+		if (status == 1) {
 			if (role.equals("ROLE_DEPARTMENT")) {
 
 				request.setStatus1(1);
-				if (rank!=null) request.setRanks(rank);
+				if (rank != null)
+					request.setRanks(rank);
 				requestRepository.save(request);
 
 				return true;
@@ -586,45 +589,40 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 		}
 	}
 
+	public List<DocumentData> findrequest(Date start, Date end, String role, String enrollment) {
 
-	public List<DocumentData> findrequest(Date start ,Date end ,String role, String enrollment) {
+		if ((start == null || end == null) && enrollment == null)
+			return null;
 
-			if((start== null || end==null) && enrollment==null) return null;
-	
-	//	List<Student> students = studentRepo.findAll( Specification.where(StudentSpecification.getRequestData(start,end	,role) ));
-			//		.and(StudentSpecification.getStudentByEnrollment(enrollment))
+		// List<Student> students = studentRepo.findAll(
+		// Specification.where(StudentSpecification.getRequestData(start,end ,role) ));
+		// .and(StudentSpecification.getStudentByEnrollment(enrollment))
 //						.and(StudentSpecification.getStudentByfirstlevel(role))
 //						
 //		if(start!=null)start.setTime(0);
 //		if(end!=null)end.setTime(0);
 		System.out.println("............................okkkkkk..................................");
 		System.out.println(enrollment);
-		
-		
-		List<DocumentData> students = studentRepo.findDocument(start,end,enrollment);
-		
-		
-		
-		
+
+		List<DocumentData> students = studentRepo.findDocument(start, end, enrollment);
+
 		System.out.println("..............................................................");
-		//List<RequestDto> data = ObjectMapperUtils.mapAll(students, RequestDto.class);
-		
+		// List<RequestDto> data = ObjectMapperUtils.mapAll(students, RequestDto.class);
+
 		return students;
 
 	}
 
+	public List<Student> findAllStudent(String caste, Integer addmission_year, String gender, Integer semester,
+			Integer branch, String course, String admission_category) {
 
-	public List<Student> findAllStudent(String caste, Integer addmission_year, String gender, Integer semester, Integer branch,
-			String course) {
-		
-		List<Student> students = studentRepo.findAll(Specification.where(
-				StudentSpecification.getStudentByBranch(branch)
-				.and(StudentSpecification.getStudentByCaste(caste))
-				.and(StudentSpecification.getStudentByCourse(course))
+		List<Student> students = studentRepo.findAll(Specification.where(StudentSpecification.getStudentByBranch(branch)
+				.and(StudentSpecification.getStudentByCaste(caste)).and(StudentSpecification.getStudentByCourse(course))
 				.and(StudentSpecification.getStudentByGender(gender))
 				.and(StudentSpecification.getStudentByAddmissionYear(addmission_year))
+				.and(StudentSpecification.getStudentByAdmissionCategory(admission_category))
 				.and(StudentSpecification.getStudentBySem(semester))));
-		
+
 		return students;
 	}
 
@@ -648,19 +646,21 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 		return temp;
 	}
 
-	public void resetRequest(Request request,  MultipartFile request_document, Double cgpa,String username,String type) throws IOException {
+	public void resetRequest(Request request, MultipartFile request_document, Double cgpa, String username, String type)
+			throws IOException {
 
 		request.setStatus1(0);
 		request.setStatus2(0);
 		request.setStatus3(0);
-		Map<String,String> DOCUMENT=createStorage(request_document,username,type,"student/request/");
+		Map<String, String> DOCUMENT = createStorage(request_document, username, type, "student/request/");
 		request.setDocument_name(DOCUMENT.get("file_name"));
 		request.setDocument_url(DOCUMENT.get("file_url"));
 		request.setDocument_size(DOCUMENT.get("file_size"));
 		request.setDocument_type(DOCUMENT.get("file_type"));
 
-		boolean isDocumetStored = storeFile(request_document,DOCUMENT.get("file_path"),DOCUMENT.get("file_name"));
-		if(cgpa!=null) request.setCgpa(cgpa);
+		boolean isDocumetStored = storeFile(request_document, DOCUMENT.get("file_path"), DOCUMENT.get("file_name"));
+		if (cgpa != null)
+			request.setCgpa(cgpa);
 		request.setLive(true);
 	}
 
@@ -672,34 +672,31 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 		return false;
 	}
 
-	public String changePasswordDao(String username,String password, String current_password,String type){
-		if(type.equals("ADMIN")) {
+	public String changePasswordDao(String username, String password, String current_password, String type) {
+		if (type.equals("ADMIN")) {
 			Admin admin = adminrepo.findByEmail(username);
-			if(!passwordEncoder.matches(current_password,admin.getPassword())){
+			if (!passwordEncoder.matches(current_password, admin.getPassword())) {
 				return "false";
-			}else {
-				try{
+			} else {
+				try {
 					admin.setPassword(passwordEncoder.encode(password));
 					adminrepo.save(admin);
 					return "true";
-				}
-				catch (Exception e){
+				} catch (Exception e) {
 					System.out.println(e.toString());
 					return null;
 				}
 			}
-		}
-		else {
+		} else {
 			Student student = studentRepo.findByEnrollment(username);
-			if(!passwordEncoder.matches(current_password,student.getPassword())){
+			if (!passwordEncoder.matches(current_password, student.getPassword())) {
 				return "false";
-			}else {
-				try{
+			} else {
+				try {
 					student.setPassword(passwordEncoder.encode(password));
 					studentRepo.save(student);
 					return "true";
-				}
-				catch (Exception e){
+				} catch (Exception e) {
 					System.out.println(e.toString());
 					return null;
 				}
@@ -708,94 +705,88 @@ if(role.equals("ROLE_DEPARTMENT")) request.setLast_modified_by(userDetails.getBr
 
 	}
 
-    public String generateCommonLangPassword() {
-        String upperCaseLetters = RandomStringUtils.random(2, 65, 90, true, true);
-        String lowerCaseLetters = RandomStringUtils.random(2, 97, 122, true, true);
-        String numbers = RandomStringUtils.randomNumeric(2);
-        String specialChar = RandomStringUtils.random(2, 33, 39, false, false);
-        String totalChars = RandomStringUtils.randomAlphanumeric(2);
-        String combinedChars = upperCaseLetters.concat(lowerCaseLetters)
-                .concat(numbers)
-                .concat(specialChar)
-                .concat(totalChars);
-        List<Character> pwdChars = combinedChars.chars()
-                .mapToObj(c -> (char) c)
-                .collect(Collectors.toList());
-        Collections.shuffle(pwdChars);
-        String password = pwdChars.stream()
-                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
-                .toString();
-        return password;
-    }
+	public String generateCommonLangPassword() {
+		String upperCaseLetters = RandomStringUtils.random(2, 65, 90, true, true);
+		String lowerCaseLetters = RandomStringUtils.random(2, 97, 122, true, true);
+		String numbers = RandomStringUtils.randomNumeric(2);
+		String specialChar = RandomStringUtils.random(2, 33, 39, false, false);
+		String totalChars = RandomStringUtils.randomAlphanumeric(2);
+		String combinedChars = upperCaseLetters.concat(lowerCaseLetters).concat(numbers).concat(specialChar)
+				.concat(totalChars);
+		List<Character> pwdChars = combinedChars.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
+		Collections.shuffle(pwdChars);
+		String password = pwdChars.stream().collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+				.toString();
+		return password;
+	}
 
-    public HashMap<String,String> createStorage(MultipartFile file,String id,String type,String domain){
-		//types === photo/sign/feereceipt/marksheet
+	public HashMap<String, String> createStorage(MultipartFile file, String id, String type, String domain) {
+		// types === photo/sign/feereceipt/marksheet
 
-		//domain student,admin,student/request etc...
-		HashMap<String,String> fileData = new HashMap<String, String>();
+		// domain student,admin,student/request etc...
+		HashMap<String, String> fileData = new HashMap<String, String>();
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		String file_name= type+"_"+id+"_"+timestamp.getTime()+"_"+file.getOriginalFilename();
-		String file_path = Paths.get(LdceApplication.uploadDirectory,domain,type).toString();
-		String file_url = Paths.get(domain,type,file_name).toString();
+		String file_name = type + "_" + id + "_" + timestamp.getTime() + "_" + file.getOriginalFilename();
+		String file_path = Paths.get(LdceApplication.uploadDirectory, domain, type).toString();
+		String file_url = Paths.get(domain, type, file_name).toString();
 		String file_type = file.getContentType();
 		Long file_Size = file.getSize();
 		String file_size = file_Size.toString();
-		fileData.put("file_name",file_name);
-		fileData.put("file_path",file_path);
-		fileData.put("file_type",file_type);
-		fileData.put("file_size",file_size);
-		fileData.put("file_url",file_url);
+		fileData.put("file_name", file_name);
+		fileData.put("file_path", file_path);
+		fileData.put("file_type", file_type);
+		fileData.put("file_size", file_size);
+		fileData.put("file_url", file_url);
 		return fileData;
 	}
 
-	public boolean storeFile(MultipartFile file,String file_path,String file_name ) throws IOException {
+	public boolean storeFile(MultipartFile file, String file_path, String file_name) throws IOException {
 		Logger logger = LoggerFactory.getLogger(Dao.class);
-		logger.info("request come for store file at path:  "+file_path);
-		logger.info("Name of the file is  "+file_name);
+		logger.info("request come for store file at path:  " + file_path);
+		logger.info("Name of the file is  " + file_name);
 		boolean fileExists = true;
 		File f = new File(file_path);
 		if (!f.exists()) {
-			logger.info("file path does not exist"+file_path);
-			fileExists =  f.mkdirs();
-			if(fileExists)
-				logger.info("path created successfully "+file_path);
+			logger.info("file path does not exist" + file_path);
+			fileExists = f.mkdirs();
+			if (fileExists)
+				logger.info("path created successfully " + file_path);
 			else
-				logger.info("unable to create filepath successfully "+file_name);
+				logger.info("unable to create filepath successfully " + file_name);
 		}
-		if(fileExists){
-			try{
+		if (fileExists) {
+			try {
 
-				BufferedOutputStream stream1 = new BufferedOutputStream(new FileOutputStream(new File(Paths.get(file_path,file_name).toString())));
-				logger.info("stream created at "+file_path);
+				BufferedOutputStream stream1 = new BufferedOutputStream(
+						new FileOutputStream(new File(Paths.get(file_path, file_name).toString())));
+				logger.info("stream created at " + file_path);
 				stream1.write(file.getBytes());
 				stream1.close();
-				logger.info("stream closed at "+file_path);
+				logger.info("stream closed at " + file_path);
 
-			}
-			catch(Exception e){
-				logger.error("Exception occured during storing a file: ",file_name);
+			} catch (Exception e) {
+				logger.error("Exception occured during storing a file: ", file_name);
 				logger.error(e.toString());
-				return  false;
+				return false;
 			}
 			return true;
 		}
 		return false;
 	}
 
-	public void deleteOldFile(String filename){
+	public void deleteOldFile(String filename) {
 		Logger logger = LoggerFactory.getLogger(Dao.class);
-		logger.info("request come for delete old file "+filename);
-		try{
+		logger.info("request come for delete old file " + filename);
+		try {
 			boolean delete = new File(filename).delete();
-			if(delete){
-				logger.info(filename+" deleted success fully");
+			if (delete) {
+				logger.info(filename + " deleted success fully");
 
-			}else{
-				logger.info(filename+" is not deleted");
+			} else {
+				logger.info(filename + " is not deleted");
 			}
-		}
-		catch (Exception e){
-			logger.error("exception occure for deleting old file "+filename);
+		} catch (Exception e) {
+			logger.error("exception occure for deleting old file " + filename);
 			logger.error(e.toString());
 
 		}

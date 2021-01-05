@@ -153,9 +153,12 @@ public class AdminController {
 			@RequestParam(defaultValue = "ALL") String gender,
 			@RequestParam(defaultValue = "0") Integer semester,
 			@RequestParam(defaultValue = "0") Integer branch,
-			@RequestParam(defaultValue = "ALL") String course) {
+			@RequestParam(defaultValue = "ALL") String course,
+			@RequestParam(defaultValue = "ALL") String admission_category) {
+		
+		System.out.println(admission_category+"..........................");
 
-		return dao.findAllStudent(caste, addmission_year, gender, semester, branch, course);
+		return dao.findAllStudent(caste, addmission_year, gender, semester, branch, course,admission_category);
 	}
 
 	// list json data to admin

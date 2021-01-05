@@ -136,6 +136,19 @@ public class StudentSpecification {
 		};
 
 	}
+	public static Specification<Student> getStudentByAdmissionCategory(String admission_category) {
+
+		return (root, query, criteriaBuilder) -> {
+
+			if (admission_category != null && !(admission_category.equals("ALL"))) {
+				Predicate equalPredicate = criteriaBuilder.equal(root.get("admission_category"), admission_category);
+				return equalPredicate;
+			} else
+				return null;
+		};
+
+	}
+	
 
 
 }
