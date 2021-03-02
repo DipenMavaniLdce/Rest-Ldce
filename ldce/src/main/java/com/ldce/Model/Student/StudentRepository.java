@@ -35,11 +35,11 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 	@Query("from Student")
     List<Student> findBya();
 
-	@Query(value = "SELECT count(*) from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.status1=0 AND branch =:branchid", nativeQuery = true)
-    Long countByStatus1(@Param("branchid") int branch);
+	@Query(value = "SELECT count(*) from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.status1=0 AND branch =:branchid AND s.course =:course", nativeQuery = true)
+    Long countByStatus1(@Param("branchid") int branch,@Param("course") String course);
 
-	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.status1=0 AND branch =:branchid", nativeQuery = true)
-    List<DocumentData> findByStatus1(@Param("branchid") int branch);
+	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.status1=0 AND s.branch =:branchid AND s.course =:course", nativeQuery = true)
+    List<DocumentData> findByStatus1(@Param("branchid") int branch,@Param("course") String course);
 
 
 

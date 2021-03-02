@@ -63,9 +63,12 @@ public class AdminController {
 		switch (userDetails.getRole()) {
 			case "ROLE_DEPARTMENT":
 				logger.trace(userDetails.getRole() + " found");
-				map.put("Registered Student", strp.count(Specification.where(CountSpecification
-						.CountByBranch(userDetails.getBranch()).and(CountSpecification.CountByFaculty_approve(0)))));
-				map.put("Applied Document", strp.countByStatus1(userDetails.getBranch()));
+				map.put("Registered Student", strp.count(Specification
+						.where(CountSpecification.CountByBranch(userDetails.getBranch())
+								.and(CountSpecification.CountByFaculty_approve(0))
+								.and(CountSpecification.CountByCourse(userDetails.getCourse()))
+						)));
+				map.put("Applied Document", strp.countByStatus1(userDetails.getBranch(),userDetails.getCourse()));
 				return ResponseEntity.ok(map);
 			case "ROLE_SSMENTOR":
 				logger.trace(userDetails.getRole() + " found");

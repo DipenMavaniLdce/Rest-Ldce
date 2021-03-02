@@ -24,5 +24,9 @@ public class CountSpecification {
 		return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("faculty_approve"), status);
 
 	}
+	public static Specification<Student> CountByCourse(String course) {
+		return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("course"), course);
+
+	}
 
 }

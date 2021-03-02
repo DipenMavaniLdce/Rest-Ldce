@@ -69,9 +69,10 @@ public class SearchQueryDao {
     public List<DocumentData> penndingDocument(CustomUserDetails userDetails) {
         String role = userDetails.getRole();
         int branch = userDetails.getBranch();
+        String course = userDetails.getCourse();
         switch (role) {
             case "ROLE_DEPARTMENT":
-                return studentRepository.findByStatus1(branch);
+                return studentRepository.findByStatus1(branch,course);
             case "ROLE_SSMENTOR":
                 return studentRepository.findByStatus2();
             case "ROLE_SSHEAD":

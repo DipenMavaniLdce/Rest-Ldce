@@ -17,11 +17,16 @@ import java.io.File;
 		"com.ldce.Email", "com.ldce.util", "com.ldce.filter" })
 @EnableJpaRepositories(basePackages = { "com.ldce.Model", "com.ldce.Main" })
 public class LdceApplication {
+//CREATE SYTSTEM ENVIRONMENT FOR STROYING IMAGES
+	public static String remoteUrl =  System.getenv().get("URL_S3");
+	//System.getProperty("user.dir")+"\\uploads";
+	public static String uploadDirectory =  remoteUrl != null ? remoteUrl :"E:/Documents/uploads";
 
-	public static String uploadDirectory =  System.getProperty("user.dir")+"\\uploads";
-
-	//public static String uploadDirectory =  "G:\\maven.1604047499613\\ldce/uploads/";
+	//public static String uploadDirectory = "https://elasticbeanstalk-us-east-2-156372987353.s3.us-east-2.amazonaws.com/uploads";
 	public static void main(String[] args) {
+		System.getenv().forEach((k, v) -> {
+			System.out.println(k + ":" + v);
+		});
 		new File(uploadDirectory).mkdirs();
 		SpringApplication.run(LdceApplication.class, args);
 	}
