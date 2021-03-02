@@ -1,22 +1,18 @@
 package com.ldce.controller;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.ldce.Dao.Dao;
+import com.ldce.Dao.SaveQueryDao;
+import com.ldce.Dao.SearchQueryDao;
+import com.ldce.Dao.UpdateQueryDao;
 import com.ldce.Data.DocumentData;
 import com.ldce.Data.FeeRefundData;
-import com.ldce.Data.RequestDto;
+import com.ldce.Model.Admin.Admin;
+import com.ldce.Model.Request.RequestRepository;
+import com.ldce.Model.Student.Student;
+import com.ldce.Model.Student.StudentRepository;
 import com.ldce.SearchSpecification.CountSpecification;
 import com.ldce.SearchSpecification.ReqCountSpecification;
-import com.ldce.Model.Admin.Admin;
+import com.ldce.exception.RecordNotFoundException;
+import com.ldce.security.CustomUserDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +24,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ldce.Model.Request.RequestRepository;
-import com.ldce.Model.Student.Student;
-import com.ldce.Model.Student.StudentRepository;
-import com.ldce.exception.RecordNotFoundException;
-import com.ldce.security.CustomUserDetails;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @Secured(value = { "ROLE_DEPARTMENT", "ROLE_SSMENTOR", "ROLE_SSHEAD" })
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
-
-	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 	@Autowired
 	StudentRepository strp;
@@ -49,36 +44,44 @@ public class AdminController {
 	RequestRepository reqrepo;
 
 	@Autowired
-	Dao dao;
+	UpdateQueryDao updateQueryDao;
+
+	@Autowired
+    SaveQueryDao saveQueryDao;
+
+	@Autowired
+	SearchQueryDao searchQueryDao;
+
 
 	@CrossOrigin
 	@GetMapping("/adminDashbord")
 	public ResponseEntity<?> getdashBoard() {
 		Logger logger = LoggerFactory.getLogger(AdminController.class);
-		Map<String, Long> map = new HashMap<String, Long>();
+		Map<String, Long> map = new HashMap<>();
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		logger.trace("userDetails found");
-		if (userDetails.getRole().equals("ROLE_DEPARTMENT")) {
-			logger.trace(userDetails.getRole()+" found");
-			map.put("Registered Student", strp.count(Specification.where(CountSpecification
-					.CountByBranch(userDetails.getBranch()).and(CountSpecification.CountByFaculty_approve(0)))));
-			map.put("Applied Document", strp.countByStatus1(userDetails.getBranch()));
-			return ResponseEntity.ok(map);
-		} else if (userDetails.getRole().equals("ROLE_SSMENTOR")) {
-			logger.trace(userDetails.getRole()+" found");
-			map.put("Applied Document", reqrepo.count(Specification
-					.where(ReqCountSpecification.CountBystatus1(1).and(ReqCountSpecification.CountBystatus2(0)))));
-			return ResponseEntity.ok(map);
-		} else if (userDetails.getRole().equals("ROLE_SSHEAD")) {
-			logger.trace(userDetails.getRole()+" found");
-			map.put("Applied Document", reqrepo.count(Specification.where(ReqCountSpecification.CountBystatus1(1)
-					.and(ReqCountSpecification.CountBystatus2(1)).and(ReqCountSpecification.CountBystatus3(0)))));
-			return ResponseEntity.ok(map);
-		} else {
-			logger.warn("invalid roll found found");
-			HashMap<String, String> res = new HashMap<String, String>();
-			res.put("error","invalid role");
-			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
+		switch (userDetails.getRole()) {
+			case "ROLE_DEPARTMENT":
+				logger.trace(userDetails.getRole() + " found");
+				map.put("Registered Student", strp.count(Specification.where(CountSpecification
+						.CountByBranch(userDetails.getBranch()).and(CountSpecification.CountByFaculty_approve(0)))));
+				map.put("Applied Document", strp.countByStatus1(userDetails.getBranch()));
+				return ResponseEntity.ok(map);
+			case "ROLE_SSMENTOR":
+				logger.trace(userDetails.getRole() + " found");
+				map.put("Applied Document", reqrepo.count(Specification
+						.where(ReqCountSpecification.CountBystatus1(1).and(ReqCountSpecification.CountBystatus2(0)))));
+				return ResponseEntity.ok(map);
+			case "ROLE_SSHEAD":
+				logger.trace(userDetails.getRole() + " found");
+				map.put("Applied Document", reqrepo.count(Specification.where(ReqCountSpecification.CountBystatus1(1)
+						.and(ReqCountSpecification.CountBystatus2(1)).and(ReqCountSpecification.CountBystatus3(0)))));
+				return ResponseEntity.ok(map);
+			default:
+				logger.warn("invalid roll found found");
+				HashMap<String, String> res = new HashMap<>();
+				res.put("error", "invalid role");
+				return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -89,12 +92,12 @@ public class AdminController {
 		Logger logger = LoggerFactory.getLogger(AdminController.class);
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		logger.trace(userDetails.getRole()+" found");
-		Admin admin = dao.adminCrenditials(userDetails.getEmail());
+		Admin admin = searchQueryDao.adminCrenditials(userDetails.getEmail());
 		return ResponseEntity.ok(admin);
 	}
 	@PostMapping("/FeeRefundApprove")
 	public ResponseEntity<?> feeRefundApprove(String enrollment, Integer status, String comment){
-		HashMap<String, String> res = new HashMap<String, String>();
+		HashMap<String, String> res = new HashMap<>();
 		if(enrollment==null || status == null) {
 			res.put("error","Type, Enrollment and Status is Required");
 			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
@@ -104,7 +107,7 @@ public class AdminController {
 			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
 		}
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (!dao.UpdateFeeRefundStatus(userDetails, enrollment, status, comment)) {
+		if (!updateQueryDao.UpdateFeeRefundStatus(userDetails, enrollment, status, comment)) {
 			throw new RecordNotFoundException("student data is not found");
 		} else {
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -116,7 +119,7 @@ public class AdminController {
 	public ResponseEntity<?> documentApprove(String enrollment, String type, Integer status, String comment, String rank) {
 		System.out.println(enrollment + type + status+comment+rank);
 
-		HashMap<String, String> res = new HashMap<String, String>();
+		HashMap<String, String> res = new HashMap<>();
 		if(enrollment==null || type == null || status == null) {
 			res.put("error","Type, Enrollment and Status is Required");
 			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
@@ -130,7 +133,7 @@ public class AdminController {
 			return new ResponseEntity<>(res,HttpStatus.BAD_REQUEST);
 		}
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (!dao.UpdateStatus(userDetails, enrollment, type, status, comment,rank)) {
+		if (!updateQueryDao.UpdateStatus(userDetails, enrollment, type, status, comment,rank)) {
 			throw new RecordNotFoundException("student data is not found");
 		} else {
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -139,7 +142,7 @@ public class AdminController {
 
 	@PostMapping("/facultyApprove")
 	public ResponseEntity studentApprove(String enrollment, Integer status, String comment) {
-		if (!dao.save(enrollment, status, comment)) {
+		if (!saveQueryDao.save(enrollment, status, comment)) {
 			throw new RecordNotFoundException("student data is not found");
 		} else {
 			return new ResponseEntity(HttpStatus.OK);
@@ -158,7 +161,7 @@ public class AdminController {
 		
 		System.out.println(admission_category+"..........................");
 
-		return dao.findAllStudent(caste, addmission_year, gender, semester, branch, course,admission_category);
+		return searchQueryDao.findAllStudent(caste, addmission_year, gender, semester, branch, course,admission_category);
 	}
 
 	// list json data to admin
@@ -167,16 +170,14 @@ public class AdminController {
 	public List<Student> getStudentData() {
 
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		List<Student> student = dao.pendingRegistration(userDetails.getBranch(),userDetails.getCourse());
-		return student;
+		return searchQueryDao.pendingRegistration(userDetails.getBranch(),userDetails.getCourse());
 	}
 
 	@CrossOrigin
 	@GetMapping("/pendingDocument")
 	public List<DocumentData> getDocApprove() {
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		List<DocumentData> students = dao.penndingDocument(userDetails);
-		return students;
+		return searchQueryDao.penndingDocument(userDetails);
 	}
 
 
@@ -185,16 +186,14 @@ public class AdminController {
 	@GetMapping("/pendingFeeRefund")
 	public List<FeeRefundData> getFeeApprove() {
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		List<FeeRefundData> details = dao.penddingFeeRefund(userDetails);
-		return details;
+		return searchQueryDao.penddingFeeRefund(userDetails);
 	}
 
 	@CrossOrigin
 	@GetMapping("/acceptedDocument")
 	public List<DocumentData> getAcceptedDocument() {
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		List<DocumentData> students = dao.penndingDocument(userDetails);
-		return students;
+		return searchQueryDao.penndingDocument(userDetails);
 	}
 
 	@CrossOrigin
@@ -211,7 +210,7 @@ public class AdminController {
 		logger.info(role+"  found");
 	
 		System.out.println(start + "  ......  " + end + " ...." + enrollment);
-		return dao.findrequest(start,end , role,enrollment);
+		return searchQueryDao.findRequest(start,end , role,enrollment);
 	}
 
 	@CrossOrigin
@@ -233,8 +232,8 @@ public class AdminController {
 
         String username = (String) request.getAttribute("username");
 
-        HashMap<String, String> res = new HashMap<String, String>();
-        if (dao.updatephoto(username, adminPhoto,"ADMIN")) {
+        HashMap<String, String> res = new HashMap<>();
+        if (updateQueryDao.updatephoto(username, adminPhoto,"ADMIN")) {
 
             res.put("success", "User Photo Changed Successfully");
             return new ResponseEntity<>(res, HttpStatus.OK);
@@ -251,8 +250,8 @@ public class AdminController {
             throws IOException {
         String username = (String) request.getAttribute("username");
         System.out.println(username);
-        HashMap<String, String> res = new HashMap<String, String>();
-        if (dao.updatesign(username, adminSign,"ADMIN")) {
+        HashMap<String, String> res = new HashMap<>();
+        if (updateQueryDao.updatesign(username, adminSign,"ADMIN")) {
             res.put("success", "User Sign Updated Successfully");
             return new ResponseEntity<>(res, HttpStatus.OK);
         } else {
@@ -268,8 +267,8 @@ public class AdminController {
 		String password = request.getParameter("password");
 		String current_password = request.getParameter("current_password");
 
-		HashMap<String, String> res = new HashMap<String, String>();
-		String s = dao.changePasswordDao(username, password, current_password,"ADMIN");
+		HashMap<String, String> res = new HashMap<>();
+		String s = updateQueryDao.changePasswordDao(username, password, current_password,"ADMIN");
 
 		if (s == null) {
 			res.put("error", "Server error");

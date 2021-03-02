@@ -1,46 +1,46 @@
 package com.ldce.Data;
 
 public interface FeeRefundData {
-    public long getStudent_id();
+    long getStudent_id();
 
-    public String getEnrollment();
+    String getEnrollment();
 
-    public String getFirst_name();
+    String getFirst_name();
 
-    public String getLast_name();
+    String getLast_name();
 
-    public String getMiddle_name();
+    String getMiddle_name();
 
-    public String getEmail();
+    String getEmail();
 
-    public String getContact();
+    String getContact();
 
-    public String getGender();
+    String getGender();
 
 
 
-    public int getBranch();
+    int getBranch();
 
-    public String getCourse();
+    String getCourse();
 
-    public Long getRefund_id();
+    Long getRefund_id();
 
-    public String getFee_document_name() ;
+    String getFee_document_name() ;
 
-    public String getFee_document_url();
+    String getFee_document_url();
 
-    public String getFee_document_size();
+    String getFee_document_size();
 
-    public String getFee_document_type() ;
-    public double getAmount();
+    String getFee_document_type() ;
+    double getAmount();
 
-    public int getSemester();
-    public String getBank_name();
-    public String getFees_type();
-    public String getBank_ifsc() ;
-    public String getBank_branch();
-    public String getBank_ac_no();
-    public String getTransaction_no();
+    int getSemester();
+    String getBank_name();
+    String getFees_type();
+    String getBank_ifsc() ;
+    String getBank_branch();
+    String getBank_ac_no();
+    String getTransaction_no();
 
 
 

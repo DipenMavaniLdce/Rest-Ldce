@@ -6,6 +6,9 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.ldce.Dao.SaveQueryDao;
+import com.ldce.Dao.SearchQueryDao;
+import com.ldce.Dao.UpdateQueryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ldce.Dao.Dao;
+
 import com.ldce.Data.RequestDto;
 import com.ldce.Model.FeeRefund.FeeRefundDetails;
 import com.ldce.Model.FeeRefund.FeeRefundDetailsRepository;
@@ -28,7 +31,13 @@ import com.ldce.security.CustomUserDetails;
 @RequestMapping("/api/student")
 public class StudentController {
 	@Autowired
-	Dao dao;
+	UpdateQueryDao updateQueryDao;
+
+	@Autowired
+	SaveQueryDao saveQueryDao;
+
+	@Autowired
+	SearchQueryDao searchQueryDao;
 
 	@Autowired
 	FeeRefundDetailsRepository frdr;
@@ -37,7 +46,7 @@ public class StudentController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/confirm-account")
 	public ModelAndView confirmStudentAccount(@RequestParam("token") String tokenValue) {
-		if (dao.validateEmail(tokenValue)) {
+		if (updateQueryDao.validateEmail(tokenValue)) {
 			return new ModelAndView("redirect:/login");
 		} else {
 			return new ModelAndView("error.html");
@@ -47,7 +56,7 @@ public class StudentController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("studentDashboard")
 	public RequestDto getdashBoard(@RequestAttribute("username") String username) {
-		return dao.getStudentDashbord(username);
+		return searchQueryDao.getStudentDashbord(username);
 	}
 
 	@CrossOrigin(origins = "http://localhost:3000")
@@ -55,7 +64,7 @@ public class StudentController {
 	public FeeRefundDetails getfeerefund() {
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		System.out.println(userDetails);
-		return dao.feerefund(userDetails.getEnrollment());
+		return searchQueryDao.feerefund(userDetails.getEnrollment());
 	}
 
 	// change photo
@@ -65,8 +74,8 @@ public class StudentController {
 			throws IOException {
 		String username = (String) request.getAttribute("username");
 		System.out.println(username);
-		HashMap<String, String> res = new HashMap<String, String>();
-		if (dao.updatephoto(username, studentPhoto,"STUDENT")) {
+		HashMap<String, String> res = new HashMap<>();
+		if (updateQueryDao.updatephoto(username, studentPhoto,"STUDENT")) {
 
 			res.put("success", "User Photo Changed Successfully");
 			return new ResponseEntity<>(res, HttpStatus.OK);
@@ -84,8 +93,8 @@ public class StudentController {
 			throws IOException {
 		String username = (String) request.getAttribute("username");
 		System.out.println(username);
-		HashMap<String, String> res = new HashMap<String, String>();
-		if (dao.updatesign(username, studentSign,"STUDENT")) {
+		HashMap<String, String> res = new HashMap<>();
+		if (updateQueryDao.updatesign(username, studentSign,"STUDENT")) {
 			res.put("success", "User Sign Updated Successfully");
 			return new ResponseEntity<>(res, HttpStatus.OK);
 		} else {
@@ -101,7 +110,7 @@ public class StudentController {
 			@Valid Student_guardian guardian) throws IOException {
 		String username = (String) request.getAttribute("username");
 		HashMap<String, String> res = new HashMap<>();
-		if (dao.updateprofile(username, Student, info, guardian)) {
+		if (updateQueryDao.updateprofile(username, Student, info, guardian)) {
 			res.put("success", "Data Updated SuccessFully");
 			return new ResponseEntity<>(res, HttpStatus.OK);
 		} else {
@@ -114,19 +123,19 @@ public class StudentController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/data")
 	public ResponseEntity<?> getData(@RequestAttribute("username") String username) {
-		Student student = dao.search(username);
+		Student student = searchQueryDao.search(username);
 		return ResponseEntity.ok(student);
 	}
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/DocumentSubmit/{type}")
 	public ResponseEntity<?> requestCertificate(@PathVariable("type") String type,
-			@RequestAttribute("username") String username,
-			@RequestParam(name="request_document",required = true) MultipartFile request_document,
-			@RequestParam(name = "cgpa", required = false, defaultValue = "0") Double cgpa,
-			@RequestParam(name = "graduation_year", required = false, defaultValue = "0") Integer graduation_year, HttpServletRequest request) throws IOException {
+												@RequestAttribute("username") String username,
+												@RequestParam(name = "request_document") MultipartFile request_document,
+												@RequestParam(name = "cgpa", required = false, defaultValue = "0") Double cgpa,
+												@RequestParam(name = "graduation_year", required = false, defaultValue = "0") Integer graduation_year) throws IOException {
 
-		HashMap<String, String> res = new HashMap<String, String>();
+		HashMap<String, String> res = new HashMap<>();
 		System.out.println(type);
 
 		System.out.println(request_document);
@@ -158,7 +167,7 @@ public class StudentController {
 			return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
 		}
 
-		int code = dao.saveRequest(type, username, request_document, cgpa, graduation_year);
+		int code = saveQueryDao.saveRequest(type, username, request_document, cgpa, graduation_year);
 		if (code == 409) {
 			res.put("error", "Document Request Already Exist!");
 			return new ResponseEntity<>(res, HttpStatus.CONFLICT);
@@ -179,10 +188,10 @@ public class StudentController {
 	@PostMapping("/feeRefund")
 	public ResponseEntity<?> feeRefund(@Valid FeeRefundDetails feerefund,
 			@RequestAttribute("username") String username,
-			@RequestParam(name="request_document",required = true) MultipartFile request_document) {
-		HashMap<String, String> res = new HashMap<String, String>();
+			@RequestParam(name="request_document") MultipartFile request_document) {
+		HashMap<String, String> res = new HashMap<>();
 		try {
-			int code = dao.saveFeeRefundDetails(feerefund, username, request_document);
+			int code = saveQueryDao.saveFeeRefundDetails(feerefund, username, request_document);
 			if (code == 409) {
 				res.put("error", " Request Already Exist!");
 				return new ResponseEntity<>(res, HttpStatus.CONFLICT);
@@ -207,8 +216,8 @@ public class StudentController {
 		String username = (String) request.getAttribute("username");
 		String password = request.getParameter("password");
 		String current_password = request.getParameter("current_password");
-		HashMap<String, String> res = new HashMap<String, String>();
-		String s = dao.changePasswordDao(username, password, current_password,"STUDENT");
+		HashMap<String, String> res = new HashMap<>();
+		String s = updateQueryDao.changePasswordDao(username, password, current_password,"STUDENT");
 		if (s == null) {
 			res.put("error", "Server error");
 			return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);

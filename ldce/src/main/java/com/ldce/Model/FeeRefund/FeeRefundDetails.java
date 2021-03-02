@@ -27,9 +27,9 @@ public class FeeRefundDetails {
 	String bank_branch;
 	String bank_ac_no;
 	String transaction_no;
-	int status1 = 0;
-	int status2 = 0;
-	int status3 = 0;
+	int status1;
+	int status2;
+	int status3;
 	boolean live = true;
 	String comment;
 	double amount;
@@ -80,11 +80,11 @@ public class FeeRefundDetails {
         return fee_document_type;
     }
 
-    Date Applied_date = new Date();
+    Date Applied_date;
 	@ManyToOne(fetch = FetchType.LAZY)
 
 	@JoinColumn(name = "fee_refund_enrollment", referencedColumnName = "enrollment")
-    Student student;
+	public Student student;
 
 	public FeeRefundDetails() {
 

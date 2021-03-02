@@ -9,13 +9,7 @@ import com.ldce.Model.Request.Request;
 public class ReqCountSpecification {
 
 	public static Specification<Request> CountBystatus1(Integer status1) {
-		return (root, query, criteriaBuilder) -> {
-
-			Predicate equalPredicate = criteriaBuilder.equal(root.get("status1"), status1);
-
-			return equalPredicate;
-
-		};
+		return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status1"), status1);
 
 	}
 

@@ -27,9 +27,9 @@ public class StudentDto implements Serializable {
 
 	String role = "ROLE_STUDENT";
 
-	byte student_photo[];
+	byte[] student_photo;
 
-	byte student_sign[];
+	byte[] student_sign;
 
 	Boolean isactive = true;
 	int faculty_approve;

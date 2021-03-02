@@ -21,13 +21,7 @@ public class CountSpecification {
 	}
 
 	public static Specification<Student> CountByFaculty_approve(Integer status) {
-		return (root, query, criteriaBuilder) -> {
-
-			Predicate equalPredicate = criteriaBuilder.equal(root.get("faculty_approve"), status);
-
-			return equalPredicate;
-
-		};
+		return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("faculty_approve"), status);
 
 	}
 

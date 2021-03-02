@@ -1,25 +1,15 @@
 package com.ldce.SearchSpecification;
 
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Predicate;
-
-import com.ldce.Model.Request.Request;
-import org.springframework.data.jpa.domain.Specification;
-
 import com.ldce.Model.Student.Student;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Date;
+import org.springframework.data.jpa.domain.Specification;
 
 public class StudentSpecification {
 	public static Specification<Student> getStudentByBranch(Integer branch) {
 		return (root, query, criteriaBuilder) -> {
 
 			if (branch != null && branch != 0) {
-				Predicate equalPredicate = criteriaBuilder.equal(root.get("branch"), branch);
 
-				return equalPredicate;
+				return criteriaBuilder.equal(root.get("branch"), branch);
 			} else
 				return null;
 		};
@@ -29,8 +19,7 @@ public class StudentSpecification {
 		return (root, query, criteriaBuilder) -> {
 
 			if (caste != null && !(caste.equals("ALL"))) {
-				Predicate equalPredicate = criteriaBuilder.equal(root.get("caste"), caste);
-				return equalPredicate;
+				return criteriaBuilder.equal(root.get("caste"), caste);
 			} else
 				return null;
 		};
@@ -40,8 +29,7 @@ public class StudentSpecification {
 		return (root, query, criteriaBuilder) -> {
 
 			if (gender != null && !(gender.equals("ALL"))) {
-				Predicate equalPredicate = criteriaBuilder.equal(root.get("gender"), gender);
-				return equalPredicate;
+				return criteriaBuilder.equal(root.get("gender"), gender);
 			} else
 				return null;
 		};
@@ -52,8 +40,7 @@ public class StudentSpecification {
 		return (root, query, criteriaBuilder) -> {
 
 			if (course != null && !(course.equals("ALL"))) {
-				Predicate equalPredicate = criteriaBuilder.equal(root.get("course"), course);
-				return equalPredicate;
+				return criteriaBuilder.equal(root.get("course"), course);
 			} else
 				return null;
 		};
@@ -63,9 +50,8 @@ public class StudentSpecification {
 		return (root, query, criteriaBuilder) -> {
 
 			if (year != null && year != 0) {
-				Predicate equalPredicate = criteriaBuilder.equal(root.get("addmission_year"), year);
 
-				return equalPredicate;
+				return criteriaBuilder.equal(root.get("addmission_year"), year);
 			} else
 				return null;
 		};
@@ -76,45 +62,44 @@ public class StudentSpecification {
 		return (root, query, criteriaBuilder) -> {
 
 			if (sem != null && sem != 0) {
-				Predicate equalPredicate = criteriaBuilder.equal(root.get("semester"), sem);
-				return equalPredicate;
+				return criteriaBuilder.equal(root.get("semester"), sem);
 			} else
 				return null;
 		};
 	}
-	public static Specification<Student> getRequestData(Date start,Date end,String role) {
-		return (root, query, criteriaBuilder) -> {
-
-			if(start==null || end ==null) return null;
-		
-			
-			String pattern = "yyyy-MM-dd";
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
-			String s = simpleDateFormat.format(start);
-		//	String e = simpleDateFormat.format(end);
-			
-//		LocalDateTime st = 	LocalDateTime.parse);
-//		LocalDateTime ed= 	LocalDateTime.parse(e);
-//			
-	System.out.println(s+"...............................................");
-//		System.out.println(ed+"..................................................");
-			Join<Student, Request> requestJoin = root.join("request");
-			
-			System.out.println(requestJoin.get("modified_date"));
-			
-			Predicate equalPredicate = //criteriaBuilder.and(
-										criteriaBuilder.equal(requestJoin.get("modified_date"), new Date(start.getYear(),start.getMonth(),start.getDate()));//(requestJoin.get("modified_date"),start)
-										//,criteriaBuilder.lessThanOrEqualTo(requestJoin.get("modified_date"),end)
-										//,criteriaBuilder.equal(requestJoin.get("last_modified_by"),role)
-										//);
-					System.out.println(equalPredicate.toString());
-					//equal(requestJoin.get("modified_date"),date);
-		query.distinct(true);
-			return equalPredicate;
-		};
-
-	}
+//	public static Specification<Student> getRequestData(Date start,Date end,String role) {
+//		return (root, query, criteriaBuilder) -> {
+//
+//			if(start==null || end ==null) return null;
+//
+//
+//			String pattern = "yyyy-MM-dd";
+//			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+//
+//			String s = simpleDateFormat.format(start);
+//		//	String e = simpleDateFormat.format(end);
+//
+////		LocalDateTime st = 	LocalDateTime.parse);
+////		LocalDateTime ed= 	LocalDateTime.parse(e);
+////
+//	System.out.println(s+"...............................................");
+////		System.out.println(ed+"..................................................");
+//			Join<Student, Request> requestJoin = root.join("request");
+//
+//			System.out.println(requestJoin.get("modified_date"));
+//
+//			Predicate equalPredicate = //criteriaBuilder.and(
+//										criteriaBuilder.equal(requestJoin.get("modified_date"), new Date(start.getYear(),start.getMonth(),start.getDate()));//(requestJoin.get("modified_date"),start)
+//										//,criteriaBuilder.lessThanOrEqualTo(requestJoin.get("modified_date"),end)
+//										//,criteriaBuilder.equal(requestJoin.get("last_modified_by"),role)
+//										//);
+//					System.out.println(equalPredicate.toString());
+//					//equal(requestJoin.get("modified_date"),date);
+//		query.distinct(true);
+//			return equalPredicate;
+//		};
+//
+//	}
 
 //	public static Specification<Student> getStudentByfirstlevel(String role) {
 //		return (root, query, criteriaBuilder) -> {
@@ -130,9 +115,8 @@ public class StudentSpecification {
 
 		return (root, query, criteriaBuilder) -> {
 			if(enrollment==null) return null;
-			Predicate equalPredicate = criteriaBuilder.equal(root.get("enrollment"), enrollment);
 
-			return equalPredicate;
+			return criteriaBuilder.equal(root.get("enrollment"), enrollment);
 		};
 
 	}
@@ -141,8 +125,7 @@ public class StudentSpecification {
 		return (root, query, criteriaBuilder) -> {
 
 			if (admission_category != null && !(admission_category.equals("ALL"))) {
-				Predicate equalPredicate = criteriaBuilder.equal(root.get("admission_category"), admission_category);
-				return equalPredicate;
+				return criteriaBuilder.equal(root.get("admission_category"), admission_category);
 			} else
 				return null;
 		};

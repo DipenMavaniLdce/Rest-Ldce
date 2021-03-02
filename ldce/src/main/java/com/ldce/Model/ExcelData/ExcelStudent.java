@@ -1,9 +1,9 @@
 package com.ldce.Model.ExcelData;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
+
 @Entity
 public class ExcelStudent {
     @Id

@@ -1,6 +1,5 @@
 package com.ldce.security;
 
-import com.ldce.filter.JwtRequestFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class CustomUserDetailService implements UserDetailsService {
 		Logger logger = LoggerFactory.getLogger(CustomUserDetailService.class);
 		logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
-		String usertype[] = username.split(",");
+		String[] usertype = username.split(",");
 		String user = usertype[0];
 		String type = usertype[1];
 

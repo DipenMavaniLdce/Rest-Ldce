@@ -1,53 +1,53 @@
 package com.ldce.Data;
 
 public interface DocumentData {
-	public long getStudent_id();
+	long getStudent_id();
 
-	public String getEnrollment();
+	String getEnrollment();
 
-	public String getFirst_name();
+	String getFirst_name();
 
-	public String getLast_name();
+	String getLast_name();
 
-	public String getMiddle_name();
+	String getMiddle_name();
 
-	public String getEmail();
+	 String getEmail();
 
-	public String getContact();
+	 String getContact();
 
-	public String getGender();
+	 String getGender();
 
-	public String getType();
+	 String getType();
 
-	public int getBranch();
+	 int getBranch();
 
-	public String getCourse();
-
-
-	public String getPhoto_url();
-	public String getPhoto_type();
-	public String getPhoto_size();
-	public String getPhoto_name();
-
-	public String getDocument_size();
-	public String getDocument_url();
-	public String getDocument_name();
-	public String getDocument_type();
-
-	public int getSemester();
-
-	public long getRequest_id();
+	 String getCourse();
 
 
-	public String getRanks();
+	 String getPhoto_url();
+	 String getPhoto_type();
+	 String getPhoto_size();
+	 String getPhoto_name();
+
+	 String getDocument_size();
+	 String getDocument_url();
+	 String getDocument_name();
+	 String getDocument_type();
+
+	 int getSemester();
+
+	 long getRequest_id();
+
+
+	 String getRanks();
 	
-	public double getCgpa();
+	 double getCgpa();
 
-	public int getAddmission_year();
+	 int getAddmission_year();
 
-	public int getGraduation_year();
+	 int getGraduation_year();
 
-	public String getComment();
+	 String getComment();
 
 
 

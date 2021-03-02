@@ -17,67 +17,67 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 
 
 	@Query("from Student where token=(from Token where tokenValue=?1)")
-	public Student findBytokenValue(String tokenValue);
+    Student findBytokenValue(String tokenValue);
 
 	@Query("from Student")
-	public List<DocumentData> findwholedocs();
+    List<DocumentData> findwholedocs();
 
-	public Student findByEmail(String email);
+	Student findByEmail(String email);
 
 	@Query("from Student where branch=?1 AND faculty_approve=0 AND course=?2")
-	public List<Student> findByBranchActive(int branch,String course);
+    List<Student> findByBranchActive(int branch, String course);
 
 
 
 	@Query("from Student")
-	public List<Student> findByBranchActivee();
+    List<Student> findByBranchActivee();
 
 	@Query("from Student")
-	public List<Student> findBya();
+    List<Student> findBya();
 
 	@Query(value = "SELECT count(*) from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.status1=0 AND branch =:branchid", nativeQuery = true)
-	public Long countByStatus1(@Param("branchid") int branch);
+    Long countByStatus1(@Param("branchid") int branch);
 
 	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.status1=0 AND branch =:branchid", nativeQuery = true)
-	public List<DocumentData> findByStatus1(@Param("branchid") int branch);
+    List<DocumentData> findByStatus1(@Param("branchid") int branch);
 
 
 
 	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.status1=1 AND r.status2=0", nativeQuery = true)
-	public List<DocumentData> findByStatus2();
+    List<DocumentData> findByStatus2();
 
 	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.status1=1 AND r.status2=1 AND r.status3=0", nativeQuery = true)
-	public List<DocumentData> findByStatus3();
+    List<DocumentData> findByStatus3();
 	
 	
-	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment where (r.modified_date >= ?1 or ?1 IS null) and (modified_date <= ?2 or ?2 IS null) and (s.enrollment= ?3 or ?3 IS null)", nativeQuery = true)
-	public List<DocumentData> findDocument(Date start,Date end , String enrollment);
+	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment where (r.modified_date >= ?1 or ?1 IS null) and (modified_date <= ?2 or ?2 IS null) or (s.enrollment= ?3 or ?3 IS null)", nativeQuery = true)
+    List<DocumentData> findDocument(Date start, Date end, String enrollment);
 	
 
 
 	@Query(value = "SELECT * from student s inner JOIN fee_refund_details f on f.fee_refund_enrollment=s.enrollment AND f.status1=0 AND branch =:branchid", nativeQuery = true)
-	public List<FeeRefundData> findByfeerefundStatus1(@Param("branchid") int branch);
+    List<FeeRefundData> findByfeerefundStatus1(@Param("branchid") int branch);
 
 
 	@Query(value = "SELECT * from student s inner JOIN fee_refund_details f on  f.fee_refund_enrollment=s.enrollment AND f.status1=1 AND f.status2=0", nativeQuery = true)
-	public List<FeeRefundData> findByfeerefundStatus2();
+    List<FeeRefundData> findByfeerefundStatus2();
 
 
 	@Query(value = "SELECT * from student s inner JOIN fee_refund_details f on  f.fee_refund_enrollment=s.enrollment AND f.status1=1 AND f.status2=1 AND r.status3=0", nativeQuery = true)
-	public List<FeeRefundData> findByfeerefundStatus3();
+    List<FeeRefundData> findByfeerefundStatus3();
 
 	//modified_date<=?
 	@Query(value = "SELECT * from student s inner JOIN request r on r.request_enrollment=s.enrollment AND r.modified_date=?1 AND r.last_modified_by=?2", nativeQuery = true)
-	public List<DocumentData> findByApprovedDate(Date date,String lastModifiedBy);
+    List<DocumentData> findByApprovedDate(Date date, String lastModifiedBy);
 
 //	@Query("from Student where semester=1?")
 //	public List<Student> updateBranch(int semester);
 	@Transactional
 	@Modifying
 	@Query("UPDATE Student s SET s.semester = 3 WHERE s.semester=?1")
-	public int updateSemester(int semester);
+    int updateSemester(int semester);
 
-	public Student findByEnrollment(String enrollment);
+	Student findByEnrollment(String enrollment);
 
 
 

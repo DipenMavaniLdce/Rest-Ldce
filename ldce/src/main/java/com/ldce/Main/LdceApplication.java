@@ -1,6 +1,4 @@
 package com.ldce.Main;
-
-
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,8 +18,8 @@ import java.io.File;
 @EnableJpaRepositories(basePackages = { "com.ldce.Model", "com.ldce.Main" })
 public class LdceApplication {
 
+	public static String uploadDirectory =  System.getProperty("user.dir")+"\\uploads";
 
-	public static String uploadDirectory =  System.getProperty("user.dir")+"\\uploads";;
 	//public static String uploadDirectory =  "G:\\maven.1604047499613\\ldce/uploads/";
 	public static void main(String[] args) {
 		new File(uploadDirectory).mkdirs();

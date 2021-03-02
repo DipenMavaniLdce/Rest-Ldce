@@ -8,11 +8,14 @@ import org.springframework.data.repository.query.Param;
 public interface RequestRepository extends JpaRepository<Request, Long>, JpaSpecificationExecutor<Request> {
 
 	@Query("from Request where request_id=?1")
-	public Request findByrequest(long request_id);
+    Request findByrequest(long request_id);
 
 	@Query(value = "SELECT * from request where type=:type AND request_enrollment=:enrollment", nativeQuery = true)
-	public Request findByReq(@Param("type") String type, @Param("enrollment") String enrollment);
+    Request findByReq(@Param("type") String type, @Param("enrollment") String enrollment);
 
+
+
+	//public List<Request> findByApplied_dateAfterAndApplied_dateBefore(java.sql.Date start, java.sql.Date end);
 	long countByStatus1(int status);
 
 	long countByStatus2(int status);
