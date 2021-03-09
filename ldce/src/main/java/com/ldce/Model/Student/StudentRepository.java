@@ -72,10 +72,11 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 
 //	@Query("from Student where semester=1?")
 //	public List<Student> updateBranch(int semester);
+	
 	@Transactional
-	@Modifying
-	@Query("UPDATE Student s SET s.semester = 3 WHERE s.semester=?1")
-    int updateSemester(int semester);
+	  @Modifying
+	@Query("UPDATE Student s SET s.semester =?1 , s.graduation=?5 WHERE s.semester=?2 and s.branch=?3 and s.course=?4 ")
+    int progressionBySem(int to ,int from ,int branchCode, String course,boolean graduation );
 
 	Student findByEnrollment(String enrollment);
 

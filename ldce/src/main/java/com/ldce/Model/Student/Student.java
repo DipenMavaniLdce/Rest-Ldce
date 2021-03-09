@@ -60,6 +60,7 @@ public class Student implements Serializable {
 	@NotEmpty
 	String course;
 
+	boolean graduation=false;
 	String faculty_comment;
 	@NotEmpty
 	String admission_category;
@@ -242,6 +243,15 @@ public class Student implements Serializable {
 
 	public void setCourse(String course) {
 		this.course = course;
+	}
+
+
+	public boolean isGraduation() {
+		return graduation;
+	}
+
+	public void setGraduation(boolean graduation) {
+		this.graduation = graduation;
 	}
 
 	public String getPhoto_name() {

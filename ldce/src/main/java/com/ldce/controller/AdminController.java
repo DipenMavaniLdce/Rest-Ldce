@@ -285,4 +285,17 @@ public class AdminController {
 		}
 
 	}
+	
+	
+	@GetMapping("/progressionBySem")
+	public String progressionBySem(int from,int to) {
+
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		return updateQueryDao.progressionBySem(from, to, userDetails.getBranch(), userDetails.getCourse());
+	}
+	
+	
+
+	
 }
