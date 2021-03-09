@@ -19,8 +19,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException {
 		Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
-		logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		logger.trace("user is trying to access unauthorized section of application");
+
+		logger.info("user is trying to access unauthorized section of application");
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
 	}
 }

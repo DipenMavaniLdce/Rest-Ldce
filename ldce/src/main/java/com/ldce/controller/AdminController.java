@@ -1,5 +1,9 @@
 package com.ldce.controller;
 
+import com.fasterxml.jackson.databind.ser.BeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.ldce.Dao.SaveQueryDao;
 import com.ldce.Dao.SearchQueryDao;
 import com.ldce.Dao.UpdateQueryDao;
@@ -19,12 +23,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -294,8 +301,45 @@ public class AdminController {
 		
 		return updateQueryDao.progressionBySem(from, to, userDetails.getBranch(), userDetails.getCourse());
 	}
-	
-	
+	@PatchMapping("/detain/student/{enrollment}")
+	public ResponseEntity<?> detainStudent(@PathVariable("enrollment") String er){
+		Map<String,String> res = new HashMap<>();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		switch (updateQueryDao.detainStudent(er, userDetails)) {
+			case OK:
+				res.put("message", er + " is now Detained successfully");
+				return new ResponseEntity<>(res, HttpStatus.OK);
+			case NOT_FOUND:
+				res.put("message", er + " is not found in course " + userDetails.getCourse() + " branch code =" + userDetails.getBranch());
+				return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
+			default:
+				res.put("error", "Somthing went Wrong Please tray again latter");
+				return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@GetMapping("/request/student/{enrollment}")
+	public ResponseEntity<?> getStudent(@PathVariable("enrollment") String er ){
+
+		Map<Object,Object> res = new HashMap<>();
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Student st = strp.findByEnrollmentAndCourseAndBranch(er,userDetails.getCourse(), userDetails.getBranch());
+		if(st == null){
+			res.put("message", er + " is not found in course " + userDetails.getCourse() + " branch code =" + userDetails.getBranch());
+			return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
+		}
+		else{
+//			MappingJacksonValue mappingJacksonValue= new MappingJacksonValue(st);
+//			SimpleBeanPropertyFilter filter=SimpleBeanPropertyFilter.filterOutAllExcept("feerefunddetails","request","guardian","info","token");
+//			FilterProvider filters = new SimpleFilterProvider().addFilter("Studentfilter",filter);
+//			mappingJacksonValue.setFilters(filters);
+			return new ResponseEntity<>(st, HttpStatus.OK);
+		}
+	}
+
+
+
 
 	
 }

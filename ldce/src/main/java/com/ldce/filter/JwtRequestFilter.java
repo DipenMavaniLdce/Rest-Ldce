@@ -32,18 +32,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			FilterChain filterChain) throws ServletException, IOException {
 
 		Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class);
-		logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
 		final String authorizitionHeader = httpServletRequest.getHeader("Authorization");
 		final String domain = httpServletRequest.getHeader("Domain");
-
+		logger.info("authorizitionHeader :- {} , domain :- {}",authorizitionHeader,domain);
 		String username = null;
 		String jwt = null;
 		if (authorizitionHeader != null && authorizitionHeader.startsWith("Bearer ")) {
 			jwt = authorizitionHeader.substring(7);
 			try {
 				username = jwtUtil.extractUsername(jwt);
-				logger.trace("username successfully extract from token");
+				logger.info("username successfully extract from token");
+				logger.info("username :- {}" ,username);
 			} catch (IllegalArgumentException e) {
 				logger.error("Exception on IllegalArgumentException on JWT token");
 				logger.error(e.toString());

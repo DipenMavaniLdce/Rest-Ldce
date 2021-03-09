@@ -80,7 +80,7 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 
 	Student findByEnrollment(String enrollment);
 
-
+	Student findByEnrollmentAndCourseAndBranch(String enrollment,String course,int branch);
 
 
 //	@Query("select new RequestDto(faculty_comment,faculty_approve, List<Request> request) from Student where enrollment =?1")

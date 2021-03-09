@@ -17,6 +17,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -431,4 +432,21 @@ public class UpdateQueryDao {
 		return message;
 	}
 
+    public HttpStatus detainStudent(String er, CustomUserDetails userDetails) {
+		Student student = studentRepo.findByEnrollmentAndCourseAndBranch(er,userDetails.getCourse(),userDetails.getBranch());
+		if(student == null)
+			return HttpStatus.NOT_FOUND;
+		else{
+			if(student.isGraduation()){
+				student.setGraduation(false);
+			}
+			if (student.getSemester() < 2) {
+				student.setSemester(1);
+			} else {
+				student.setSemester(student.getSemester() - 2);
+			}
+			studentRepo.save(student);
+			return HttpStatus.OK;
+		}
+    }
 }

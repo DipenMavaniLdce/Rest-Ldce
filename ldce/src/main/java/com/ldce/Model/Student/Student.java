@@ -16,6 +16,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.ldce.Main.Token;
 import com.ldce.Model.FeeRefund.FeeRefundDetails;
 import com.ldce.Model.Request.Request;
@@ -23,6 +24,7 @@ import com.ldce.Model.Request.Request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@JsonFilter("Studentfilter")
 public class Student implements Serializable {
 
 	@Id
