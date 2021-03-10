@@ -301,7 +301,7 @@ public class AdminController {
 		
 		return updateQueryDao.progressionBySem(from, to, userDetails.getBranch(), userDetails.getCourse());
 	}
-	@PatchMapping("/detain/student/{enrollment}")
+	@GetMapping("/detain/student/{enrollment}")
 	public ResponseEntity<?> detainStudent(@PathVariable("enrollment") String er){
 		Map<String,String> res = new HashMap<>();
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

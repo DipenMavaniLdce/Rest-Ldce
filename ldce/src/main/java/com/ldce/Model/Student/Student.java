@@ -24,7 +24,7 @@ import com.ldce.Model.Request.Request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@JsonFilter("Studentfilter")
+//@JsonFilter("Studentfilter")
 public class Student implements Serializable {
 
 	@Id
