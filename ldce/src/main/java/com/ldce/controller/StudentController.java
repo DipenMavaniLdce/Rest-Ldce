@@ -106,12 +106,13 @@ public class StudentController {
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/updateStudent")
-	public ResponseEntity<?> updateProfile(HttpServletRequest request, @Valid Student Student, @Valid Student_info info,
+	public ResponseEntity<?> updateProfile(HttpServletRequest request, @Valid Student student, @Valid Student_info info,
 			@Valid Student_guardian guardian) throws IOException {
-		String username = (String) request.getAttribute("username");
+
+		System.out.println(student);
 		HashMap<String, String> res = new HashMap<>();
-		if (updateQueryDao.updateprofile(username, Student, info, guardian)) {
-			res.put("success", "Data Updated SuccessFully");
+		if (updateQueryDao.updateprofile(student.getEnrollment(), student, info, guardian)) {
+			res.put("success", "Student " +student.getEnrollment() +"Updated SuccessFully");
 			return new ResponseEntity<>(res, HttpStatus.OK);
 		} else {
 			res.put("error", "server Error");

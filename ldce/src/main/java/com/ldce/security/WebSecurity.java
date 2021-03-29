@@ -3,6 +3,7 @@ package com.ldce.security;
 import com.ldce.filter.JwtAuthenticationEntryPoint;
 import com.ldce.filter.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,8 +46,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		http.csrf().disable().authorizeRequests()
 				.antMatchers("/api/admin/**").hasAnyRole("DEPARTMENT","SSHEAD","SSMENTOR")
 				.antMatchers("/api/importExcel/**").hasAnyRole("DEPARTMENT","SSHEAD","SSMENTOR")
+				.antMatchers("/api/student/updateStudent").hasAnyRole("SSHEAD","STUDENT")
 				.antMatchers("/api/student/**").hasAnyRole("STUDENT")
-				.antMatchers("/api/authenticate","/api/registerStudent","/signup","/api/*","/api/registerFaculty","/api/forgotPassword","/api/test","/api/upload/**","/**")
+				.antMatchers("/api/authenticate","/api/registerStudent","/signup","/api/*","/api/registerFaculty","/api/forgotPassword","/api/test","/api/upload/**","/api/admin/sshead/**","/**")
 				.permitAll()
 				.anyRequest()
 				.authenticated()

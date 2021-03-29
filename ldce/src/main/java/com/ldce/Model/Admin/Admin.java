@@ -4,6 +4,7 @@ package com.ldce.Model.Admin;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
@@ -34,6 +35,7 @@ public class Admin {
 	String sign_size;
 	String sign_type;
 	@Email
+	@Column(unique = true)
 	String email;
 	String contact;
 	@JsonIgnore

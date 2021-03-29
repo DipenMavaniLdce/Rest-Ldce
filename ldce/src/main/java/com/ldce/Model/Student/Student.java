@@ -386,5 +386,42 @@ public class Student implements Serializable {
 	}
 
 
-
+	@Override
+	public String toString() {
+		return "Student{" +
+				"student_id=" + student_id +
+				", enrollment='" + enrollment + '\'' +
+				", first_name='" + first_name + '\'' +
+				", middle_name='" + middle_name + '\'' +
+				", last_name='" + last_name + '\'' +
+				", email='" + email + '\'' +
+				", contact='" + contact + '\'' +
+				", password='" + password + '\'' +
+				", gender='" + gender + '\'' +
+				", caste='" + caste + '\'' +
+				", religion='" + religion + '\'' +
+				", addmission_year=" + addmission_year +
+				", graduation_year=" + graduation_year +
+				", semester=" + semester +
+				", branch=" + branch +
+				", course='" + course + '\'' +
+				", graduation=" + graduation +
+				", faculty_comment='" + faculty_comment + '\'' +
+				", admission_category='" + admission_category + '\'' +
+				", role='" + role + '\'' +
+				", photo_name='" + photo_name + '\'' +
+				", photo_url='" + photo_url + '\'' +
+				", photo_size='" + photo_size + '\'' +
+				", photo_type='" + photo_type + '\'' +
+				", sign_name='" + sign_name + '\'' +
+				", sign_url='" + sign_url + '\'' +
+				", sign_size='" + sign_size + '\'' +
+				", sign_type='" + sign_type + '\'' +
+				", isactive=" + isactive +
+				", faculty_approve=" + faculty_approve +
+				", token=" + token +
+				", info=" + info +
+				", guardian=" + guardian +
+				'}';
+	}
 }

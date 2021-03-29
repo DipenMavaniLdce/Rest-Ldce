@@ -198,8 +198,12 @@ public class UpdateQueryDao {
 	}
 
 	public boolean updateprofile(String enrollment, Student student, Student_info info, Student_guardian guardian) {
-
+		System.out.println(enrollment);
+		System.out.println(student);
 		Student existstudent = studentRepo.findByEnrollment(enrollment);
+		if(existstudent == null)
+			return  false;
+
 		student.setStudent_id(existstudent.getStudent_id());
 		info.setId(existstudent.getInfo().getId());
 
@@ -219,16 +223,8 @@ public class UpdateQueryDao {
 		guardian.setId(existstudent.getGuardian().getId());
 		student.setGuardian(guardian);
 
-		if (!(student.getEnrollment().equals(existstudent.getEnrollment()))) {
-			existstudent.getToken().newTokenValue();
-			existstudent.setIsactive(false);
-		}
 		student.setToken(existstudent.getToken());
-		try {
-			studentRepo.save(student);
-		} catch (DataIntegrityViolationException E) {
-			throw new DataIntegrityViolationException("Duplicate entry");
-		}
+		studentRepo.save(student);
 		return true;
 
 	}
@@ -448,5 +444,27 @@ public class UpdateQueryDao {
 			studentRepo.save(student);
 			return HttpStatus.OK;
 		}
+    }
+
+    public HttpStatus updateAdminBySSHead(Admin admin) {
+
+
+		Admin existAdmin = adminrepo.findByEmail(admin.getEmail());
+		if(existAdmin == null)
+			return HttpStatus.NOT_FOUND;
+		admin.setPhoto_name(existAdmin.getPhoto_name());
+		admin.setPhoto_size(existAdmin.getPhoto_size());
+		admin.setPhoto_type(existAdmin.getPhoto_url());
+		admin.setPhoto_url(existAdmin.getPhoto_url());
+
+		admin.setSign_name(existAdmin.getSign_name());
+		admin.setSign_type(existAdmin.getSign_type());
+		admin.setSign_url(existAdmin.getSign_url());
+		admin.setSign_size(existAdmin.getSign_size());
+
+		admin.setPassword(existAdmin.getPassword());
+
+		adminrepo.save(admin);
+		return HttpStatus.OK;
     }
 }

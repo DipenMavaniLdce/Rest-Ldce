@@ -320,7 +320,7 @@ public class AdminController {
 	}
 
 	@GetMapping("/request/student/{enrollment}")
-	public ResponseEntity<?> getStudent(@PathVariable("enrollment") String er ){
+	public ResponseEntity<?> getDepartmentStudent(@PathVariable("enrollment") String er ){
 
 		Map<Object,Object> res = new HashMap<>();
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -337,7 +337,18 @@ public class AdminController {
 			return new ResponseEntity<>(st, HttpStatus.OK);
 		}
 	}
-
+	//request/student?enrollment=
+	@GetMapping("/request/student")
+	public ResponseEntity<?> getGlobalStudent(@RequestParam(defaultValue = "") String enrollment){
+		Map<Object,Object> res = new HashMap<>();
+		Student student = searchQueryDao.getGlobalStudent(enrollment);
+		if(student == null){
+			res.put("message","Student with Enrollment "+enrollment+" Not Found");
+			return new ResponseEntity<>(res,HttpStatus.NOT_FOUND);
+		}
+		res.put("student",student);
+		return new ResponseEntity<>(res,HttpStatus.OK);
+	}
 
 
 

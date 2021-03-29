@@ -141,4 +141,11 @@ public class SearchQueryDao {
         return student;
     }
 
+    public Student getGlobalStudent(String enrollment){
+        return studentRepository.findByEnrollment(enrollment);
+    }
+
+    public Admin searchAdminByEmail(String email) {
+        return adminRepository.findByEmail(email);
+    }
 }

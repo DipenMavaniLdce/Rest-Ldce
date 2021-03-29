@@ -1,8 +1,6 @@
 package com.ldce.Dao;
 
 import com.ldce.Main.LdceApplication;
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.objects.annotations.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
