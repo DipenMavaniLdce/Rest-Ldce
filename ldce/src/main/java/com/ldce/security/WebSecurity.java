@@ -39,7 +39,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.csrf().disable().authorizeRequests()
-		.antMatchers("/api/admin/sshead").hasAnyRole("DEPARTMENT")
+		.antMatchers("/api/admin/sshead").hasAnyRole("SSHEAD")
 		.antMatchers("/api/admin/**").hasAnyRole("DEPARTMENT", "SSHEAD", "SSMENTOR")
 				.antMatchers("/api/importExcel/**").hasAnyRole("DEPARTMENT", "SSHEAD", "SSMENTOR")
 				.antMatchers("/api/student/updateStudent").hasAnyRole("SSHEAD", "STUDENT")
