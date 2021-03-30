@@ -106,10 +106,12 @@ public class SearchQueryDao {
 
     }
 
-    public List<Student> findAllStudent(String caste, Integer addmission_year, String gender, Integer semester,
+    public List<Student> findAllStudent(String enrollment, String caste, Integer addmission_year, String gender, Integer semester,
                                         Integer branch, String course, String admission_category) {
 
-        return studentRepository.findAll(Specification.where(StudentSpecification.getStudentByBranch(branch)
+        return studentRepository.findAll(Specification.where(
+                StudentSpecification.getStudentByEnrollment(enrollment)
+                .and(StudentSpecification.getStudentByBranch(branch))
                 .and(StudentSpecification.getStudentByCaste(caste))
                 .and(StudentSpecification.getStudentByCourse(course))
                 .and(StudentSpecification.getStudentByGender(gender))
