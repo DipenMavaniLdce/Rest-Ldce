@@ -114,7 +114,7 @@ public class StudentSpecification {
 	public static Specification<Student> getStudentByEnrollment(String enrollment) {
 
 		return (root, query, criteriaBuilder) -> {
-			if(enrollment==null) return null;
+			if(enrollment == null || enrollment.equals("ALL")) return null;
 
 			return criteriaBuilder.equal(root.get("enrollment"), enrollment);
 		};

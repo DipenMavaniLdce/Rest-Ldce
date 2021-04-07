@@ -4,6 +4,8 @@ import com.ldce.Dao.SearchQueryDao;
 import com.ldce.Dao.UpdateQueryDao;
 import com.ldce.Model.Admin.Admin;
 import com.ldce.Model.Admin.AdminRepository;
+import com.ldce.Model.Student.Student;
+
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -58,4 +61,21 @@ public class SSHeadController {
          res.put("message","Profile Updated Successfully");
          return new ResponseEntity(res,httpStatus);
     }
+    
+    
+    
+    
+    
+	@CrossOrigin
+	@GetMapping("/searchAllAdmin")
+	public List<Admin> searchAdmin(
+			@RequestParam(defaultValue = "0") Integer branch,
+			@RequestParam(defaultValue = "ALL") String course) {
+		
+	
+
+		return searchQueryDao.findAdmin(branch, course);
+	}
+	
+	
 }

@@ -23,15 +23,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-
-
 	@Autowired
 	UserDetailsService userDetailsService;
 
 	@Autowired
 	JwtRequestFilter jwtRequestFilter;
-
-
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -42,26 +38,24 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-
 		http.csrf().disable().authorizeRequests()
-				.antMatchers("/api/admin/**").hasAnyRole("DEPARTMENT","SSHEAD","SSMENTOR")
-				.antMatchers("/api/importExcel/**").hasAnyRole("DEPARTMENT","SSHEAD","SSMENTOR")
-				.antMatchers("/api/student/updateStudent").hasAnyRole("SSHEAD","STUDENT")
+		.antMatchers("/api/admin/sshead").hasAnyRole("SSHEAD")
+		.antMatchers("/api/admin/**").hasAnyRole("DEPARTMENT", "SSHEAD", "SSMENTOR")
+				.antMatchers("/api/importExcel/**").hasAnyRole("DEPARTMENT", "SSHEAD", "SSMENTOR")
+				.antMatchers("/api/student/updateStudent").hasAnyRole("SSHEAD", "STUDENT")
+				
 				.antMatchers("/api/student/**").hasAnyRole("STUDENT")
-				.antMatchers("/api/authenticate","/api/registerStudent","/signup","/api/*","/api/registerFaculty","/api/forgotPassword","/api/test","/api/upload/**","/api/admin/sshead/**","/**")
-				.permitAll()
-				.anyRequest()
-				.authenticated()
-				.and()
-				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
-				.sessionManagement()
+				.antMatchers("/api/authenticate", "/api/registerStudent", "/signup", "/api/*", "/api/registerFaculty",
+						"/api/forgotPassword", "/api/test", "/api/upload/**", "/api/admin/sshead/**", "/**")
+				.permitAll().anyRequest().authenticated().and().exceptionHandling()
+				.authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-		
 
 	}
+
 	@Bean
-	public UserDetailsService getUserDetails(){
+	public UserDetailsService getUserDetails() {
 		return new CustomUserDetailService();
 	}
 
@@ -81,4 +75,3 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		return new JwtAuthenticationEntryPoint();
 	}
 }
-

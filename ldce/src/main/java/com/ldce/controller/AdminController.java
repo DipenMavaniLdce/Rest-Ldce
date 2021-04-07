@@ -161,7 +161,9 @@ public class AdminController {
 
 	@CrossOrigin
 	@GetMapping("/searchStudent")
-	public List<Student> searchStudent(@RequestParam(defaultValue = "ALL") String caste,
+	public List<Student> searchStudent(
+			@RequestParam(defaultValue = "ALL") String enrollment,
+			@RequestParam(defaultValue = "ALL") String caste,
 			@RequestParam(defaultValue = "0")  Integer addmission_year,
 			@RequestParam(defaultValue = "ALL") String gender,
 			@RequestParam(defaultValue = "0") Integer semester,
@@ -171,7 +173,7 @@ public class AdminController {
 		
 		System.out.println(admission_category+"..........................");
 
-		return searchQueryDao.findAllStudent(caste, addmission_year, gender, semester, branch, course,admission_category);
+		return searchQueryDao.findAllStudent(enrollment, caste, addmission_year, gender, semester, branch, course,admission_category);
 	}
 
 	// list json data to admin
