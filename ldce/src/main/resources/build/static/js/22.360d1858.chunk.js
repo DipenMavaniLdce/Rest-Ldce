@@ -1,0 +1,2 @@
+(this.webpackJsonpfront_ldce=this.webpackJsonpfront_ldce||[]).push([[22],{322:function(t,n,e){"use strict";e.r(n);var o=e(0),u=e.n(o),c=e(16),l=e(38);n.default=Object(c.b)(null,{logout:l.h})((function(t){var n=t.history,e=t.logout;return Object(o.useEffect)((function(){e(),n.push("/login")})),u.a.createElement(u.a.Fragment,null)}))}}]);
+//# sourceMappingURL=22.360d1858.chunk.js.map
